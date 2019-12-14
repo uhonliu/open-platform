@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bsd.payment.server.mapper.PayChannelMapper">
+    <resultMap id="BaseResultMap" type="com.bsd.payment.server.model.entity.PayChannel">
+        <id column="channel_id" property="channelId" jdbcType="INTEGER"/>
+        <result column="channel_code" property="channelCode" jdbcType="VARCHAR"/>
+        <result column="channel_name" property="channelName" jdbcType="VARCHAR"/>
+        <result column="channel_mch_id" property="channelMchId" jdbcType="VARCHAR"/>
+        <result column="mch_id" property="mchId" jdbcType="VARCHAR"/>
+        <result column="state" property="state" jdbcType="TINYINT"/>
+        <result column="param" property="param" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    channel_id, channel_code, channel_name, channel_mch_id, mch_id, state, param, remark, create_time, update_time
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from bsd_pay_channel
+        where channel_id = #{channelId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from bsd_pay_channel
+    where channel_id = #{channelId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.bsd.payment.server.model.entity.PayChannel">
+    insert into bsd_pay_channel (channel_id, channel_code, channel_name,
+        channel_mch_id, mch_id, state,
+        param, remark, create_time,
+        update_time)
+    values (#{channelId,jdbcType=INTEGER}, #{channelCode,jdbcType=VARCHAR}, #{channelName,jdbcType=VARCHAR},
+        #{channelMchId,jdbcType=VARCHAR}, #{mchId,jdbcType=VARCHAR}, #{state,jdbcType=TINYINT},
+        #{param,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+        #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="com.bsd.payment.server.model.entity.PayChannel">
+        insert into bsd_pay_channel
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="channelId != null">
+                channel_id,
+            </if>
+            <if test="channelCode != null">
+                channel_code,
+            </if>
+            <if test="channelName != null">
+                channel_name,
+            </if>
+            <if test="channelMchId != null">
+                channel_mch_id,
+            </if>
+            <if test="mchId != null">
+                mch_id,
+            </if>
+            <if test="state != null">
+                state,
+            </if>
+            <if test="param != null">
+                param,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="channelId != null">
+                #{channelId,jdbcType=INTEGER},
+            </if>
+            <if test="channelCode != null">
+                #{channelCode,jdbcType=VARCHAR},
+            </if>
+            <if test="channelName != null">
+                #{channelName,jdbcType=VARCHAR},
+            </if>
+            <if test="channelMchId != null">
+                #{channelMchId,jdbcType=VARCHAR},
+            </if>
+            <if test="mchId != null">
+                #{mchId,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=TINYINT},
+            </if>
+            <if test="param != null">
+                #{param,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.bsd.payment.server.model.entity.PayChannel">
+        update bsd_pay_channel
+        <set>
+            <if test="channelCode != null">
+                channel_code = #{channelCode,jdbcType=VARCHAR},
+            </if>
+            <if test="channelName != null">
+                channel_name = #{channelName,jdbcType=VARCHAR},
+            </if>
+            <if test="channelMchId != null">
+                channel_mch_id = #{channelMchId,jdbcType=VARCHAR},
+            </if>
+            <if test="mchId != null">
+                mch_id = #{mchId,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                state = #{state,jdbcType=TINYINT},
+            </if>
+            <if test="param != null">
+                param = #{param,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where channel_id = #{channelId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.bsd.payment.server.model.entity.PayChannel">
+    update bsd_pay_channel
+    set channel_code = #{channelCode,jdbcType=VARCHAR},
+        channel_name = #{channelName,jdbcType=VARCHAR},
+        channel_mch_id = #{channelMchId,jdbcType=VARCHAR},
+        mch_id = #{mchId,jdbcType=VARCHAR},
+        state = #{state,jdbcType=TINYINT},
+        param = #{param,jdbcType=VARCHAR},
+        remark = #{remark,jdbcType=VARCHAR},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+        update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where channel_id = #{channelId,jdbcType=INTEGER}
+    </update>
+    <!-- 查询出此渠道和商户下的数据 -->
+    <select id="selectByMchIdAndChannelCode" resultMap="BaseResultMap" parameterType="java.util.List">
+        select
+        <include refid="Base_Column_List"/>
+        from bsd_pay_channel
+        where mch_id = #{mchId,jdbcType=VARCHAR} and channel_code = #{channelCode,jdbcType=VARCHAR}
+    </select>
+</mapper>

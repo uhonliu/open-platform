@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bsd.org.server.mapper.UserMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.bsd.org.server.model.entity.User">
+        <id column="dd_userid" property="ddUserid"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="user_id" property="userId"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="position_id" property="positionId"/>
+        <result column="unionid" property="unionid"/>
+        <result column="name" property="name"/>
+        <result column="tel" property="tel"/>
+        <result column="work_place" property="workPlace"/>
+        <result column="remark" property="remark"/>
+        <result column="mobile" property="mobile"/>
+        <result column="email" property="email"/>
+        <result column="org_email" property="orgEmail"/>
+        <result column="active" property="active"/>
+        <result column="department" property="department"/>
+        <result column="position" property="position"/>
+        <result column="avatar" property="avatar"/>
+        <result column="hired_date" property="hiredDate"/>
+        <result column="jobnumber" property="jobnumber"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_by" property="updateBy"/>
+    </resultMap>
+
+    <resultMap id="UserDetailMap" type="com.bsd.org.server.model.vo.UserDetailVO">
+        <result column="dd_userid" property="ddUserid"/>
+        <result column="user_id" property="userId"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="unionid" property="unionid"/>
+        <result column="name" property="name"/>
+        <result column="tel" property="tel"/>
+        <result column="work_place" property="workPlace"/>
+        <result column="remark" property="remark"/>
+        <result column="mobile" property="mobile"/>
+        <result column="email" property="email"/>
+        <result column="org_email" property="orgEmail"/>
+        <result column="active" property="active"/>
+        <result column="avatar" property="avatar"/>
+        <result column="hired_date" property="hiredDate"/>
+        <result column="jobnumber" property="jobnumber"/>
+        <result column="position_id" property="positionId"/>
+        <result column="position_code" property="positionCode"/>
+        <result column="position_name" property="positionName"/>
+        <result column="department" property="department"/>
+        <result column="department_id" property="departmentId"/>
+        <result column="department_name" property="departmentName"></result>
+        <result column="parent_name" property="parentName"></result>
+        <result column="company_id" property="companyId"></result>
+        <result column="company_name" property="companyName"></result>
+    </resultMap>
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        create_time,
+        update_time,
+        user_id, parent_id, position_id, dd_userid, unionid, name, tel, work_place, remark, mobile, email, org_email, active, department, position, avatar, hired_date, jobnumber, create_by, update_by
+    </sql>
+
+    <!--自定义关联查询-->
+    <!-- 表名 -->
+    <sql id="t_name">org_user</sql>
+    <!-- 别名 -->
+    <sql id="t_alias">org_user as user</sql>
+    <!--外键表关联定义 -->
+    <sql id="join"></sql>
+
+    <!-- 自定义查询单个实体 -->
+    <select id="getEntityMap" resultType="com.opencloud.common.mybatis.EntityMap">
+        SELECT * FROM
+        <include refid="t_alias"/>
+        <include refid="join"/>
+        ${ew.customSqlSegment}
+    </select>
+
+    <!-- 自定义关联查询分页 -->
+    <select id="pageList" resultType="com.opencloud.common.mybatis.EntityMap">
+        SELECT ${ew.select} FROM
+        <include refid="t_alias"/>
+        <include refid="join"/>
+        ${ew.customSqlSegment}
+    </select>
+
+    <select id="userDetailListPage" resultMap="UserDetailMap">
+        <include refid="UserDetailListSql"></include>
+    </select>
+
+    <select id="userDetailList" resultMap="UserDetailMap">
+        <include refid="UserDetailListSql"></include>
+    </select>
+
+    <select id="userPage" resultMap="UserDetailMap">
+        <include refid="commonSql"></include>
+    </select>
+
+    <select id="userList" resultMap="UserDetailMap">
+        <include refid="commonSql"></include>
+    </select>
+
+
+    <sql id="UserDetailListSql">
+        SELECT TEMP.* FROM
+        (
+            SELECT A.dd_userid,A.user_id,A.parent_id,A.unionid,A.name,A.tel,A.work_place,
+            A.remark,A.mobile,A.email,A.org_email,A.active,A.avatar,A.hired_date,A.jobnumber,A.department,
+            B.position_id,B.position_code,B.position_name,
+            C.department_id,C.department_name,
+            D.name as parent_name,
+            E.company_id,E.company_name
+            FROM org_user A
+            LEFT JOIN org_position B
+            ON A.position_id = B.position_id
+            JOIN org_department C
+            ON FIND_IN_SET(C.department_id,A.department)
+            LEFT JOIN
+            (
+            SELECT * FROM org_user
+            WHERE user_id<![CDATA[ <> ]]>0
+            ) AS D
+            ON A.parent_id = D.user_id
+            LEFT JOIN org_company E
+            ON C.company_id = E.company_id
+        ) TEMP
+        ${ew.customSqlSegment}
+    </sql>
+
+    <sql id="commonSql">
+        SELECT TEMP.* FROM
+        (
+            SELECT A.dd_userid,A.user_id,A.parent_id,A.unionid,A.name,A.tel,A.work_place,
+            A.remark,A.mobile,A.email,A.org_email,A.active,A.avatar,A.hired_date,A.jobnumber,A.department,
+            B.position_id,B.position_code,B.position_name,
+            GROUP_CONCAT(C.department_name) as 'department_name',
+            D.name as parent_name,
+            E.company_id,E.company_name
+            FROM org_user A
+            LEFT JOIN org_position B
+            ON A.position_id = B.position_id
+            JOIN org_department C
+            ON FIND_IN_SET(C.department_id,A.department)
+            LEFT JOIN
+            (
+            SELECT * FROM org_user
+            WHERE user_id<![CDATA[ <> ]]>0
+            ) AS D
+            ON A.parent_id = D.user_id
+            LEFT JOIN org_company E
+            ON C.company_id = E.company_id
+            GROUP BY A.dd_userid
+        ) TEMP
+        ${ew.customSqlSegment}
+    </sql>
+</mapper>

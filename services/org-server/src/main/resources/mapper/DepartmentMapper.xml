@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bsd.org.server.mapper.DepartmentMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.bsd.org.server.model.entity.Department">
+        <id column="department_id" property="departmentId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="department_code" property="departmentCode"/>
+        <result column="department_name" property="departmentName"/>
+        <result column="level" property="level"/>
+        <result column="seq" property="seq"/>
+        <result column="status" property="status"/>
+        <result column="company_id" property="companyId"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_by" property="updateBy"/>
+    </resultMap>
+
+    <!-- 部门VO map -->
+    <resultMap id="DepartmentVoResultMap" type="com.bsd.org.server.model.vo.DepartmentVO">
+        <result column="department_id" property="departmentId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="department_code" property="departmentCode"/>
+        <result column="department_name" property="departmentName"/>
+        <result column="level" property="level"/>
+        <result column="seq" property="seq"/>
+        <result column="status" property="status"/>
+        <result column="company_id" property="companyId"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="parent_name" property="parentName"/>
+        <result column="company_name" property="companyName"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        create_time,
+        update_time,
+        department_id, parent_id, department_code, department_name, level, seq, status, company_id, create_by, update_by
+    </sql>
+
+    <!--自定义关联查询-->
+    <!-- 表名 -->
+    <sql id="t_name">org_department</sql>
+    <!-- 别名 -->
+    <sql id="t_alias">org_department as department</sql>
+    <!--外键表关联定义 -->
+    <sql id="join"></sql>
+
+    <!-- 自定义查询单个实体 -->
+    <select id="getEntityMap" resultType="com.opencloud.common.mybatis.EntityMap">
+        SELECT * FROM
+        <include refid="t_alias"/>
+        <include refid="join"/>
+        ${ew.customSqlSegment}
+    </select>
+
+    <!-- 自定义关联查询分页 -->
+    <select id="pageList" resultType="com.opencloud.common.mybatis.EntityMap">
+        SELECT ${ew.select} FROM
+        <include refid="t_alias"/>
+        <include refid="join"/>
+        ${ew.customSqlSegment}
+    </select>
+
+    <!-- 分页查询部门列表 -->
+    <select id="pageByParam" resultMap="DepartmentVoResultMap">
+        <include refid="getDepartmentListSql"></include>
+    </select>
+
+    <!-- 查询部门列表 -->
+    <select id="listByParam" resultMap="DepartmentVoResultMap">
+        <include refid="getDepartmentListSql"></include>
+    </select>
+
+    <sql id="getDepartmentListSql">
+        SELECT
+        A.*,
+        B.company_name,
+        C.department_name AS parent_name
+        FROM org_department A
+        INNER JOIN org_company B
+        ON A.company_id = B.company_id
+        LEFT JOIN org_department C
+        ON A.parent_id = C.department_id
+        ${ew.customSqlSegment}
+    </sql>
+</mapper>

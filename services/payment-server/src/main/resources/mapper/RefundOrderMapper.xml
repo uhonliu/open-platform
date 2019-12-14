@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bsd.payment.server.mapper.RefundOrderMapper">
+    <resultMap id="BaseResultMap" type="com.bsd.payment.server.model.entity.RefundOrder">
+        <id column="refund_order_id" property="refundOrderId" jdbcType="VARCHAR"/>
+        <result column="pay_order_id" property="payOrderId" jdbcType="VARCHAR"/>
+        <result column="channel_pay_order_no" property="channelPayOrderNo" jdbcType="VARCHAR"/>
+        <result column="mch_id" property="mchId" jdbcType="VARCHAR"/>
+        <result column="mch_refund_no" property="mchRefundNo" jdbcType="VARCHAR"/>
+        <result column="channel_code" property="channelCode" jdbcType="VARCHAR"/>
+        <result column="pay_amount" property="payAmount" jdbcType="BIGINT"/>
+        <result column="refund_amount" property="refundAmount" jdbcType="BIGINT"/>
+        <result column="currency" property="currency" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="result" property="result" jdbcType="TINYINT"/>
+        <result column="client_ip" property="clientIp" jdbcType="VARCHAR"/>
+        <result column="device" property="device" jdbcType="VARCHAR"/>
+        <result column="remark_info" property="remarkInfo" jdbcType="VARCHAR"/>
+        <result column="channel_user" property="channelUser" jdbcType="VARCHAR"/>
+        <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+        <result column="channel_mch_id" property="channelMchId" jdbcType="VARCHAR"/>
+        <result column="channel_order_no" property="channelOrderNo" jdbcType="VARCHAR"/>
+        <result column="channel_err_code" property="channelErrCode" jdbcType="VARCHAR"/>
+        <result column="channel_err_msg" property="channelErrMsg" jdbcType="VARCHAR"/>
+        <result column="extra" property="extra" jdbcType="VARCHAR"/>
+        <result column="notify_url" property="notifyUrl" jdbcType="VARCHAR"/>
+        <result column="param1" property="param1" jdbcType="VARCHAR"/>
+        <result column="param2" property="param2" jdbcType="VARCHAR"/>
+        <result column="expire_time" property="expireTime" jdbcType="TIMESTAMP"/>
+        <result column="refund_succ_time" property="refundSuccTime" jdbcType="TIMESTAMP"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    refund_order_id, pay_order_id, channel_pay_order_no, mch_id, mch_refund_no, channel_code, pay_amount,
+    refund_amount, currency, status, result, client_ip, device, remark_info, channel_user,
+    user_name, channel_mch_id, channel_order_no, channel_err_code, channel_err_msg, extra, notify_url,
+    param1, param2, expire_time, refund_succ_time, create_time, update_time
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from bsd_refund_order
+        where refund_order_id = #{refundOrderId,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from bsd_refund_order
+    where refund_order_id = #{refundOrderId,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.bsd.payment.server.model.entity.RefundOrder">
+    insert into bsd_refund_order (refund_order_id, pay_order_id, channel_pay_order_no,
+        mch_id, mch_refund_no, channel_code,
+        pay_amount, refund_amount, currency,
+        status, result, client_ip,
+        device, remark_info, channel_user,
+        user_name, channel_mch_id, channel_order_no,
+        channel_err_code, channel_err_msg, extra,
+        notify_url, param1, param2,
+        expire_time, refund_succ_time, create_time,
+        update_time)
+    values (#{refundOrderId,jdbcType=VARCHAR}, #{payOrderId,jdbcType=VARCHAR}, #{channelPayOrderNo,jdbcType=VARCHAR}, 
+        #{mchId,jdbcType=VARCHAR}, #{mchRefundNo,jdbcType=VARCHAR}, #{channelCode,jdbcType=VARCHAR},
+        #{payAmount,jdbcType=BIGINT}, #{refundAmount,jdbcType=BIGINT}, #{currency,jdbcType=VARCHAR},
+        #{status,jdbcType=TINYINT}, #{result,jdbcType=TINYINT}, #{clientIp,jdbcType=VARCHAR},
+        #{device,jdbcType=VARCHAR}, #{remarkInfo,jdbcType=VARCHAR}, #{channelUser,jdbcType=VARCHAR},
+        #{userName,jdbcType=VARCHAR}, #{channelMchId,jdbcType=VARCHAR}, #{channelOrderNo,jdbcType=VARCHAR},
+        #{channelErrCode,jdbcType=VARCHAR}, #{channelErrMsg,jdbcType=VARCHAR}, #{extra,jdbcType=VARCHAR},
+        #{notifyUrl,jdbcType=VARCHAR}, #{param1,jdbcType=VARCHAR}, #{param2,jdbcType=VARCHAR},
+        #{expireTime,jdbcType=TIMESTAMP}, #{refundSuccTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP},
+        #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="com.bsd.payment.server.model.entity.RefundOrder">
+        insert into bsd_refund_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="refundOrderId != null">
+                refund_order_id,
+            </if>
+            <if test="payOrderId != null">
+                pay_order_id,
+            </if>
+            <if test="channelPayOrderNo != null">
+                channel_pay_order_no,
+            </if>
+            <if test="mchId != null">
+                mch_id,
+            </if>
+            <if test="mchRefundNo != null">
+                mch_refund_no,
+            </if>
+            <if test="channelCode != null">
+                channel_code,
+            </if>
+            <if test="payAmount != null">
+                pay_amount,
+            </if>
+            <if test="refundAmount != null">
+                refund_amount,
+            </if>
+            <if test="currency != null">
+                currency,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="result != null">
+                result,
+            </if>
+            <if test="clientIp != null">
+                client_ip,
+            </if>
+            <if test="device != null">
+                device,
+            </if>
+            <if test="remarkInfo != null">
+                remark_info,
+            </if>
+            <if test="channelUser != null">
+                channel_user,
+            </if>
+            <if test="userName != null">
+                user_name,
+            </if>
+            <if test="channelMchId != null">
+                channel_mch_id,
+            </if>
+            <if test="channelOrderNo != null">
+                channel_order_no,
+            </if>
+            <if test="channelErrCode != null">
+                channel_err_code,
+            </if>
+            <if test="channelErrMsg != null">
+                channel_err_msg,
+            </if>
+            <if test="extra != null">
+                extra,
+            </if>
+            <if test="notifyUrl != null">
+                notify_url,
+            </if>
+            <if test="param1 != null">
+                param1,
+            </if>
+            <if test="param2 != null">
+                param2,
+            </if>
+            <if test="expireTime != null">
+                expire_time,
+            </if>
+            <if test="refundSuccTime != null">
+                refund_succ_time,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="refundOrderId != null">
+                #{refundOrderId,jdbcType=VARCHAR},
+            </if>
+            <if test="payOrderId != null">
+                #{payOrderId,jdbcType=VARCHAR},
+            </if>
+            <if test="channelPayOrderNo != null">
+                #{channelPayOrderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="mchId != null">
+                #{mchId,jdbcType=VARCHAR},
+            </if>
+            <if test="mchRefundNo != null">
+                #{mchRefundNo,jdbcType=VARCHAR},
+            </if>
+            <if test="channelCode != null">
+                #{channelCode,jdbcType=VARCHAR},
+            </if>
+            <if test="payAmount != null">
+                #{payAmount,jdbcType=BIGINT},
+            </if>
+            <if test="refundAmount != null">
+                #{refundAmount,jdbcType=BIGINT},
+            </if>
+            <if test="currency != null">
+                #{currency,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="result != null">
+                #{result,jdbcType=TINYINT},
+            </if>
+            <if test="clientIp != null">
+                #{clientIp,jdbcType=VARCHAR},
+            </if>
+            <if test="device != null">
+                #{device,jdbcType=VARCHAR},
+            </if>
+            <if test="remarkInfo != null">
+                #{remarkInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="channelUser != null">
+                #{channelUser,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="channelMchId != null">
+                #{channelMchId,jdbcType=VARCHAR},
+            </if>
+            <if test="channelOrderNo != null">
+                #{channelOrderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="channelErrCode != null">
+                #{channelErrCode,jdbcType=VARCHAR},
+            </if>
+            <if test="channelErrMsg != null">
+                #{channelErrMsg,jdbcType=VARCHAR},
+            </if>
+            <if test="extra != null">
+                #{extra,jdbcType=VARCHAR},
+            </if>
+            <if test="notifyUrl != null">
+                #{notifyUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="param1 != null">
+                #{param1,jdbcType=VARCHAR},
+            </if>
+            <if test="param2 != null">
+                #{param2,jdbcType=VARCHAR},
+            </if>
+            <if test="expireTime != null">
+                #{expireTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="refundSuccTime != null">
+                #{refundSuccTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.bsd.payment.server.model.entity.RefundOrder">
+        update bsd_refund_order
+        <set>
+            <if test="payOrderId != null">
+                pay_order_id = #{payOrderId,jdbcType=VARCHAR},
+            </if>
+            <if test="channelPayOrderNo != null">
+                channel_pay_order_no = #{channelPayOrderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="mchId != null">
+                mch_id = #{mchId,jdbcType=VARCHAR},
+            </if>
+            <if test="mchRefundNo != null">
+                mch_refund_no = #{mchRefundNo,jdbcType=VARCHAR},
+            </if>
+            <if test="channelCode != null">
+                channel_code = #{channelCode,jdbcType=VARCHAR},
+            </if>
+            <if test="payAmount != null">
+                pay_amount = #{payAmount,jdbcType=BIGINT},
+            </if>
+            <if test="refundAmount != null">
+                refund_amount = #{refundAmount,jdbcType=BIGINT},
+            </if>
+            <if test="currency != null">
+                currency = #{currency,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="result != null">
+                result = #{result,jdbcType=TINYINT},
+            </if>
+            <if test="clientIp != null">
+                client_ip = #{clientIp,jdbcType=VARCHAR},
+            </if>
+            <if test="device != null">
+                device = #{device,jdbcType=VARCHAR},
+            </if>
+            <if test="remarkInfo != null">
+                remark_info = #{remarkInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="channelUser != null">
+                channel_user = #{channelUser,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null">
+                user_name = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="channelMchId != null">
+                channel_mch_id = #{channelMchId,jdbcType=VARCHAR},
+            </if>
+            <if test="channelOrderNo != null">
+                channel_order_no = #{channelOrderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="channelErrCode != null">
+                channel_err_code = #{channelErrCode,jdbcType=VARCHAR},
+            </if>
+            <if test="channelErrMsg != null">
+                channel_err_msg = #{channelErrMsg,jdbcType=VARCHAR},
+            </if>
+            <if test="extra != null">
+                extra = #{extra,jdbcType=VARCHAR},
+            </if>
+            <if test="notifyUrl != null">
+                notify_url = #{notifyUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="param1 != null">
+                param1 = #{param1,jdbcType=VARCHAR},
+            </if>
+            <if test="param2 != null">
+                param2 = #{param2,jdbcType=VARCHAR},
+            </if>
+            <if test="expireTime != null">
+                expire_time = #{expireTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="refundSuccTime != null">
+                refund_succ_time = #{refundSuccTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where refund_order_id = #{refundOrderId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.bsd.payment.server.model.entity.RefundOrder">
+    update bsd_refund_order
+    set pay_order_id = #{payOrderId,jdbcType=VARCHAR},
+        channel_pay_order_no = #{channelPayOrderNo,jdbcType=VARCHAR},
+        mch_id = #{mchId,jdbcType=VARCHAR},
+        mch_refund_no = #{mchRefundNo,jdbcType=VARCHAR},
+        channel_code = #{channelCode,jdbcType=VARCHAR},
+        pay_amount = #{payAmount,jdbcType=BIGINT},
+        refund_amount = #{refundAmount,jdbcType=BIGINT},
+        currency = #{currency,jdbcType=VARCHAR},
+        status = #{status,jdbcType=TINYINT},
+        result = #{result,jdbcType=TINYINT},
+        client_ip = #{clientIp,jdbcType=VARCHAR},
+        device = #{device,jdbcType=VARCHAR},
+        remark_info = #{remarkInfo,jdbcType=VARCHAR},
+        channel_user = #{channelUser,jdbcType=VARCHAR},
+        user_name = #{userName,jdbcType=VARCHAR},
+        channel_mch_id = #{channelMchId,jdbcType=VARCHAR},
+        channel_order_no = #{channelOrderNo,jdbcType=VARCHAR},
+        channel_err_code = #{channelErrCode,jdbcType=VARCHAR},
+        channel_err_msg = #{channelErrMsg,jdbcType=VARCHAR},
+        extra = #{extra,jdbcType=VARCHAR},
+        notify_url = #{notifyUrl,jdbcType=VARCHAR},
+        param1 = #{param1,jdbcType=VARCHAR},
+        param2 = #{param2,jdbcType=VARCHAR},
+        expire_time = #{expireTime,jdbcType=TIMESTAMP},
+        refund_succ_time = #{refundSuccTime,jdbcType=TIMESTAMP},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+        update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where refund_order_id = #{refundOrderId,jdbcType=VARCHAR}
+    </update>
+</mapper>

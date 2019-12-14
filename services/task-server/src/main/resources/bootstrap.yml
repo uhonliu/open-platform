@@ -1,0 +1,66 @@
+server:
+    port: 8501
+
+spring:
+    application:
+        name: ${artifactId}
+    cloud:
+        #手动配置Bus id,
+        bus:
+            id: ${spring.application.name}:${server.port}
+        nacos:
+            config:
+                namespace: ${config.namespace}
+                refreshable-dataids: common.properties
+                server-addr: ${config.server-addr}
+                shared-dataids: common.properties,db.properties,redis.properties,rabbitmq.properties
+            discovery:
+                namespace: ${discovery.namespace}
+                server-addr: ${discovery.server-addr}
+    main:
+        allow-bean-definition-overriding: true
+    #解决restful 404错误 spring.mvc.throw-exception-if-no-handler-found=true spring.resources.add-mappings=false
+    mvc:
+        throw-exception-if-no-handler-found: true
+    resources:
+        add-mappings: false
+    profiles:
+        active: ${profile.name}
+    quartz:
+        job-store-type: jdbc
+        properties:
+            org:
+                quartz:
+                    jobStore:
+                        class: org.quartz.impl.jdbcjobstore.JobStoreTX
+                        clusterCheckinInterval: 10000
+                        driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+                        isClustered: true
+                        tablePrefix: QRTZ_
+                        useProperties: false
+                    scheduler:
+                        instanceId: AUTO
+                        instanceName: clusteredScheduler
+                    threadPool:
+                        class: org.quartz.simpl.SimpleThreadPool
+                        threadCount: 10
+                        threadPriority: 5
+                        threadsInheritContextClassLoaderOfInitializingThread: true
+
+management:
+    endpoints:
+        web:
+            exposure:
+                include: '*'
+
+opencloud:
+    swagger2:
+        enabled: true
+        description: 任务调度服务器
+        title: 任务调度服务器
+
+#mybatis plus 设置
+mybatis-plus:
+    #实体扫描，多个package用逗号或者分号分隔
+    typeAliasesPackage: com.opencloud.task.server.**.entity
+    mapper-locations: classpath:mapper/*.xml

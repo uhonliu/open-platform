@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bsd.org.server.mapper.PositionMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.bsd.org.server.model.entity.Position">
+        <id column="position_id" property="positionId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="position_code" property="positionCode"/>
+        <result column="position_name" property="positionName"/>
+        <result column="work_content" property="workContent"/>
+        <result column="work_standard" property="workStandard"/>
+        <result column="responsibility_weight" property="responsibilityWeight"/>
+        <result column="required_qualifications" property="requiredQualifications"/>
+        <result column="status" property="status"/>
+        <result column="seq" property="seq"/>
+        <result column="department_id" property="departmentId"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_by" property="updateBy"/>
+    </resultMap>
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="PositionVoResultMap" type="com.bsd.org.server.model.vo.PositionVO">
+        <result column="position_id" property="positionId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="position_code" property="positionCode"/>
+        <result column="position_name" property="positionName"/>
+        <result column="work_content" property="workContent"/>
+        <result column="work_standard" property="workStandard"/>
+        <result column="responsibility_weight" property="responsibilityWeight"/>
+        <result column="required_qualifications" property="requiredQualifications"/>
+        <result column="status" property="status"/>
+        <result column="seq" property="seq"/>
+        <result column="department_id" property="departmentId"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="department_name" property="departmentName"/>
+        <result column="company_id" property="companyId"/>
+        <result column="company_name" property="companyName"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        create_time,
+        update_time,
+        position_id, position_code, position_name, work_content, work_standard, responsibility_weight, required_qualifications, status, seq, department_id, create_by, update_by
+    </sql>
+
+    <!--自定义关联查询-->
+    <!-- 表名 -->
+    <sql id="t_name">org_position</sql>
+    <!-- 别名 -->
+    <sql id="t_alias">org_position as position</sql>
+    <!--外键表关联定义 -->
+    <sql id="join"></sql>
+
+    <!-- 自定义查询单个实体 -->
+    <select id="getEntityMap" resultType="com.opencloud.common.mybatis.EntityMap">
+        SELECT * FROM
+        <include refid="t_alias"/>
+        <include refid="join"/>
+        ${ew.customSqlSegment}
+    </select>
+
+    <!-- 自定义关联查询分页 -->
+    <select id="pageList" resultType="com.opencloud.common.mybatis.EntityMap">
+        SELECT ${ew.select} FROM
+        <include refid="t_alias"/>
+        <include refid="join"/>
+        ${ew.customSqlSegment}
+    </select>
+
+    <!-- 分页查询岗位列表 -->
+    <select id="pageByParam" resultMap="PositionVoResultMap">
+        <include refid="getPositionListSql"></include>
+    </select>
+
+    <!-- 查询岗位列表 -->
+    <select id="listByParam" resultMap="PositionVoResultMap">
+        <include refid="getPositionListSql"></include>
+    </select>
+
+
+    <sql id="getPositionListSql">
+        SELECT A.*,
+        B.department_name,
+		C.company_id,
+		C.company_name
+        FROM org_position A
+        INNER JOIN org_department B
+        ON A.department_id = B.department_id
+		INNER JOIN org_company C
+		ON B.company_id = C.company_id
+        ${ew.customSqlSegment}
+    </sql>
+</mapper>

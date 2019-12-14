@@ -1,0 +1,88 @@
+server:
+    port: 7211
+    servlet:
+        session:
+            cookie:
+                name: APP-OAUTH2SESSION
+
+spring:
+    application:
+        name: ${artifactId}
+    cloud:
+        #手动配置Bus id,
+        bus:
+            id: ${spring.application.name}:${server.port}
+        nacos:
+            config:
+                namespace: ${config.namespace}
+                refreshable-dataids: common.properties
+                server-addr: ${config.server-addr}
+                shared-dataids: common.properties,db.properties,redis.properties,rabbitmq.properties,oauth2.properties
+            discovery:
+                namespace: ${discovery.namespace}
+                server-addr: ${discovery.server-addr}
+    main:
+        allow-bean-definition-overriding: true
+    #解决restful 404错误 spring.mvc.throw-exception-if-no-handler-found=true spring.resources.add-mappings=false
+    mvc:
+        throw-exception-if-no-handler-found: true
+    resources:
+        add-mappings: false
+    profiles:
+        active: ${profile.name}
+    thymeleaf:
+        cache: false
+        encoding: UTF-8
+        mode: HTML
+        prefix: classpath:/templates/
+        suffix: .html
+
+management:
+    endpoints:
+        web:
+            exposure:
+                include: '*'
+
+opencloud:
+    swagger2:
+        enabled: true
+        description: 门户开发者认证服务器
+        title: 门户开发者认证服务器
+    client:
+        oauth2:
+            #portal:
+            #    client-id: 7gBZcbsC7kLIWCdELIl8nxcs
+            #    client-secret: 0osTIhce7uPvDKHz6aa67bhCukaKoYl4
+            gitee:
+                access-token-uri: https://gitee.com/oauth/token
+                #client-id: 474cd13d5f1c56eda1478201013c81eac3da9d744342c4ae8fcac270225899cd
+                #client-secret: 227394056f275c3c816b57abd1add3f1d29cd2c571f589e9db33daa2a3bd7680
+                login-success-uri: ${opencloud.common.admin-server-addr}/login/success
+                redirect-uri: ${opencloud.common.api-server-addr}/auth/oauth/gitee/callback
+                scope: user_info
+                user-authorization-uri: https://gitee.com/oauth/authorize
+                user-info-uri: https://gitee.com/api/v5/user
+            qq:
+                access-token-uri: https://graph.qq.com/oauth2.0/token
+                #client-id: 111111111
+                #client-secret: 1.1111111111111112E32
+                login-success-uri: ${opencloud.common.admin-server-addr}/login/success
+                redirect-uri: ${opencloud.common.api-server-addr}/auth/oauth/qq/callback
+                scope: get_user_info
+                user-authorization-uri: https://graph.qq.com/oauth2.0/authorize
+                user-info-uri: https://graph.qq.com/user/get_user_info
+            wechat:
+                access-token-uri: https://api.weixin.qq.com/sns/oauth2/access_token
+                #client-id: 111111111
+                #client-secret: 1.1111111111111112E32
+                login-success-uri: ${opencloud.common.admin-server-addr}/login/success
+                redirect-uri: ${opencloud.common.api-server-addr}/auth/oauth/wechat/callback
+                scope: snsapi_login
+                user-authorization-uri: https://open.weixin.qq.com/connect/qrconnect
+                user-info-uri: https://api.weixin.qq.com/sns/userinfo
+
+#mybatis plus 设置
+mybatis-plus:
+    #实体扫描，多个package用逗号或者分号分隔
+    typeAliasesPackage: com.opencloud.portal.uaa.server.**.entity
+    mapper-locations: classpath:mapper/*.xml

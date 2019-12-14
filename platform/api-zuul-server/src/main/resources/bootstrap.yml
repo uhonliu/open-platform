@@ -1,0 +1,158 @@
+server:
+    port: 8888
+
+spring:
+    application:
+        name: ${artifactId}
+    cloud:
+        #手动配置Bus id,
+        bus:
+            id: ${spring.application.name}:${server.port}
+        nacos:
+            config:
+                namespace: ${config.namespace}
+                refreshable-dataids: common.properties
+                server-addr: ${config.server-addr}
+                shared-dataids: common.properties,db.properties,redis.properties,rabbitmq.properties
+            discovery:
+                namespace: ${discovery.namespace}
+                server-addr: ${discovery.server-addr}
+        # sentinel动态配置规则
+        sentinel:
+            zuul:
+                enabled: true
+                order:
+                    pre: 10000
+                    post: 0
+                    error: -1
+            filter:
+                enabled: false
+            datasource:
+                # 限流
+                gw-flow:
+                    nacos:
+                        server-addr: ${config.server-addr}
+                        dataId: sentinel-gw-flow
+                        groupId: DEFAULT_GROUP
+                        rule-type: gw-flow
+                # api分组
+                gw-api-group:
+                    nacos:
+                        server-addr: ${config.server-addr}
+                        dataId: sentinel-gw-api-group
+                        groupId: DEFAULT_GROUP
+                        rule-type: gw-api-group
+                # 黑白名单
+                authority:
+                    nacos:
+                        server-addr: ${config.server-addr}
+                        dataId: sentinel-authority
+                        groupId: DEFAULT_GROUP
+                        rule-type: authority
+                # 系统保护
+                system:
+                    nacos:
+                        server-addr: ${config.server-addr}
+                        dataId: sentinel-system
+                        groupId: DEFAULT_GROUP
+                        rule-type: system
+    main:
+        allow-bean-definition-overriding: true
+    #解决restful 404错误 spring.mvc.throw-exception-if-no-handler-found=true spring.resources.add-mappings=false
+    mvc:
+        throw-exception-if-no-handler-found: true
+    resources:
+        add-mappings: false
+    profiles:
+        active: ${profile.name}
+    thymeleaf:
+        cache: false
+        encoding: UTF-8
+        mode: HTML
+        prefix: classpath:/templates/
+        suffix: .html
+
+hystrix:
+    command:
+        default:
+            execution:
+                isolation:
+                    thread:
+                        # hystrix 超时时间最好大于Ribbon的超时时间
+                        timeoutInMilliseconds: 90000
+
+ribbon:
+    #请求连接的超时时间
+    ConnectTimeout: 3000
+    #请求处理的超时时间
+    ReadTimeout: 15000
+    #对当前实例的重试次数
+    MaxAutoRetries: 1
+    #切换实例的重试次数
+    MaxAutoRetriesNextServer: 1
+    #对所有操作请求都进行重试
+    OkToRetryOnAllOperations: false
+
+zuul:
+    #是否开启路由重试
+    retryable: true
+    add-host-header: true
+    host:
+        connect-timeout-millis: 10000
+        max-per-route-connections: 500
+        max-total-connections: 1000
+        socket-timeout-millis: 60000
+    ignored-services: '*'
+    ratelimit:
+        behind-proxy: true
+        enabled: true
+        key-prefix: cloud_rate_limit
+        repository: REDIS
+        add-response-headers: false
+    semaphore:
+        max-semaphores: 1000
+    sensitive-headers: ''
+
+management:
+    endpoints:
+        web:
+            exposure:
+                # 开放部分端点和自定义端点
+                include: health,info,open
+
+opencloud:
+    swagger2:
+        enabled: true
+        description: 平台基础服务器
+        title: 平台基础服务器
+    #网关配置
+    api:
+        #动态权限控制
+        access-control: true
+        #校验参数签名
+        check-sign: false
+        #接口调试,生产环境设为false
+        api-debug: true
+        # 始终放行
+        permit-all:
+            - /*/login/**
+            - /*/logout/**
+            - /*/oauth/**
+            - /actuator
+            - /actuator/health
+            - /actuator/info
+        # 忽略权限鉴定
+        authority-ignores:
+            - /*/authority/granted/me
+            - /*/authority/granted/me/menu
+            - /*/current/user/**
+        # 签名忽略
+        sign-ignores:
+            - /**/login/**
+            - /**/logout/**
+
+#mybatis plus 设置
+mybatis-plus:
+    #实体扫描，多个package用逗号或者分号分隔
+    typeAliasesPackage: com.opencloud.gateway.zuul.server.**.entity
+    mapper-locations: classpath:mapper/*.xml

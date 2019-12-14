@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bsd.org.server.mapper.CompanyMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.bsd.org.server.model.entity.Company">
+        <id column="company_id" property="companyId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="company_name" property="companyName"/>
+        <result column="company_name_en" property="companyNameEn"/>
+        <result column="nature_id" property="natureId"/>
+        <result column="industry_id" property="industryId"/>
+        <result column="area_id" property="areaId"/>
+        <result column="established_time" property="establishedTime"/>
+        <result column="registered_capital" property="registeredCapital"/>
+        <result column="staff_num" property="staffNum"/>
+        <result column="website" property="website"/>
+        <result column="profile" property="profile"/>
+        <result column="contact" property="contact"/>
+        <result column="phone" property="phone"/>
+        <result column="fax" property="fax"/>
+        <result column="email" property="email"/>
+        <result column="address" property="address"/>
+        <result column="post_code" property="postCode"/>
+        <result column="logo" property="logo"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_by" property="updateBy"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        create_time,
+        update_time,
+        company_id, company_name, company_name_en, nature_id, industry_id, area_id, established_time, registered_capital, staff_num, website, profile, contact, phone, fax, email, address, post_code, logo, create_by, update_by
+    </sql>
+
+    <!--自定义关联查询-->
+    <!-- 表名 -->
+    <sql id="t_name">org_company</sql>
+    <!-- 别名 -->
+    <sql id="t_alias">org_company as company</sql>
+    <!--外键表关联定义 -->
+    <sql id="join"></sql>
+
+    <!-- 自定义查询单个实体 -->
+    <select id="getEntityMap" resultType="com.opencloud.common.mybatis.EntityMap">
+        SELECT * FROM
+        <include refid="t_alias"/>
+        <include refid="join"/>
+        ${ew.customSqlSegment}
+    </select>
+
+    <!-- 自定义关联查询分页 -->
+    <select id="pageList" resultType="com.opencloud.common.mybatis.EntityMap">
+        SELECT ${ew.select} FROM
+        <include refid="t_alias"/>
+        <include refid="join"/>
+        ${ew.customSqlSegment}
+    </select>
+</mapper>

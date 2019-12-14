@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bsd.dingtalk.server.mapper.DepartmentMapper">
+    <!-- 表名 -->
+    <sql id="t_name">org_department</sql>
+
+    <!-- 别名 -->
+    <sql id="t_alias">org_department as department</sql>
+
+    <!--外键表关联定义 -->
+    <sql id="join">
+    </sql>
+
+    <!-- 自定义分页 -->
+    <select id="pageList" resultType="com.opencloud.common.mybatis.EntityMap">
+        select ${ew.select} FROM
+        <include refid="t_alias"/>
+        <include refid="join"/>
+        ${ew.customSqlSegment}
+    </select>
+
+    <!--
+    <insert id="insertBatch" parameterType="list">
+        insert  into department (department_id,parent_id,department_code,department_name,level,seq,status,company_id,create_time,update_time,create_by,update_by)
+        values
+        <foreach collection="list" item="item"  index="index" separator=",">
+            #{item.departmentId},
+            #{item.parentId},
+            #{item.departmentCode},
+            #{item.departmentName},
+            #{item.level},
+            #{item.seq},
+            #{item.status},
+            #{item.companyId},
+            #{item.createTime},
+            #{item.updateTime},
+            #{item.create_by}
+            #{item.update_by}
+        </foreach>
+    </insert>
+    -->
+</mapper>

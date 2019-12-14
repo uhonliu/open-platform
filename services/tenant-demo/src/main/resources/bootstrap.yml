@@ -1,0 +1,21 @@
+server:
+    port: 6878
+
+spring:
+    datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        password: root
+        type: com.zaxxer.hikari.HikariDataSource
+        url: jdbc:mysql://localhost:3306/open-platform?useSSL=false&useUnicode=true&characterEncoding=utf-8
+        username: root
+
+opencloud:
+    tenant:
+        datasource:
+            driver-class-name: com.mysql.cj.jdbc.Driver
+            password: root
+            type: com.zaxxer.hikari.HikariDataSource
+            url: jdbc:mysql://localhost:3306/open-platform?useSSL=false&useUnicode=true&characterEncoding=utf-8
+            username: root
+        tenantId: tenant1234
+

@@ -1,0 +1,22 @@
+[
+     {
+          "apiName": "kjapi",
+          "predicateItems": [
+               {
+                    "pattern": "/kjapi/v1/curriculum/list"
+               },
+               {
+                    "pattern": "/kjapi/v1/**",
+                    "matchStrategy": 1
+               }
+          ]
+     },
+     {
+          "apiName": "base-server",
+          "predicateItems": [
+               {
+                    "pattern": "/base/gateway/api/rateLimit"
+               }
+          ]
+     }
+]

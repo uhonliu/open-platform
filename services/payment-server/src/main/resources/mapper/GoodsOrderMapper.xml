@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bsd.payment.server.mapper.GoodsOrderMapper">
+    <resultMap id="BaseResultMap" type="com.bsd.payment.server.model.entity.GoodsOrder">
+        <id column="goods_order_id" property="goodsOrderId" jdbcType="VARCHAR"/>
+        <result column="goods_id" property="goodsId" jdbcType="VARCHAR"/>
+        <result column="goods_name" property="goodsName" jdbcType="VARCHAR"/>
+        <result column="amount" property="amount" jdbcType="BIGINT"/>
+        <result column="user_id" property="userId" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="pay_order_id" property="payOrderId" jdbcType="VARCHAR"/>
+        <result column="channel_code" property="channelCode" jdbcType="VARCHAR"/>
+        <result column="channel_user_id" property="channelUserId" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    goods_order_id, goods_id, goods_name, amount, user_id, status, pay_order_id, channel_code,
+    channel_user_id, create_time, update_time
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from bsd_goods_order
+        where goods_order_id = #{goodsOrderId,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from bsd_goods_order
+    where goods_order_id = #{goodsOrderId,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.bsd.payment.server.model.entity.GoodsOrder">
+    insert into bsd_goods_order (goods_order_id, goods_id, goods_name,
+        amount, user_id, status,
+        pay_order_id, channel_code, channel_user_id,
+        create_time, update_time)
+    values (#{goodsOrderId,jdbcType=VARCHAR}, #{goodsId,jdbcType=VARCHAR}, #{goodsName,jdbcType=VARCHAR}, 
+        #{amount,jdbcType=BIGINT}, #{userId,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT},
+        #{payOrderId,jdbcType=VARCHAR}, #{channelCode,jdbcType=VARCHAR}, #{channelUserId,jdbcType=VARCHAR},
+        #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="com.bsd.payment.server.model.entity.GoodsOrder">
+        insert into bsd_goods_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="goodsOrderId != null">
+                goods_order_id,
+            </if>
+            <if test="goodsId != null">
+                goods_id,
+            </if>
+            <if test="goodsName != null">
+                goods_name,
+            </if>
+            <if test="amount != null">
+                amount,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="payOrderId != null">
+                pay_order_id,
+            </if>
+            <if test="channelCode != null">
+                channel_code,
+            </if>
+            <if test="channelUserId != null">
+                channel_user_id,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="goodsOrderId != null">
+                #{goodsOrderId,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsId != null">
+                #{goodsId,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsName != null">
+                #{goodsName,jdbcType=VARCHAR},
+            </if>
+            <if test="amount != null">
+                #{amount,jdbcType=BIGINT},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="payOrderId != null">
+                #{payOrderId,jdbcType=VARCHAR},
+            </if>
+            <if test="channelCode != null">
+                #{channelCode,jdbcType=VARCHAR},
+            </if>
+            <if test="channelUserId != null">
+                #{channelUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.bsd.payment.server.model.entity.GoodsOrder">
+        update bsd_goods_order
+        <set>
+            <if test="goodsId != null">
+                goods_id = #{goodsId,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsName != null">
+                goods_name = #{goodsName,jdbcType=VARCHAR},
+            </if>
+            <if test="amount != null">
+                amount = #{amount,jdbcType=BIGINT},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="payOrderId != null">
+                pay_order_id = #{payOrderId,jdbcType=VARCHAR},
+            </if>
+            <if test="channelCode != null">
+                channel_code = #{channelCode,jdbcType=VARCHAR},
+            </if>
+            <if test="channelUserId != null">
+                channel_user_id = #{channelUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where goods_order_id = #{goodsOrderId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.bsd.payment.server.model.entity.GoodsOrder">
+    update bsd_goods_order
+    set goods_id = #{goodsId,jdbcType=VARCHAR},
+        goods_name = #{goodsName,jdbcType=VARCHAR},
+        amount = #{amount,jdbcType=BIGINT},
+        user_id = #{userId,jdbcType=VARCHAR},
+        status = #{status,jdbcType=TINYINT},
+        pay_order_id = #{payOrderId,jdbcType=VARCHAR},
+        channel_code = #{channelCode,jdbcType=VARCHAR},
+        channel_user_id = #{channelUserId,jdbcType=VARCHAR},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+        update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where goods_order_id = #{goodsOrderId,jdbcType=VARCHAR}
+    </update>
+</mapper>

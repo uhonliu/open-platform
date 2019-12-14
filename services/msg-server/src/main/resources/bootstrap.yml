@@ -1,0 +1,55 @@
+server:
+    port: 8266
+
+spring:
+    application:
+        name: ${artifactId}
+    cloud:
+        #手动配置Bus id,
+        bus:
+            id: ${spring.application.name}:${server.port}
+        nacos:
+            config:
+                namespace: ${config.namespace}
+                refreshable-dataids: common.properties
+                server-addr: ${config.server-addr}
+                shared-dataids: common.properties,db.properties,redis.properties,rabbitmq.properties,sms.properties
+            discovery:
+                namespace: ${discovery.namespace}
+                server-addr: ${discovery.server-addr}
+    main:
+        allow-bean-definition-overriding: true
+    #解决restful 404错误 spring.mvc.throw-exception-if-no-handler-found=true spring.resources.add-mappings=false
+    mvc:
+        throw-exception-if-no-handler-found: true
+    resources:
+        add-mappings: false
+    profiles:
+        active: ${profile.name}
+    # 文件上传限制
+    servlet:
+        multipart:
+            max-file-size: 10MB
+            max-request-size: 10MB
+
+management:
+    endpoints:
+        web:
+            exposure:
+                include: '*'
+
+opencloud:
+    #sms:
+    #    aliyun:
+    #        accessKeyId: xxxxx
+    #        accessKeySecret: xxxxx
+    swagger2:
+        enabled: true
+        description: 消息服务器
+        title: 消息服务器
+
+#mybatis plus 设置
+mybatis-plus:
+    #实体扫描，多个package用逗号或者分号分隔
+    typeAliasesPackage: com.opencloud.msg.client.**.entity
+    mapper-locations: classpath:mapper/*.xml

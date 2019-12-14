@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.opencloud.msg.server.mapper.EmailLogsMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.opencloud.msg.client.model.entity.EmailLogs">
+        <id column="log_id" property="logId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="subject" property="subject"/>
+        <result column="send_to" property="sendTo"/>
+        <result column="send_cc" property="sendCc"/>
+        <result column="content" property="content"/>
+        <result column="attachments" property="attachments"/>
+        <result column="send_nums" property="sendNums"/>
+        <result column="error" property="error"/>
+        <result column="result" property="result"/>
+        <result column="config" property="config"/>
+        <result column="tpl_code" property="tplCode"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        create_time,
+        update_time,
+        log_id, subject, send_to, send_cc, content, attachments, send_nums, error, result, config, tpl_code
+    </sql>
+
+    <!--自定义关联查询-->
+    <!-- 表名 -->
+    <sql id="t_name">msg_email_logs</sql>
+    <!-- 别名 -->
+    <sql id="t_alias">msg_email_logs as logs</sql>
+    <!--外键表关联定义 -->
+    <sql id="join"></sql>
+
+    <!-- 自定义查询单个实体 -->
+    <select id="getEntityMap" resultType="com.opencloud.common.mybatis.EntityMap">
+        SELECT * FROM
+        <include refid="t_alias"/>
+        <include refid="join"/>
+        ${ew.customSqlSegment}
+    </select>
+
+    <!-- 自定义关联查询分页 -->
+    <select id="pageList" resultType="com.opencloud.common.mybatis.EntityMap">
+        SELECT ${ew.select} FROM
+        <include refid="t_alias"/>
+        <include refid="join"/>
+        ${ew.customSqlSegment}
+    </select>
+</mapper>

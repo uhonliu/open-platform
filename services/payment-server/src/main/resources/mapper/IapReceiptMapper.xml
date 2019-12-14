@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bsd.payment.server.mapper.IapReceiptMapper">
+    <resultMap id="BaseResultMap" type="com.bsd.payment.server.model.entity.IapReceipt">
+        <id column="pay_order_id" property="payOrderId" jdbcType="VARCHAR"/>
+        <result column="mch_id" property="mchId" jdbcType="VARCHAR"/>
+        <result column="transaction_id" property="transactionId" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="handle_count" property="handleCount" jdbcType="TINYINT"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <resultMap id="ResultMapWithBLOBs" type="com.bsd.payment.server.model.entity.IapReceipt" extends="BaseResultMap">
+        <result column="receipt_data" property="receiptData" jdbcType="LONGVARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    pay_order_id, mch_id, transaction_id, status, handle_count, create_time, update_time
+    </sql>
+    <sql id="Blob_Column_List">
+    receipt_data
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from bsd_iap_receipt
+        where pay_order_id = #{payOrderId,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from bsd_iap_receipt
+    where pay_order_id = #{payOrderId,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.bsd.payment.server.model.entity.IapReceipt">
+    insert into bsd_iap_receipt (pay_order_id, mch_id, transaction_id,
+      status, handle_count, create_time,
+      update_time, receipt_data)
+    values (#{payOrderId,jdbcType=VARCHAR}, #{mchId,jdbcType=VARCHAR}, #{transactionId,jdbcType=VARCHAR}, 
+      #{status,jdbcType=TINYINT}, #{handleCount,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{receiptData,jdbcType=LONGVARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.bsd.payment.server.model.entity.IapReceipt">
+        insert into bsd_iap_receipt
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="payOrderId != null">
+                pay_order_id,
+            </if>
+            <if test="mchId != null">
+                mch_id,
+            </if>
+            <if test="transactionId != null">
+                transaction_id,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="handleCount != null">
+                handle_count,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="receiptData != null">
+                receipt_data,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="payOrderId != null">
+                #{payOrderId,jdbcType=VARCHAR},
+            </if>
+            <if test="mchId != null">
+                #{mchId,jdbcType=VARCHAR},
+            </if>
+            <if test="transactionId != null">
+                #{transactionId,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="handleCount != null">
+                #{handleCount,jdbcType=TINYINT},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="receiptData != null">
+                #{receiptData,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.bsd.payment.server.model.entity.IapReceipt">
+        update bsd_iap_receipt
+        <set>
+            <if test="mchId != null">
+                mch_id = #{mchId,jdbcType=VARCHAR},
+            </if>
+            <if test="transactionId != null">
+                transaction_id = #{transactionId,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="handleCount != null">
+                handle_count = #{handleCount,jdbcType=TINYINT},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="receiptData != null">
+                receipt_data = #{receiptData,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where pay_order_id = #{payOrderId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bsd.payment.server.model.entity.IapReceipt">
+    update bsd_iap_receipt
+    set mch_id = #{mchId,jdbcType=VARCHAR},
+        transaction_id = #{transactionId,jdbcType=VARCHAR},
+        status = #{status,jdbcType=TINYINT},
+        handle_count = #{handleCount,jdbcType=TINYINT},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+        receipt_data = #{receiptData,jdbcType=LONGVARCHAR}
+    where pay_order_id = #{payOrderId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.bsd.payment.server.model.entity.IapReceipt">
+    update bsd_iap_receipt
+    set mch_id = #{mchId,jdbcType=VARCHAR},
+        transaction_id = #{transactionId,jdbcType=VARCHAR},
+        status = #{status,jdbcType=TINYINT},
+        handle_count = #{handleCount,jdbcType=TINYINT},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+        update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where pay_order_id = #{payOrderId,jdbcType=VARCHAR}
+    </update>
+</mapper>

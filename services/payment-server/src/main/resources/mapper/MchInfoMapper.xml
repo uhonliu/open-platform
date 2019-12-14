@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bsd.payment.server.mapper.MchInfoMapper">
+    <resultMap id="BaseResultMap" type="com.bsd.payment.server.model.entity.MchInfo">
+        <id column="mch_id" property="mchId" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
+        <result column="req_key" property="reqKey" jdbcType="VARCHAR"/>
+        <result column="res_key" property="resKey" jdbcType="VARCHAR"/>
+        <result column="state" property="state" jdbcType="TINYINT"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    mch_id, name, type, req_key, res_key, state, create_time, update_time
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from bsd_mch_info
+        where mch_id = #{mchId,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from bsd_mch_info
+    where mch_id = #{mchId,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.bsd.payment.server.model.entity.MchInfo">
+    insert into bsd_mch_info (mch_id, name, type,
+        req_key, res_key, state,
+        create_time, update_time)
+    values (#{mchId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
+        #{reqKey,jdbcType=VARCHAR}, #{resKey,jdbcType=VARCHAR}, #{state,jdbcType=TINYINT},
+        #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="com.bsd.payment.server.model.entity.MchInfo">
+        insert into bsd_mch_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="mchId != null">
+                mch_id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="reqKey != null">
+                req_key,
+            </if>
+            <if test="resKey != null">
+                res_key,
+            </if>
+            <if test="state != null">
+                state,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="mchId != null">
+                #{mchId,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="reqKey != null">
+                #{reqKey,jdbcType=VARCHAR},
+            </if>
+            <if test="resKey != null">
+                #{resKey,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=TINYINT},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.bsd.payment.server.model.entity.MchInfo">
+        update bsd_mch_info
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="reqKey != null">
+                req_key = #{reqKey,jdbcType=VARCHAR},
+            </if>
+            <if test="resKey != null">
+                res_key = #{resKey,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                state = #{state,jdbcType=TINYINT},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where mch_id = #{mchId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.bsd.payment.server.model.entity.MchInfo">
+    update bsd_mch_info
+    set name = #{name,jdbcType=VARCHAR},
+        type = #{type,jdbcType=VARCHAR},
+        req_key = #{reqKey,jdbcType=VARCHAR},
+        res_key = #{resKey,jdbcType=VARCHAR},
+        state = #{state,jdbcType=TINYINT},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+        update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where mch_id = #{mchId,jdbcType=VARCHAR}
+    </update>  <!-- 查询所有的商户id -->
+    <select id="selectMchId" resultMap="BaseResultMap" parameterType="list">
+        select
+            mch_id
+        from
+            bsd_mch_info
+        order by
+            mch_id DESC
+    </select>
+
+</mapper>

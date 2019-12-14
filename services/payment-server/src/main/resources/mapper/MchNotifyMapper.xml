@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bsd.payment.server.mapper.MchNotifyMapper">
+    <resultMap id="BaseResultMap" type="com.bsd.payment.server.model.entity.MchNotify">
+        <id column="order_id" property="orderId" jdbcType="VARCHAR"/>
+        <result column="mch_id" property="mchId" jdbcType="VARCHAR"/>
+        <result column="mch_order_no" property="mchOrderNo" jdbcType="VARCHAR"/>
+        <result column="order_type" property="orderType" jdbcType="VARCHAR"/>
+        <result column="notify_url" property="notifyUrl" jdbcType="VARCHAR"/>
+        <result column="notify_count" property="notifyCount" jdbcType="TINYINT"/>
+        <result column="result" property="result" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="last_notify_time" property="lastNotifyTime" jdbcType="TIMESTAMP"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    order_id, mch_id, mch_order_no, order_type, notify_url, notify_count, result, status, last_notify_time,
+    create_time, update_time
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from bsd_mch_notify
+        where order_id = #{orderId,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from bsd_mch_notify
+    where order_id = #{orderId,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.bsd.payment.server.model.entity.MchNotify">
+    insert into bsd_mch_notify (order_id, mch_id, mch_order_no,
+        order_type, notify_url, notify_count,
+        result, status, last_notify_time,
+        create_time, update_time)
+    values (#{orderId,jdbcType=VARCHAR}, #{mchId,jdbcType=VARCHAR}, #{mchOrderNo,jdbcType=VARCHAR}, 
+        #{orderType,jdbcType=VARCHAR}, #{notifyUrl,jdbcType=VARCHAR}, #{notifyCount,jdbcType=TINYINT},
+        #{result,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{lastNotifyTime,jdbcType=TIMESTAMP},
+        #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="com.bsd.payment.server.model.entity.MchNotify">
+        insert into bsd_mch_notify
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderId != null">
+                order_id,
+            </if>
+            <if test="mchId != null">
+                mch_id,
+            </if>
+            <if test="mchOrderNo != null">
+                mch_order_no,
+            </if>
+            <if test="orderType != null">
+                order_type,
+            </if>
+            <if test="notifyUrl != null">
+                notify_url,
+            </if>
+            <if test="notifyCount != null">
+                notify_count,
+            </if>
+            <if test="result != null">
+                result,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="lastNotifyTime != null">
+                last_notify_time,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderId != null">
+                #{orderId,jdbcType=VARCHAR},
+            </if>
+            <if test="mchId != null">
+                #{mchId,jdbcType=VARCHAR},
+            </if>
+            <if test="mchOrderNo != null">
+                #{mchOrderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="orderType != null">
+                #{orderType,jdbcType=VARCHAR},
+            </if>
+            <if test="notifyUrl != null">
+                #{notifyUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="notifyCount != null">
+                #{notifyCount,jdbcType=TINYINT},
+            </if>
+            <if test="result != null">
+                #{result,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="lastNotifyTime != null">
+                #{lastNotifyTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.bsd.payment.server.model.entity.MchNotify">
+        update bsd_mch_notify
+        <set>
+            <if test="mchId != null">
+                mch_id = #{mchId,jdbcType=VARCHAR},
+            </if>
+            <if test="mchOrderNo != null">
+                mch_order_no = #{mchOrderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="orderType != null">
+                order_type = #{orderType,jdbcType=VARCHAR},
+            </if>
+            <if test="notifyUrl != null">
+                notify_url = #{notifyUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="notifyCount != null">
+                notify_count = #{notifyCount,jdbcType=TINYINT},
+            </if>
+            <if test="result != null">
+                result = #{result,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="lastNotifyTime != null">
+                last_notify_time = #{lastNotifyTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where order_id = #{orderId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.bsd.payment.server.model.entity.MchNotify">
+    update bsd_mch_notify
+    set mch_id = #{mchId,jdbcType=VARCHAR},
+        mch_order_no = #{mchOrderNo,jdbcType=VARCHAR},
+        order_type = #{orderType,jdbcType=VARCHAR},
+        notify_url = #{notifyUrl,jdbcType=VARCHAR},
+        notify_count = #{notifyCount,jdbcType=TINYINT},
+        result = #{result,jdbcType=VARCHAR},
+        status = #{status,jdbcType=TINYINT},
+        last_notify_time = #{lastNotifyTime,jdbcType=TIMESTAMP},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+        update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where order_id = #{orderId,jdbcType=VARCHAR}
+    </update>
+
+    <!-- 单独增加的方法 -->
+    <insert id="insertSelectiveOnDuplicateKeyUpdate" parameterType="com.bsd.payment.server.model.entity.MchNotify">
+        insert into bsd_mch_notify
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderId != null">
+                order_id,
+            </if>
+            <if test="mchId != null">
+                mch_id,
+            </if>
+            <if test="mchOrderNo != null">
+                mch_order_no,
+            </if>
+            <if test="orderType != null">
+                order_type,
+            </if>
+            <if test="notifyUrl != null">
+                notify_url,
+            </if>
+            <if test="notifyCount != null">
+                notify_count,
+            </if>
+            <if test="result != null">
+                result,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="lastNotifyTime != null">
+                last_notify_time,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderId != null">
+                #{orderId,jdbcType=VARCHAR},
+            </if>
+            <if test="mchId != null">
+                #{mchId,jdbcType=VARCHAR},
+            </if>
+            <if test="mchOrderNo != null">
+                #{mchOrderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="orderType != null">
+                #{orderType,jdbcType=VARCHAR},
+            </if>
+            <if test="notifyUrl != null">
+                #{notifyUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="notifyCount != null">
+                #{notifyCount,jdbcType=TINYINT},
+            </if>
+            <if test="result != null">
+                #{result,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="lastNotifyTime != null">
+                #{lastNotifyTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+        ON DUPLICATE KEY UPDATE order_id = #{orderId,jdbcType=VARCHAR}
+    </insert>
+</mapper>

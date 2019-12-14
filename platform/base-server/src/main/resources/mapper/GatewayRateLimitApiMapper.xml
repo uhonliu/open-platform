@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.opencloud.base.server.mapper.GatewayRateLimitApisMapper">
+    <resultMap id="BaseResultMap" type="com.opencloud.base.client.model.entity.GatewayRateLimitApi">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <result column="policy_id" jdbcType="BIGINT" property="policyId"/>
+        <result column="api_id" jdbcType="BIGINT" property="apiId"/>
+    </resultMap>
+
+    <resultMap id="RateLimitApi" extends="com.opencloud.base.server.mapper.GatewayIpLimitApisMapper.ApiResultMap"
+               type="com.opencloud.base.client.model.RateLimitApi">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <result column="policy_id" jdbcType="BIGINT" property="policyId"/>
+        <result column="policy_name" jdbcType="VARCHAR" property="policyName"/>
+        <result column="limit_quota" jdbcType="BIGINT" property="limitQuota"/>
+        <result column="interval_unit" jdbcType="VARCHAR" property="intervalUnit"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+    </resultMap>
+
+    <select id="selectRateLimitApi" resultMap="RateLimitApi">
+        SELECT
+            i.policy_id,
+            p.limit_quota,
+            p.interval_unit,
+            p.policy_name,
+            a.api_id,
+            a.api_code,
+            a.api_name,
+            a.api_category,
+            a.service_id,
+            a.path,
+            r.url
+        FROM gateway_rate_limit_api AS i
+        INNER JOIN gateway_rate_limit AS p ON i.policy_id = p.policy_id
+        INNER JOIN base_api AS a ON i.api_id = a.api_id
+        INNER JOIN gateway_route AS r ON a.service_id = r.route_name
+        WHERE p.policy_type = 'url'
+    </select>
+</mapper>

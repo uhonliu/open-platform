@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.opencloud.base.server.mapper.BaseActionMapper">
+    <resultMap id="BaseResultMap" type="com.opencloud.base.client.model.entity.BaseAction">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="action_id" property="actionId" jdbcType="BIGINT"/>
+        <result column="action_code" property="actionCode" jdbcType="VARCHAR"/>
+        <result column="action_name" property="actionName" jdbcType="VARCHAR"/>
+        <result column="menu_id" property="menuId" jdbcType="BIGINT"/>
+        <result column="priority" property="priority" jdbcType="INTEGER"/>
+        <result column="action_desc" property="actionDesc" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="is_persist" property="isPersist" jdbcType="INTEGER"/>
+        <result column="service_id" jdbcType="TIMESTAMP" property="serviceId"/>
+    </resultMap>
+</mapper>

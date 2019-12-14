@@ -1,0 +1,171 @@
+package ${package.Controller};
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.opencloud.common.model.PageParams;
+import com.opencloud.common.model.ResultBody;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+#if(${restControllerStyle})
+import org.springframework.web.bind.annotation.RestController;
+#else
+import org.springframework.stereotype.Controller;
+#end
+#if(${superControllerClassPackage})
+import ${superControllerClassPackage};
+#end
+import java.util.Arrays;
+import java.util.Map;
+
+/**
+ * $!{table.comment} 前端控制器
+ *
+ * @author ${author}
+ * @date ${date}
+ */
+@Api(value = "$!{table.comment}", tags = "$!{table.comment}")
+#if(${restControllerStyle})
+@RestController
+#else
+@Controller
+#end
+@RequestMapping("#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end")
+#if(${kotlin})
+class ${table.controllerName}#if(${superControllerClass}) : ${superControllerClass}()#end
+#else
+#if(${superControllerClass})
+public class ${table.controllerName} extends ${superControllerClass} {
+#else
+public class ${table.controllerName} {
+#end
+    @Autowired
+    private ${table.serviceName} targetService;
+
+    /**
+    * 获取分页数据
+    *
+    * @return
+    */
+    @ApiOperation(value = "获取分页数据", notes = "获取分页数据")
+    @GetMapping(value = "/list")
+    public ResultBody<IPage<${entity}>>list(@RequestParam(required = false) Map map) {
+        PageParams pageParams = new PageParams(map);
+        ${entity} query = pageParams.mapToObject(${entity}.class);
+        QueryWrapper<${entity}> queryWrapper = new QueryWrapper();
+        return ResultBody.ok().data(targetService.page(pageParams, queryWrapper));
+    }
+
+    /**
+     * 根据ID查找数据
+     */
+    @ApiOperation(value = "根据ID查找数据", notes = "根据ID查找数据")
+    @ResponseBody
+    @RequestMapping("/get")
+    public ResultBody<${entity}> get(@RequestParam("id") Long id) {
+        ${entity} entity = targetService.getById(id);
+        return ResultBody.ok().data(entity);
+    }
+
+    /**
+    * 添加数据
+    * @return
+    */
+    @ApiOperation(value = "添加数据", notes = "添加数据")
+    @ApiImplicitParams({
+    #foreach($field in ${table.fields})
+    #if(!${field.keyFlag})
+        #if(${foreach.count}==${table.fields.size()})
+        @ApiImplicitParam(name = "${field.propertyName}", required = true, value = "${field.comment}", paramType = "form")
+        #else
+        @ApiImplicitParam(name = "${field.propertyName}", required = true, value = "${field.comment}", paramType = "form"),
+        #end
+    #end
+    #end
+    })
+    @PostMapping("/add")
+    public ResultBody add(
+    #foreach($field in ${table.fields})
+    #if(!${field.keyFlag})
+        #if(${foreach.count}==${table.fields.size()})
+        @RequestParam(value = "${field.propertyName}") ${field.propertyType} ${field.propertyName}
+        #else
+        @RequestParam(value = "${field.propertyName}") ${field.propertyType} ${field.propertyName},
+        #end
+    #end
+    #end
+        ) {
+        ${entity} entity = new ${entity}();
+        #foreach($field in ${table.fields})
+        #if(!${field.keyFlag})
+        entity.set${field.capitalName}(${field.propertyName});
+        #end
+        #end
+        targetService.save(entity);
+        return ResultBody.ok();
+    }
+
+    /**
+    * 更新数据
+    * @return
+    */
+    @ApiOperation(value = "更新数据", notes = "更新数据")
+    @ApiImplicitParams({
+    #foreach($field in ${table.fields})
+        #if(${foreach.count}==${table.fields.size()})
+        @ApiImplicitParam(name = "${field.propertyName}", required = true, value = "${field.comment}", paramType = "form")
+        #else
+        @ApiImplicitParam(name = "${field.propertyName}", required = true, value = "${field.comment}", paramType = "form"),
+        #end
+    #end
+    })
+    @PostMapping("/update")
+    public ResultBody add(
+    #foreach($field in ${table.fields})
+        #if(${foreach.count}==${table.fields.size()})
+        @RequestParam(value = "${field.propertyName}") ${field.propertyType} ${field.propertyName}
+        #else
+        @RequestParam(value = "${field.propertyName}") ${field.propertyType} ${field.propertyName},
+        #end
+    #end
+        ) {
+        ${entity} entity = new ${entity}();
+        #foreach($field in ${table.fields})
+        entity.set${field.capitalName}(${field.propertyName});
+        #end
+        targetService.updateById(entity);
+        return ResultBody.ok();
+    }
+
+    /**
+    * 删除数据
+    * @return
+    */
+    @ApiOperation(value = "删除数据", notes = "删除数据")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "id", required = true, value = "id", paramType = "form")
+    })
+    @PostMapping("/remove")
+    public ResultBody remove(@RequestParam(value = "id") Long id) {
+        targetService.removeById(id);
+        return ResultBody.ok();
+    }
+
+    /**
+    * 批量删除数据
+    * @return
+    */
+    @ApiOperation(value = "批量删除数据", notes = "批量删除数据")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "ids", required = true, value = "多个用,号隔开", paramType = "form")
+    })
+    @PostMapping("/batch/remove")
+    public ResultBody batchRemove(@RequestParam(value = "ids") String ids) {
+        targetService.removeByIds(Arrays.asList(ids.split(",")));
+        return ResultBody.ok();
+    }
+}
+#end

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>SSO单点登录演示demo</title>
+</head>
+<body>
+<div sec:authorize="isAuthenticated()">
+    <p>已有用户登录</p>
+    <p>登录者:<span th:text="${user.username}"></span> <span th:text="${user.nickName}"></span></p>
+    <p>权 限: <span th:text="${user.authorities}"></span></p>
+</div>
+<div sec:authorize="isAnonymous()">
+    <p>未有用户登录</p>
+</div>
+
+</body>
+</html>

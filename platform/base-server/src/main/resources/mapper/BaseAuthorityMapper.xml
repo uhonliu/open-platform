@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.opencloud.base.server.mapper.BaseAuthorityMapper">
+    <resultMap id="BaseResultMap" type="com.opencloud.base.client.model.entity.BaseAuthority">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="authority_id" jdbcType="BIGINT" property="authorityId"/>
+        <result column="authority" jdbcType="VARCHAR" property="authority"/>
+        <result column="menu_id" jdbcType="BIGINT" property="menuId"/>
+        <result column="api_id" jdbcType="BIGINT" property="apiId"/>
+        <result column="action_id" jdbcType="BIGINT" property="actionId"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <resultMap id="AuthorityResource" type="com.opencloud.base.client.model.AuthorityResource">
+        <result column="path" jdbcType="VARCHAR" property="path"/>
+        <result column="authority" jdbcType="VARCHAR" property="authority"/>
+        <result column="service_id" jdbcType="VARCHAR" property="serviceId"/>
+        <result column="is_auth" jdbcType="INTEGER" property="isAuth"/>
+        <result column="is_open" jdbcType="INTEGER" property="isOpen"/>
+        <result column="prefix" jdbcType="VARCHAR" property="prefix"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+    </resultMap>
+
+    <resultMap id="Authority" type="com.opencloud.common.security.OpenAuthority">
+        <result column="authority_id" jdbcType="BIGINT" property="authorityId"/>
+        <result column="authority" jdbcType="VARCHAR" property="authority"/>
+        <result column="expire_time" jdbcType="TIMESTAMP" property="expireTime"/>
+        <result column="owner" jdbcType="VARCHAR" property="owner"/>
+    </resultMap>
+
+    <resultMap id="AuthorityMenu" type="com.opencloud.base.client.model.AuthorityMenu"
+               extends="com.opencloud.base.server.mapper.BaseMenuMapper.BaseResultMap">
+        <result column="authority_id" jdbcType="BIGINT" property="authorityId"/>
+        <result column="authority" jdbcType="VARCHAR" property="authority"/>
+        <collection property="actionList" column="{menuId=menu_id,status=status}" select="selectAuthorityAction"/>
+    </resultMap>
+
+    <resultMap id="AuthorityAction" type="com.opencloud.base.client.model.AuthorityAction"
+               extends="com.opencloud.base.server.mapper.BaseActionMapper.BaseResultMap">
+        <result column="authority_id" jdbcType="BIGINT" property="authorityId"/>
+        <result column="authority" jdbcType="VARCHAR" property="authority"/>
+        <result column="service_id" jdbcType="VARCHAR" property="serviceId"/>
+    </resultMap>
+
+    <resultMap id="AuthorityApi" type="com.opencloud.base.client.model.AuthorityApi"
+               extends="com.opencloud.base.server.mapper.BaseApiMapper.BaseResultMap">
+        <result column="authority_id" jdbcType="BIGINT" property="authorityId"/>
+        <result column="authority" jdbcType="VARCHAR" property="authority"/>
+        <result column="prefix" jdbcType="VARCHAR" property="prefix"/>
+    </resultMap>
+
+    <select id="selectAuthorityMenu" resultMap="AuthorityMenu">
+        SELECT
+        a.authority_id,
+        a.authority,
+        m.*
+        FROM base_authority AS a
+        INNER JOIN base_menu AS m ON a.menu_id = m.menu_id
+        <where>
+            <if test="serviceId != null and serviceId != ''">
+                AND m.service_id = #{serviceId}
+            </if>
+            <if test="status != null">
+                AND m.status = #{status}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectAuthorityAction" resultMap="AuthorityAction">
+        SELECT
+        a.authority_id,
+        a.authority,
+        o.*
+        FROM base_authority AS a
+        INNER JOIN base_action AS o ON a.action_id = o.action_id
+        <if test="roleId!=null">
+            INNER JOIN base_authority_role AS ra ON ra.authority_id = a.authority_id
+        </if>
+        <if test="userId!=null">
+            INNER JOIN base_authority_user AS ua ON ua.authority_id = a.authority_id
+        </if>
+        <where>
+            <if test="status!=null">
+                AND o.status = #{status}
+            </if>
+            <if test="menuId!=null">
+                AND o.menu_id = #{menuId}
+            </if>
+            <if test="roleId!=null">
+                AND ra.role_id = #{roleId}
+            </if>
+            <if test="userId!=null">
+                AND ua.user_id = #{userId}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectAuthorityApi" resultMap="AuthorityApi">
+        SELECT
+        a.authority_id,
+        a.authority,
+        api.*,
+        route.path as prefix
+        FROM base_authority AS a
+        INNER JOIN base_api AS api ON a.api_id = api.api_id
+        INNER JOIN gateway_route AS route ON route.route_name = api.service_id
+        <where>
+            <if test="status!=null">
+                AND api.status = #{status}
+            </if>
+            <if test="serviceId!=null and serviceId!=''">
+                AND api.service_id = #{serviceId}
+            </if>
+        </where>
+        ORDER BY api.create_time DESC
+    </select>
+
+    <select id="selectAuthorityAll" resultMap="Authority">
+        SELECT
+        authority_id,
+        authority,
+        'user' AS owner
+        FROM base_authority
+        <where>
+            <if test="status!=null">
+                AND status = #{status}
+            </if>
+            <if test="type!=null and type!='' and type == '1'.toString()">
+                AND api_id IS NULL
+            </if>
+            <if test="type!=null and type!='' and type == '2'.toString()">
+                AND api_id IS NOT NULL
+            </if>
+        </where>
+    </select>
+
+    <select id="selectAllAuthorityResource" resultMap="AuthorityResource">
+        SELECT
+        a.authority_id,
+        a.authority,
+        menu.path,
+        menu.service_id,
+        '1' AS is_auth,
+        '1' AS is_open,
+        menu.`status`,
+        route.path AS prefix
+        FROM base_authority AS a
+        INNER JOIN base_menu AS menu ON a.menu_id = menu.menu_id
+        LEFT JOIN gateway_route AS route ON route.route_name = menu.service_id
+        WHERE menu.`status` = 1
+        UNION ALL
+        SELECT
+        a.authority_id,
+        a.authority,
+        api.path,
+        api.service_id,
+        api.is_auth,
+        api.is_open,
+        api.`status`,
+        route.path AS prefix
+        FROM base_authority AS a
+        INNER JOIN base_api AS api ON a.api_id = api.api_id
+        LEFT JOIN gateway_route AS route ON route.route_name = api.service_id
+        UNION ALL
+        SELECT
+        a.authority_id,
+        a.authority,
+        api.path,
+        api.service_id,
+        api.is_auth,
+        api.is_open,
+        api.`status`,
+        route.path AS prefix
+        FROM base_authority_action AS ac
+        INNER JOIN base_authority AS a ON a.action_id = ac.action_id
+        INNER JOIN base_authority AS a2 ON ac.authority_id = a2.authority_id
+        INNER JOIN base_api AS api ON a2.api_id = api.api_id
+        INNER JOIN base_action AS action ON ac.action_id = action.action_id
+        LEFT JOIN gateway_route AS route ON route.route_name = api.service_id
+        WHERE action.`status` = 1
+    </select>
+</mapper>

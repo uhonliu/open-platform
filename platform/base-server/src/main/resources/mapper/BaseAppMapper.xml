@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.opencloud.base.server.mapper.BaseAppMapper">
+    <resultMap id="AppResultMap" type="com.opencloud.base.client.model.App">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="app_id" property="appId" jdbcType="BIGINT"/>
+        <result column="api_key" property="apiKey" jdbcType="VARCHAR"/>
+        <result column="secret_key" property="secretKey" jdbcType="VARCHAR"/>
+        <result column="app_type" property="appType" jdbcType="VARCHAR"/>
+        <result column="app_icon" property="appIcon" jdbcType="VARCHAR"/>
+        <result column="app_name" property="appName" jdbcType="VARCHAR"/>
+        <result column="app_name_en" property="appNameEn" jdbcType="VARCHAR"/>
+        <result column="app_os" property="appOs" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="is_persist" property="isPersist" jdbcType="INTEGER"/>
+        <result column="app_desc" property="appDesc" jdbcType="VARCHAR"/>
+        <result column="website" property="website" jdbcType="VARCHAR"/>
+        <result column="developer_id" property="developerId" jdbcType="BIGINT"/>
+        <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+    </resultMap>
+    <!-- 自定义分页 -->
+    <select id="pageList" resultMap="AppResultMap">
+        SELECT base_app.*,base_developer.user_name FROM base_app
+        LEFT JOIN base_developer ON base_developer.user_id = base_app.developer_id
+        ${ew.customSqlSegment}
+    </select>
+</mapper>

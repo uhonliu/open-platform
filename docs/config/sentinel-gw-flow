@@ -1,0 +1,26 @@
+[
+     {
+          "resource": "kjapi",
+          "resourceMode": 1,
+          "count": 1,
+          "grade": 1,
+          "limitApp": "default",
+          "controlBehavior": 0,
+          "intervalSec": 3,
+          "paramItem": {
+               "parseStrategy": 0
+          }
+     },
+     {
+          "resource": "base-server",
+          "resourceMode": 1,
+          "count": 1,
+          "grade": 1,
+          "limitApp": "default",
+          "controlBehavior": 0,
+          "intervalSec": 3,
+          "paramItem": {
+               "parseStrategy": 0
+          }
+     }
+]

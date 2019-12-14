@@ -1,0 +1,56 @@
+server:
+    port: 8255
+
+spring:
+    application:
+        name: ${artifactId}
+    cloud:
+        #手动配置Bus id,
+        bus:
+            id: ${spring.application.name}:${server.port}
+        nacos:
+            config:
+                namespace: ${config.namespace}
+                refreshable-dataids: common.properties
+                server-addr: ${config.server-addr}
+                shared-dataids: common.properties,redis.properties,rabbitmq.properties,bpm.db.properties
+            discovery:
+                namespace: ${discovery.namespace}
+                server-addr: ${discovery.server-addr}
+    main:
+        allow-bean-definition-overriding: true
+    #解决restful 404错误 spring.mvc.throw-exception-if-no-handler-found=true spring.resources.add-mappings=false
+    mvc:
+        throw-exception-if-no-handler-found: true
+    resources:
+        add-mappings: false
+    profiles:
+        active: ${profile.name}
+    activiti:
+        check-process-definitions: false
+        database-schema: ACT
+        database-schema-update: true
+        history-level: full
+    #datasource:
+    #    driver-class-name: com.mysql.cj.jdbc.Driver
+    #    password: root
+    #    url: jdbc:mysql://localhost:3306/open-platform-bpm?useSSL=false&useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    #    username: root
+
+management:
+    endpoints:
+        web:
+            exposure:
+                include: '*'
+
+opencloud:
+    swagger2:
+        enabled: true
+        description: 工作流服务器
+        title: 工作流服务器
+
+#mybatis plus 设置
+mybatis-plus:
+    #实体扫描，多个package用逗号或者分号分隔
+    typeAliasesPackage: com.opencloud.bpm.client.**.entity
+    mapper-locations: classpath:mapper/*.xml

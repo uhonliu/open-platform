@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>services</artifactId>
+        <groupId>com.opencloud</groupId>
+        <version>3.0.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.bsd</groupId>
+    <artifactId>dingtalk-server</artifactId>
+    <version>1.0.0</version>
+
+    <dependencies>
+        <!-- 引入公共包,需发布到本地仓库或私服 -->
+        <dependency>
+            <artifactId>common-starter</artifactId>
+            <groupId>com.opencloud</groupId>
+            <version>${opencloud.common.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.taobao.top</groupId>
+            <artifactId>top-api-sdk-dev</artifactId>
+            <version>ding-open-mc-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${pom.basedir}/lib/taobao-sdk-java-auto_1479188381469-20190628.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.taobao.top</groupId>
+            <artifactId>lippi-oapi-encrpt</artifactId>
+            <version>dingtalk-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${pom.basedir}/lib/lippi-oapi-encrpt.jar</systemPath>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <!-- 打包名称 -->
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <includeSystemScope>true</includeSystemScope>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--maven deploy 忽略发布插件-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>${maven-deploy-plugin.version}</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

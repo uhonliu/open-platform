@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bsd.comment.server.mapper.CommentReplyMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.bsd.comment.server.model.entity.CommentReply">
+        <id column="reply_id" property="replyId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="comment_id" property="commentId"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="from_user_id" property="fromUserId"/>
+        <result column="from_user_name" property="fromUserName"/>
+        <result column="content" property="content"/>
+        <result column="to_user_id" property="toUserId"/>
+        <result column="is_shield" property="isShield"/>
+        <result column="is_author" property="isAuthor"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_by" property="updateBy"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        create_time,
+        update_time,
+        reply_id, comment_id, parent_id, from_user_id, from_user_name, content, to_user_id, is_shield, is_author, create_by, update_by
+    </sql>
+
+    <!--自定义关联查询-->
+    <!-- 表名 -->
+    <sql id="t_name">bsd_comment_reply</sql>
+    <!-- 别名 -->
+    <sql id="t_alias">bsd_comment_reply as reply</sql>
+    <!--外键表关联定义 -->
+    <sql id="join"></sql>
+
+    <!-- 自定义查询单个实体 -->
+    <select id="getEntityMap" resultType="com.opencloud.common.mybatis.EntityMap">
+        SELECT * FROM
+        <include refid="t_alias"/>
+        <include refid="join"/>
+        ${ew.customSqlSegment}
+    </select>
+
+    <!-- 自定义关联查询分页 -->
+    <select id="pageList" resultType="com.opencloud.common.mybatis.EntityMap">
+        SELECT ${ew.select} FROM
+        <include refid="t_alias"/>
+        <include refid="join"/>
+        ${ew.customSqlSegment}
+    </select>
+</mapper>

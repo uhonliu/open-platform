@@ -1,0 +1,12 @@
+[
+    {
+        "resource": "kjapi",
+        "limitApp": "default",
+        "strategy": 0
+    },
+    {
+        "resource": "base-server",
+        "limitApp": "appA,appB",
+        "strategy": 1
+    }
+]

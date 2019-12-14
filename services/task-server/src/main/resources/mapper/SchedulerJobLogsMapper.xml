@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.opencloud.task.server.mapper.SchedulerJobLogsMapper">
+    <resultMap id="BaseResultMap" type="com.opencloud.task.client.model.entity.SchedulerJobLogs">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="log_id" jdbcType="BIGINT" property="logId"/>
+        <result column="job_name" jdbcType="VARCHAR" property="jobName"/>
+        <result column="job_group" jdbcType="VARCHAR" property="jobGroup"/>
+        <result column="job_class" jdbcType="VARCHAR" property="jobClass"/>
+        <result column="job_description" jdbcType="VARCHAR" property="jobDescription"/>
+        <result column="trigger_class" jdbcType="VARCHAR" property="triggerClass"/>
+        <result column="cron_expression" jdbcType="VARCHAR" property="cronExpression"/>
+        <result column="run_time" jdbcType="BIGINT" property="runTime"/>
+        <result column="run_start_time" jdbcType="TIMESTAMP" property="runStartTime"/>
+        <result column="run_end_time" jdbcType="TIMESTAMP" property="runEndTime"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="job_data" jdbcType="VARCHAR" property="jobData"/>
+        <result column="exception" jdbcType="VARCHAR" property="exception"/>
+        <result column="status" jdbcType="BIT" property="status"/>
+        <result column="start_date" jdbcType="TIMESTAMP" property="startDate"/>
+        <result column="end_date" jdbcType="TIMESTAMP" property="endDate"/>
+        <result column="repeat_interval" jdbcType="BIGINT" property="repeatInterval"/>
+        <result column="repeat_count" jdbcType="INTEGER" property="repeatCount"/>
+    </resultMap>
+</mapper>

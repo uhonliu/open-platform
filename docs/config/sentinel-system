@@ -1,0 +1,20 @@
+[
+    {
+        "resource": "kjapi",
+        "limitApp": "default",
+        "highestSystemLoad": 10,
+        "highestCpuUsage": 0.8,
+        "qps": 1000,
+        "avgRt": 100,
+        "maxThread": 4
+    },
+    {
+        "resource": "base-server",
+        "limitApp": "default",
+        "highestSystemLoad": 10,
+        "highestCpuUsage": 0.8,
+        "qps": 1000,
+        "avgRt": 100,
+        "maxThread": 4
+    }
+]

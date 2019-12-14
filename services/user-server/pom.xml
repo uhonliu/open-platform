@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>services</artifactId>
+        <groupId>com.opencloud</groupId>
+        <version>3.0.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.bsd</groupId>
+    <artifactId>user-server</artifactId>
+    <version>1.0.0</version>
+
+    <dependencies>
+        <!-- 引入公共包,需发布到本地仓库或私服 -->
+        <dependency>
+            <artifactId>common-starter</artifactId>
+            <groupId>com.opencloud</groupId>
+            <version>${opencloud.common.version}</version>
+        </dependency>
+        <dependency>
+            <artifactId>msg-client</artifactId>
+            <groupId>com.opencloud</groupId>
+            <version>${opencloud.msg-client.version}</version>
+        </dependency>
+        <dependency>
+            <artifactId>base-client</artifactId>
+            <groupId>com.opencloud</groupId>
+            <version>${opencloud.base-client.version}</version>
+        </dependency>
+        <!--JJWT库-->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.1</version>
+        </dependency>
+        <!-- excel导出工具 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+            <version>1.1.2-beat1</version>
+        </dependency>
+        <!-- redisson -->
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson</artifactId>
+            <version>3.11.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.netflix.feign</groupId>
+            <artifactId>feign-httpclient</artifactId>
+            <version>8.18.0</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <!-- 打包名称 -->
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--maven deploy 忽略发布插件-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>${maven-deploy-plugin.version}</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
