@@ -38,4 +38,13 @@ public class DeveloperConstants {
      * https 前缀
      */
     public static final String HTTPS_PREFIX = "https://";
+
+    /**
+     * 获取小程序全局唯一后台接口调用凭据（access_token）
+     */
+    public static final String AUTH_GETACCESSTOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s";
+    /**
+     * 微信小程序accesstoken 存入redis 前缀
+     */
+    public static final String AUTH_GETACCESSTOKEN_REDIS_PREFIX = "wechat_gzh_xcx_accesstoken_";
 }

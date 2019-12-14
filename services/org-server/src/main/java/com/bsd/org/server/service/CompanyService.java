@@ -32,4 +32,14 @@ public interface CompanyService extends IBaseService<Company> {
      * 删除菜单缓存
      */
     void removeMeunCache();
+
+    /**
+     * 根据部门ID 获取所有下属人员的ID
+     *
+     * @param departmentId
+     * @return java.util.List<java.lang.Long>
+     * @author zhangzz
+     * @date 2019/12/10
+     */
+    List<Long> getUserIds(Long departmentId);
 }

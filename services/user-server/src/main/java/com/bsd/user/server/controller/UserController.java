@@ -421,6 +421,7 @@ public class UserController {
         userPo.setSex(sex);
         //userCode随机生成
         userPo.setUserCode(RandomValueUtils.uuid());
+        userPo.setUpdateFlag(UserConstants.UPDATEFLAG1);
         //默认密码设置
         userPo.setPassword(passwordEncoder.encode(UserConstants.MANUAL_INPUT_USER_DEFAULT_PASSWORD));
         boolean isSuc = userService.manualSave(userPo);

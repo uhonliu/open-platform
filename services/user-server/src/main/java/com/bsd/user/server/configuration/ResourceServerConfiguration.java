@@ -37,7 +37,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .authorizeRequests()
                 .antMatchers(
                         "/user/**",
-                        "/developer/**"
+                        "/wx/**"
                 ).permitAll()
                 // 指定监控访问权限
                 .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()

@@ -53,4 +53,6 @@ public interface UserMapper extends SuperMapper<User> {
      * @return
      */
     List<UserDetailVO> userList(@Param(Constants.WRAPPER) Wrapper wrapper);
+
+    List<User> getUserListByDepartmentId(Long departmentId);
 }

@@ -1,5 +1,6 @@
 package com.bsd.user.server.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.bsd.user.server.model.dto.JsSdkSignDTO;
 
 /**
@@ -16,4 +17,12 @@ public interface DeveloperService {
      * @return
      */
     JsSdkSignDTO makeWxJsSdkSign(String url);
+
+    /**
+     * 获取微信小程序AccessToken
+     *
+     * @param platform
+     * @return
+     */
+    JSONObject authGetAccessToken(Integer platform);
 }

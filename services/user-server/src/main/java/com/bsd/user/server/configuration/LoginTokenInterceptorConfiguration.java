@@ -22,11 +22,11 @@ public class LoginTokenInterceptorConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-//        List<String> excludePtah = new ArrayList<String>();
-//        excludePtah.add("/user/User/**");
-//        excludePtah.add("/user/address/save");
-//
-//        registry.addInterceptor(loginTokenHandlerInterceptor).excludePathPatterns(excludePtah).addPathPatterns("/**");
+        /*List<String> excludePtah = new ArrayList<String>();
+        excludePtah.add("/user/User/**");
+        excludePtah.add("/user/address/save");
+
+        registry.addInterceptor(loginTokenHandlerInterceptor).excludePathPatterns(excludePtah).addPathPatterns("/**");*/
         List<String> pathPatterns = new ArrayList<String>();
         pathPatterns.add("/user/address/save");
         pathPatterns.add("/user/address/list");

@@ -15,7 +15,6 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class RedissonConfig {
-
     @Value("${spring.redis.host}")
     private String host;
 

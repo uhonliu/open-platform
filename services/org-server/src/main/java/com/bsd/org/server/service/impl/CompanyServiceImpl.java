@@ -1,14 +1,17 @@
 package com.bsd.org.server.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.bsd.org.server.constants.BaseUserConst;
 import com.bsd.org.server.mapper.CompanyMapper;
 import com.bsd.org.server.model.entity.Company;
 import com.bsd.org.server.model.entity.Department;
+import com.bsd.org.server.model.entity.User;
 import com.bsd.org.server.model.vo.CompanyMenuVO;
 import com.bsd.org.server.model.vo.DepartmentMenuVO;
 import com.bsd.org.server.service.CompanyService;
 import com.bsd.org.server.service.DepartmentService;
+import com.bsd.org.server.service.UserService;
 import com.opencloud.common.exception.OpenAlertException;
 import com.opencloud.common.mybatis.base.service.impl.BaseServiceImpl;
 import com.opencloud.common.utils.BeanConvertUtils;
@@ -21,8 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * 企业信息 服务实现类
@@ -40,6 +42,8 @@ public class CompanyServiceImpl extends BaseServiceImpl<CompanyMapper, Company> 
     private DepartmentService departmentService;
     @Autowired
     private RedisTemplate redisTemplate;
+    @Autowired
+    private UserService userService;
 
     /**
      * 删除企业信息
@@ -176,5 +180,87 @@ public class CompanyServiceImpl extends BaseServiceImpl<CompanyMapper, Company> 
             companyIds.add(companyId);
         }
         return companyIds;
+    }
+
+    /**
+     * 根据部门ID获取用户ID列表
+     *
+     * @param departmentId
+     * @return java.util.List<java.lang.Long>
+     * @author zhangzz
+     * @date 2019/12/10
+     */
+    @Override
+    public List<Long> getUserIds(Long departmentId) {
+        // 部门IDs
+        List<Long> departmentIds = new ArrayList<>();
+        departmentIds.add(departmentId);
+        List<DepartmentMenuVO> list = getChildDepartByDeId(departmentIds);
+        // 自身信息添加到List中
+        DepartmentMenuVO departmentMenuVO = new DepartmentMenuVO();
+        departmentMenuVO.setDepartmentId(departmentId);
+        // dd.setDepartmentName("市场与产品中心");
+        list.add(departmentMenuVO);
+        // 获取到本部门和所有的下属部门ID
+        Set<Long> userSet = new HashSet<Long>();
+        for (int i = 0; i < list.size(); i++) {
+            //ids.add(list.get(i).getDepartmentId());
+            // 根据部门ID 查询人员信息
+            List<User> list1 = userService.getUserListByDepartmentId(list.get(i).getDepartmentId());
+            for (int j = 0; j < list1.size(); j++) {
+                // 去重
+                userSet.add(list1.get(j).getUserId());
+            }
+        }
+        List<Long> userIds = new ArrayList<Long>(userSet);
+        return userIds;
+    }
+
+
+    private List<DepartmentMenuVO> getChildDepartByDeId(List<Long> departmentIds) {
+        // 有效的部门的数据集合
+        QueryWrapper<Department> queryWrapper = new QueryWrapper();
+        queryWrapper.eq("status", 1);
+        List<Department> departments = departmentService.list(queryWrapper);
+        List<DepartmentMenuVO> result = new ArrayList<>();
+        for (Long departmentId : departmentIds) {
+            QueryWrapper<Department> query = new QueryWrapper();
+            query.eq("department_id", departmentId);
+            query.eq("status", 1);
+            Department department = departmentService.getOne(query);
+            if (department == null) {
+                continue;
+            }
+            List<DepartmentMenuVO> departmentMenus = recursion(departmentId, department.getDepartmentName(), departments, result);
+            result.addAll(departmentMenus);
+        }
+        return result;
+    }
+
+    private List<DepartmentMenuVO> recursion(Long departmentParent, String departmentName, List<Department> departments, List<DepartmentMenuVO> result) {
+        List<DepartmentMenuVO> children = getChildDepartments(departmentParent, departmentName, departments);
+        Iterator<DepartmentMenuVO> inter = children.iterator();
+        while (inter.hasNext()) {
+            DepartmentMenuVO departmentMenuVO = inter.next();
+            List<DepartmentMenuVO> nextChildren = recursion(departmentMenuVO.getDepartmentId(), departmentMenuVO.getDepartmentName(), departments, result);
+            if (nextChildren != null && nextChildren.size() > 0) {
+                result.addAll(nextChildren);
+                //inter.remove();
+            }
+        }
+        return children;
+    }
+
+    private List<DepartmentMenuVO> getChildDepartments(Long departmentParent, String departmentName, List<Department> departments) {
+        List<DepartmentMenuVO> children = new ArrayList<>();
+        for (Department department : departments) {
+            if (department.getParentId().longValue() == departmentParent) {
+                DepartmentMenuVO departmentMenu = new DepartmentMenuVO();
+                BeanUtils.copyProperties(department, departmentMenu);
+                departmentMenu.setDepartmentName(departmentName + "," + department.getDepartmentName());
+                children.add(departmentMenu);
+            }
+        }
+        return children;
     }
 }

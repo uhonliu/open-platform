@@ -247,25 +247,25 @@ public class PositionController {
     }
 
 
-//    /**
-//     * 删除岗位
-//     *
-//     * @return
-//     */
-//    @ApiOperation(value = "删除岗位", notes = "根据岗位ID删除岗位")
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(name = "positionId", required = true, value = "岗位ID", example = "1", paramType = "form")
-//    })
-//    @PostMapping("/remove")
-//    public ResultBody remove(@RequestParam(value = "positionId", required = true) Long positionId) {
-//        Position position = positionService.getById(positionId);
-//        if (position == null){
-//            return ResultBody.failed().msg("岗位信息不存在");
-//        }
-//        boolean isSuc = positionService.removeById(position.getPositionId());
-//        if (!isSuc) {
-//            return ResultBody.failed().msg("删除岗位失败");
-//        }
-//        return ResultBody.ok();
-//    }
+    /**
+     * 删除岗位
+     *
+     * @return
+     */
+    /*@ApiOperation(value = "删除岗位", notes = "根据岗位ID删除岗位")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "positionId", required = true, value = "岗位ID", example = "1", paramType = "form")
+    })
+    @PostMapping("/remove")
+    public ResultBody remove(@RequestParam(value = "positionId", required = true) Long positionId) {
+        Position position = positionService.getById(positionId);
+        if (position == null) {
+            return ResultBody.failed().msg("岗位信息不存在");
+        }
+        boolean isSuc = positionService.removeById(position.getPositionId());
+        if (!isSuc) {
+            return ResultBody.failed().msg("删除岗位失败");
+        }
+        return ResultBody.ok();
+    }*/
 }

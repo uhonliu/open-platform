@@ -82,7 +82,7 @@ public class UserConstants {
     /**
      * 账户类型:1-微信移动应用 、2-微信网站应用、3-微信公众号、4-微信小程序、5-QQ、6-微博
      */
-    public static final Integer[] PLATFORM_ALL = {1, 2, 3, 4, 5, 6};
+    public static final Integer[] PLATFORM_ALL = {1, 2, 3, 4};
     public static final Integer PLATFORM_WECHAT_MOBILE = 1;
     public static final Integer PLATFORM_WECHAT_PC = 2;
     public static final Integer PLATFORM_WECHAT_GZH = 3;
@@ -174,7 +174,7 @@ public class UserConstants {
     /**
      * 手工输入用户默认密码
      */
-    public static final String MANUAL_INPUT_USER_DEFAULT_PASSWORD = "123456";
+    public static final String MANUAL_INPUT_USER_DEFAULT_PASSWORD = "bsd123456";
 
     /**
      * 性别

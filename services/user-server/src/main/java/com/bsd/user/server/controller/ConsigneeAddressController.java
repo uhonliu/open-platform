@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
  * @date 2019-07-18
  */
 @RestController
+@RequestMapping("/user/address")
 @Api(tags = "用户收货地址管理")
 public class ConsigneeAddressController {
     @Autowired
@@ -42,7 +44,7 @@ public class ConsigneeAddressController {
             @ApiImplicitParam(name = "token", required = true, value = "登录token", paramType = "header"),
             @ApiImplicitParam(name = "sessionId", required = true, value = "登录会话ID", paramType = "header"),
     })
-    @PostMapping("/user/address/save")
+    @PostMapping("/save")
     public ResultBody saveOrUpdateAddress(@RequestParam(value = "consigneeName", required = true) String consigneeName,
                                           @RequestParam(value = "countryCode", required = true) String countryCode,
                                           @RequestParam(value = "mobile", required = true) String mobile,
@@ -77,7 +79,7 @@ public class ConsigneeAddressController {
             @ApiImplicitParam(name = "token", required = true, value = "登录token", paramType = "header"),
             @ApiImplicitParam(name = "sessionId", required = true, value = "登录会话ID", paramType = "header"),
     })
-    @PostMapping("/user/address/list")
+    @PostMapping("/list")
     public ResultBody addressList(HttpServletRequest request) {
         String LoginMoblie = (String) request.getAttribute(UserConstants.LOGIN_MOBILE);
         ConsigneeAddressPo po = new ConsigneeAddressPo();
@@ -90,7 +92,7 @@ public class ConsigneeAddressController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userId", required = true, value = "用户ID", paramType = "form")
     })
-    @PostMapping("/user/address/list/byUserId")
+    @PostMapping("/list/byUserId")
     public ResultBody addressList(@RequestParam(value = "userId", required = true) Long userId) {
         return ResultBody.ok().data(consigneeAddressService.queryUserConsigneeAddressByUserId(userId));
     }
@@ -102,7 +104,7 @@ public class ConsigneeAddressController {
             @ApiImplicitParam(name = "sessionId", required = true, value = "登录会话ID", paramType = "header"),
             @ApiImplicitParam(name = "id", required = true, value = "唯一标识", paramType = "form")
     })
-    @PostMapping("/user/address/delete")
+    @PostMapping("/delete")
     public ResultBody addressDelete(HttpServletRequest request,
                                     @RequestParam(value = "id", required = true) Long id) {
         String LoginMoblie = (String) request.getAttribute(UserConstants.LOGIN_MOBILE);
@@ -120,7 +122,7 @@ public class ConsigneeAddressController {
             @ApiImplicitParam(name = "sessionId", required = true, value = "登录会话ID", paramType = "header"),
             @ApiImplicitParam(name = "id", required = true, value = "唯一标识", paramType = "form")
     })
-    @PostMapping("/user/address/setDefault")
+    @PostMapping("/setDefault")
     public ResultBody addressSetDefault(HttpServletRequest request,
                                         @RequestParam(value = "id", required = true) Long id) {
         String LoginMoblie = (String) request.getAttribute(UserConstants.LOGIN_MOBILE);

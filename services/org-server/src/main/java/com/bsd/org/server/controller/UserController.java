@@ -6,8 +6,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bsd.org.server.constants.BaseUserConst;
 import com.bsd.org.server.model.entity.User;
 import com.bsd.org.server.model.vo.UserDetailVO;
+import com.bsd.org.server.service.CompanyService;
 import com.bsd.org.server.service.UserService;
-import com.bsd.org.server.service.feign.BaseUserServiceClient;
+import com.bsd.org.server.service.fegin.BaseUserServiceClient;
 import com.opencloud.common.exception.OpenAlertException;
 import com.opencloud.common.model.ResultBody;
 import com.opencloud.common.security.OpenHelper;
@@ -38,6 +39,8 @@ import java.util.List;
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private CompanyService companyService;
 
     @Autowired
     private BaseUserServiceClient baseUserServiceClient;
@@ -97,6 +100,31 @@ public class UserController {
         return ResultBody.ok().data(users);
     }
 
+    /**
+     * 根据部门ID获取用户ID列表
+     *
+     * @param departmentId
+     * @return com.opencloud.common.model.ResultBody
+     * @author zhangzz
+     * @date 2019/12/9
+     */
+    @ApiOperation(value = "根据部门ID获取用户ID列表", notes = "根据部门ID获取用户ID列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "departmentId", required = false, value = "部门ID", paramType = "form"),
+            @ApiImplicitParam(name = "companyId", required = true, value = "公司ID", paramType = "form")
+    })
+    @GetMapping(value = "/userIds")
+    public ResultBody getUserIdsByDepartmentId(@RequestParam("companyId") Long companyId, @RequestParam(value = "departmentId", required = false) Long departmentId) {
+        if (companyId == null) {
+            throw new OpenAlertException("参数不可为空!");
+        }
+        //List<Long> list = companyService.getUserIds(departmentId);
+        UserDetailVO userDetailVO = new UserDetailVO();
+        userDetailVO.setDepartmentId(departmentId);
+        userDetailVO.setCompanyId(companyId);
+        List<String> list = userService.userIdList(userDetailVO);
+        return ResultBody.ok().data(list);
+    }
 
     /**
      * 获取所有人员信息(钉钉)
@@ -296,34 +324,7 @@ public class UserController {
         userService.updateUser(user);
         return ResultBody.ok();
     }
-
-//    /**
-//     * 删除人员(钉钉)
-//     *
-//     * @return
-//     */
-//    @ApiOperation(value = "删除人员(钉钉)", notes = "删除人员(钉钉)")
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(name = "userId", required = true, value = "根据用户ID删除钉钉人员新", paramType = "form")
-//    })
-//    @PostMapping("/remove")
-//    public ResultBody remove(@RequestParam(value = "userId") Long userId) {
-//        //判断用户是否存在
-//        User user = userService.getByUserId(userId);
-//        if (user == null) {
-//            return ResultBody.failed().msg("人员信息(钉钉)不存在");
-//        }
-//
-//        //删除用户
-//        boolean isSuc = userService.delByUserId(userId);
-//        if (!isSuc) {
-//            return ResultBody.failed().msg("删除人员信息(钉钉)失败");
-//        }
-//
-//        return ResultBody.ok();
-//    }
-
-
+    
     /**
      * 修改激活状态(钉钉)
      *
@@ -339,4 +340,30 @@ public class UserController {
         userService.changeActiveStatus(userId, status);
         return ResultBody.ok();
     }
+
+    /**
+     * 删除人员(钉钉)
+     *
+     * @return
+     */
+    /*@ApiOperation(value = "删除人员(钉钉)", notes = "删除人员(钉钉)")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId", required = true, value = "根据用户ID删除钉钉人员新", paramType = "form")
+    })
+    @PostMapping("/remove")
+    public ResultBody remove(@RequestParam(value = "userId") Long userId) {
+        //判断用户是否存在
+        User user = userService.getByUserId(userId);
+        if (user == null) {
+            return ResultBody.failed().msg("人员信息(钉钉)不存在");
+        }
+
+        //删除用户
+        boolean isSuc = userService.delByUserId(userId);
+        if (!isSuc) {
+            return ResultBody.failed().msg("删除人员信息(钉钉)失败");
+        }
+
+        return ResultBody.ok();
+    }*/
 }

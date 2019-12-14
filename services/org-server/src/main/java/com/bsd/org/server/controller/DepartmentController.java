@@ -149,8 +149,8 @@ public class DepartmentController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "departmentId", required = true, value = "部门ID", paramType = "form")
     })
-    @GetMapping("/childrens")
-    public ResultBody childrens(@RequestParam("departmentId") Long departmentId) {
+    @GetMapping("/children")
+    public ResultBody children(@RequestParam("departmentId") Long departmentId) {
         return ResultBody.ok().data(departmentService.getChildrenDepartments(departmentId, null));
     }
 
@@ -295,25 +295,25 @@ public class DepartmentController {
     }
 
 
-//    /**
-//     * 删除部门
-//     *
-//     * @return
-//     */
-//    @ApiOperation(value = "删除部门", notes = "根据部门ID删除部门")
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(name = "departmentId", required = true, value = "部门ID", example = "1", paramType = "form")
-//    })
-//    @PostMapping("/remove")
-//    public ResultBody remove(@RequestParam(value = "departmentId", required = true) Long departmentId) {
-//        Department department = departmentService.getById(departmentId);
-//        if (department == null){
-//            return ResultBody.failed().msg("部门信息不存在");
-//        }
-//        boolean isSuc = departmentService.removeById(departmentId);
-//        if (!isSuc){
-//            return ResultBody.failed().msg("删除部门信息失败");
-//        }
-//        return ResultBody.ok();
-//    }
+    /**
+     * 删除部门
+     *
+     * @return
+     */
+    /*@ApiOperation(value = "删除部门", notes = "根据部门ID删除部门")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "departmentId", required = true, value = "部门ID", example = "1", paramType = "form")
+    })
+    @PostMapping("/remove")
+    public ResultBody remove(@RequestParam(value = "departmentId", required = true) Long departmentId) {
+        Department department = departmentService.getById(departmentId);
+        if (department == null) {
+            return ResultBody.failed().msg("部门信息不存在");
+        }
+        boolean isSuc = departmentService.removeById(departmentId);
+        if (!isSuc) {
+            return ResultBody.failed().msg("删除部门信息失败");
+        }
+        return ResultBody.ok();
+    }*/
 }

@@ -76,6 +76,14 @@ public class CompanyController {
     }
 
 
+    /**
+     * 获取所有企业信息
+     *
+     * @param
+     * @return com.opencloud.common.model.ResultBody
+     * @author zhangzz
+     * @date 2019/12/6
+     */
     @ApiOperation(value = "获取所有企业信息", notes = "获取所有企业信息数据")
     @GetMapping(value = "/findAll")
     @ApiImplicitParams(value = {})
@@ -271,18 +279,18 @@ public class CompanyController {
     }
 
 
-//    /**
-//     * 删除企业信息
-//     *
-//     * @return
-//     */
-//    @ApiOperation(value = "删除企业信息", notes = "根据企业ID删除企业信息")
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(name = "companyId", required = true, value = "企业ID", example = "1", paramType = "form")
-//    })
-//    @PostMapping("/remove")
-//    public ResultBody remove(@RequestParam(value = "companyId", required = true) Long companyId) {
-//        companyService.deleteCompany(companyId);
-//        return ResultBody.ok();
-//    }
+    /**
+     * 删除企业信息
+     *
+     * @return
+     */
+    /*@ApiOperation(value = "删除企业信息", notes = "根据企业ID删除企业信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "companyId", required = true, value = "企业ID", example = "1", paramType = "form")
+    })
+    @PostMapping("/remove")
+    public ResultBody remove(@RequestParam(value = "companyId", required = true) Long companyId) {
+        companyService.deleteCompany(companyId);
+        return ResultBody.ok();
+    }*/
 }

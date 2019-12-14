@@ -15,4 +15,12 @@ public interface WechatAuthService extends OpenOAuth2Service {
     int getPlatform();
 
     String getConfigTag();
+
+    /**
+     * 微信小程序登录
+     *
+     * @param code
+     * @return
+     */
+    JSONObject authCode2Session(String code);
 }

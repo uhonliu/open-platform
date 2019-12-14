@@ -12,8 +12,8 @@
 + SpringBootAdmin账号:sba 123456
 
 #### 源码
-+ <a target="_blank" href="https://gitee.com/uhon/open-platform">服务端源码</a>
-+ <a target="_blank" href="https://gitee.com/uhon/open-admin-ui">后台UI源码</a>
++ <a target="_blank" href="https://github.com/uhonliu/open-platform">服务端源码</a>
++ <a target="_blank" href="https://github.com/uhonliu/open-admin-ui">后台UI源码</a>
 
 #### 使用手册
 <a target="_blank" href="https://gitee.com/uhon/open-platform/wikis/pages">使用手册</a>

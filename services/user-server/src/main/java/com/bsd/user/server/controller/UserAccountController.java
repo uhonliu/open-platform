@@ -69,7 +69,7 @@ public class UserAccountController {
     @ApiOperation(value = "微信账号登录回调", notes = "微信回调给客户端，客户端调用服务的此接口,服务端返回微信账号是否绑定用户中心账号信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "code", required = true, value = "回调带的code参数", paramType = "form"),
-            @ApiImplicitParam(name = "platform", required = true, value = "第三方登录平台,1-微信移动应用 、2-跨境知道微信网站应用、3-跨境知道微信公众号", paramType = "form"),
+            @ApiImplicitParam(name = "platform", required = true, value = "第三方登录平台,1-微信移动应用 、2-微信网站应用、3-微信公众号 4-日历小程序", paramType = "form"),
     })
     @GetMapping("/wechat/callback")
     public ResultBody callbackByWechat(@RequestParam(value = "code") String code,
@@ -78,8 +78,8 @@ public class UserAccountController {
         if (platform == null) {
             platform = UserConstants.PLATFORM_WECHAT_PC;
         }
-        //platform传值了，则需要校验值
-        if (UserConstants.PLATFORM_WECHAT_MOBILE.equals(platform) && UserConstants.PLATFORM_WECHAT_PC.equals(platform) && UserConstants.PLATFORM_WECHAT_GZH.equals(platform)) {
+        //校验platform
+        if (!Arrays.asList(UserConstants.PLATFORM_ALL).contains(platform)) {
             return ResultBody.failed().msg("第三方平台参数错误");
         }
         if (userAccountService.isBindingsByWechat(code, platform)) {

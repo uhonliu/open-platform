@@ -74,6 +74,8 @@ opencloud:
                 scope: snsapi_base
                 user-authorization-uri: https://open.weixin.qq.com/connect/oauth2/authorize
                 user-info-uri: https://api.weixin.qq.com/sns/userinfo
+            wechat_gzh_xcx:
+                auth-code2session-uri: https://api.weixin.qq.com/sns/jscode2session
 
     swagger2:
         enabled: true

@@ -101,6 +101,11 @@
     <select id="userList" resultMap="UserDetailMap">
         <include refid="commonSql"></include>
     </select>
+    <select id="getUserListByDepartmentId" resultType="com.bsd.org.server.model.entity.User">
+        SELECT user_id
+        FROM org_user
+        WHERE FIND_IN_SET(#{departmentId},department)
+    </select>
 
 
     <sql id="UserDetailListSql">

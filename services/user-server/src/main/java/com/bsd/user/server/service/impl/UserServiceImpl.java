@@ -80,6 +80,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
 
     @Override
     public void sendSmsCode(String mobile, Integer type, Integer signSource) {
+        log.info("发送验证码业务方法入参：mobile={}，type={}，signSource={}", mobile, type, signSource);
         if (!Arrays.asList(UserConstants.MOBILE_CODE_TYPE_ALL).contains(type)) {
             throw new OpenAlertException("请选择正确类型的验证码");
         }
@@ -141,8 +142,23 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
         smsMessage.setTplCode(templateCode);
         smsMessage.setSignName(signName);
         smsMessage.setTplParams(obj.toString());
-        smsRemoteApiService.feignSendSms(smsMessage);
-        log.info("发送短信验证码，手机号：{}，验证码类型type={},短信验证码：{},发送成功!", mobile, type, code);
+        log.info("用户服务调用短信服务发送短信入参:手机号:{},短信模板code:{},签名:{},短信内容参数:{}",
+                smsMessage.getPhoneNum(), smsMessage.getTplCode(), smsMessage.getSignName(), smsMessage.getTplParams());
+        try {
+            smsRemoteApiService.feignSendSms(smsMessage);
+            log.info("发送短信验证码，手机号：{}，验证码类型type={},短信验证码：{},发送成功!", mobile, type, code);
+        } catch (Exception e) {
+            try {
+                log.info("第2次用户服务调用短信服务发送短信入参:手机号:{},短信模板code:{},签名:{},短信内容参数:{}",
+                        smsMessage.getPhoneNum(), smsMessage.getTplCode(), smsMessage.getSignName(), smsMessage.getTplParams());
+                smsRemoteApiService.feignSendSms(smsMessage);
+                log.info("发送短信验证码，手机号：{}，验证码类型type={},短信验证码：{},发送成功!", mobile, type, code);
+            } catch (Exception e1) {
+                log.info("发送短信验证码，手机号：{}，验证码类型type={},短信验证码：{},发送失败!,失败原因:{}", mobile, type, code, e);
+                e.printStackTrace();
+                throw new OpenAlertException("短信发送失败，稍后请重试");
+            }
+        }
     }
 
     @Override
@@ -233,11 +249,15 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
     @Override
     public Map<String, Object> authenticatingToken(UserPo user) {
         Map<String, Object> result = new HashMap<String, Object>();
+        if (StringUtils.isEmpty(user.getLoginMobile())) {
+            throw new OpenAlertException("参数错误");
+        }
         User userInfo = getUserInfoByMobile(user.getLoginMobile());
         if (userInfo != null) {
             userInfo.setPassword(null);
         }
         result.putIfAbsent("userInfo", userInfo);
+        log.info("入参：{}，返回结果：{}", user.getLoginMobile(), userInfo.toString());
         return result;
     }
 
@@ -734,6 +754,9 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
             return true;
         }
         //保存数据
+        userPo.setCreateTime(new Date());
+        userPo.setUpdateTime(new Date());
+        userPo.setRegisterTime(new Date());
         int count = userMapper.insert(userPo);
         return count > 0;
     }

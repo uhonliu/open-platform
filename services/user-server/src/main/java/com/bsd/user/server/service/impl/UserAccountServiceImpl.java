@@ -67,29 +67,28 @@ public class UserAccountServiceImpl extends BaseServiceImpl<UserAccountMapper, U
     @Autowired
     private Map<String, WechatAuthService> wechatAuthServiceMap;
 
-//    /**
-//     * 获取第三方用户信息
-//     *
-//     * @param code
-//     * @param service
-//     * @return
-//     */
-//	private JSONObject getOpentUserInfo(String code,OpenOAuth2Service service) {
-//		// 通过code获取access_token
-//		String accessToken = service.getAccessToken(code);
-//		if (accessToken == null) {
-//			throw new OpenAlertException("code错误，请使用正确的code");
-//		}
-//		// 根据access_token获取openId
-//		String openId = service.getOpenId(accessToken);
-//		if (StringUtils.isEmpty(openId)) {
-//			throw new OpenAlertException("未获取正确的用户信息，请核对信息稍后重试");
-//		}
-//		// 根据openId获取qq用户信息
-//		JSONObject userInfoJson = service.getUserInfo(accessToken, openId);
-//		return userInfoJson;
-//	}
-
+    /**
+     * 获取第三方用户信息
+     *
+     * @param code
+     * @param service
+     * @return
+     */
+    private JSONObject getOpentUserInfo(String code, OpenOAuth2Service service) {
+        // 通过code获取access_token
+        String accessToken = service.getAccessToken(code);
+        if (accessToken == null) {
+            throw new OpenAlertException("code错误，请使用正确的code");
+        }
+        // 根据access_token获取openId
+        String openId = service.getOpenId(accessToken);
+        if (StringUtils.isEmpty(openId)) {
+            throw new OpenAlertException("未获取正确的用户信息，请核对信息稍后重试");
+        }
+        // 根据openId获取qq用户信息
+        JSONObject userInfoJson = service.getUserInfo(accessToken, openId);
+        return userInfoJson;
+    }
 
     @Override
     public Map<String, Object> isBindingsByQq(String code) {
@@ -144,22 +143,48 @@ public class UserAccountServiceImpl extends BaseServiceImpl<UserAccountMapper, U
             throw new OpenAlertException("未找到对应的微信授权服务");
         }
         boolean isBinding = false;
-        //通过code获取access_token
-        JSONObject accessTokenReslt = service.getAccessTokenResult(code);
-        log.info("通过code获取access_token_info:{}", (accessTokenReslt == null ? null : accessTokenReslt.toString()));
-        if (accessTokenReslt == null) {
-            throw new OpenAlertException("code错误，请使用正确的code");
+        JSONObject accessTokenReslt = null;
+        String openId = "";
+        String unionid = "";
+        UserAccountPo insertPo = null;
+        if (UserConstants.PLATFORM_MINIPROGRAM.equals(platform)) {
+            //微信小程序
+            accessTokenReslt = service.authCode2Session(code);
+            log.info("通过code获取authCode2Session:{}", (accessTokenReslt == null ? null : accessTokenReslt.toString()));
+            if (accessTokenReslt == null) {
+                throw new OpenAlertException("code错误，请使用正确的code");
+            }
+            openId = accessTokenReslt.getString(UserConstants.WECHAT_ACCESSTOKEN_OPENID_NAME);
+            unionid = accessTokenReslt.getString(UserConstants.WECHAT_ACCESSTOKEN_UNIONID_NAME);
+            if (StringUtils.isEmpty(openId) || StringUtils.isEmpty(unionid)) {
+                throw new OpenAlertException("未获取正确的用户信息，请核对信息稍后重试");
+            }
+            insertPo = new UserAccountPo(null, platform, null, openId,
+                    unionid, null, null,
+                    null, null, null,
+                    null, null, null, null, null, new Date());
+        } else {
+            //非微信小程序
+            accessTokenReslt = service.getAccessTokenResult(code);
+            log.info("通过code获取access_token_info:{}", (accessTokenReslt == null ? null : accessTokenReslt.toString()));
+            if (accessTokenReslt == null) {
+                throw new OpenAlertException("code错误，请使用正确的code");
+            }
+            //根据access_token获取openId
+            String accessToken = accessTokenReslt.getString(UserConstants.WECHAT_ACCESSTOKEN_NAME);
+            openId = accessTokenReslt.getString(UserConstants.WECHAT_ACCESSTOKEN_OPENID_NAME);
+            unionid = accessTokenReslt.getString(UserConstants.WECHAT_ACCESSTOKEN_UNIONID_NAME);
+            if (StringUtils.isEmpty(accessToken) || StringUtils.isEmpty(openId) || StringUtils.isEmpty(unionid)) {
+                throw new OpenAlertException("未获取正确的用户信息，请核对信息稍后重试");
+            }
+            //根据openId获取微信用户信息
+            JSONObject userInfoJson = service.getUserInfo(accessToken, openId);
+            insertPo = new UserAccountPo(null, platform, null, openId,
+                    unionid, userInfoJson.getString("headimgurl"), userInfoJson.getString("nickname"),
+                    userInfoJson.getInteger("sex"), userInfoJson.getString("language"), userInfoJson.getString("city"),
+                    userInfoJson.getString("province"), userInfoJson.getString("country"), null, null, null, new Date());
         }
-        //根据access_token获取openId
-        String accessToken = accessTokenReslt.getString(UserConstants.WECHAT_ACCESSTOKEN_NAME);
-        String openId = accessTokenReslt.getString(UserConstants.WECHAT_ACCESSTOKEN_OPENID_NAME);
-        String unionid = accessTokenReslt.getString(UserConstants.WECHAT_ACCESSTOKEN_UNIONID_NAME);
-        if (StringUtils.isEmpty(accessToken) || StringUtils.isEmpty(openId) || StringUtils.isEmpty(unionid)) {
-            throw new OpenAlertException("未获取正确的用户信息，请核对信息稍后重试");
-        }
-        //根据openId获取微信用户信息
-        JSONObject userInfoJson = service.getUserInfo(accessToken, openId);
-        //根据openId获取用户中心数据库中第三方账号用户信息
+        //根据unionid获取用户中心数据库中第三方账号用户信息
         List<UserAccount> listUserAccout = getUserAccount(null, null, unionid);
         log.info("数据库第三方账号信息:{}", (listUserAccout == null ? null : listUserAccout.toString()));
         //当前登录的微信账号，在数据库中对应的记录
@@ -177,10 +202,6 @@ public class UserAccountServiceImpl extends BaseServiceImpl<UserAccountMapper, U
                 }
             }
         }
-        UserAccountPo insertPo = new UserAccountPo(null, platform, null, openId,
-                unionid, userInfoJson.getString("headimgurl"), userInfoJson.getString("nickname"),
-                userInfoJson.getInteger("sex"), userInfoJson.getString("language"), userInfoJson.getString("city"),
-                userInfoJson.getString("province"), userInfoJson.getString("country"), null, null, null, new Date());
         if (alreadyBindingUserAccount != null) {
             //已绑定账号
             isBinding = true;
@@ -188,10 +209,11 @@ public class UserAccountServiceImpl extends BaseServiceImpl<UserAccountMapper, U
             insertPo.setUserId(alreadyBindingUserAccount.getUserId());
         }
         if (loginUserAccount == null) {
-            //首次登陆，创建第三方账号信息
+            //当前主体首次登陆，创建第三方账号信息
             insertPo.setCreateTime(new Date());
         }
         if (loginUserAccount != null) {
+            //当前主体非首次登陆，则更新
             insertPo.setAccountId(loginUserAccount.getAccountId());
             if (loginUserAccount.getUserId() != null && loginUserAccount.getUserId() != 0) {
                 //已绑定账号

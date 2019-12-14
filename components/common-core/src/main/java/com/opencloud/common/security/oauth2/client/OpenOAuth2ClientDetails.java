@@ -28,6 +28,10 @@ public class OpenOAuth2ClientDetails implements Serializable {
      */
     private String accessTokenUri;
     /**
+     * 微信小程序登录凭证验证uri
+     */
+    private String authCode2sessionUri;
+    /**
      * 认证地址
      */
     private String userAuthorizationUri;
@@ -109,5 +113,13 @@ public class OpenOAuth2ClientDetails implements Serializable {
 
     public void setLoginSuccessUri(String loginSuccessUri) {
         this.loginSuccessUri = loginSuccessUri;
+    }
+
+    public String getAuthCode2sessionUri() {
+        return authCode2sessionUri;
+    }
+
+    public void setAuthCode2sessionUri(String authCode2sessionUri) {
+        this.authCode2sessionUri = authCode2sessionUri;
     }
 }

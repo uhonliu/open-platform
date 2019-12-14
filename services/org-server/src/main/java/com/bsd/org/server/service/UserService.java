@@ -74,10 +74,22 @@ public interface UserService extends IBaseService<User> {
     List<UserDetailVO> userDetailList(UserDetailVO userDetailVO);
 
     /**
+     * 根据部门ID获取用户ID列表
+     *
+     * @param userDetailVO
+     * @return java.util.List<java.lang.String>
+     * @author zhangzz
+     * @date 2019/12/9
+     */
+    List<String> userIdList(UserDetailVO userDetailVO);
+
+    /**
      * 递归获取所有下级用户信息
      *
      * @param userId
      * @return
      */
     List<UserDetailVO> getCascadeChildren(Long userId);
+
+    List<User> getUserListByDepartmentId(Long departmentId);
 }

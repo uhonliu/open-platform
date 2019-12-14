@@ -5,6 +5,7 @@ import com.bsd.user.server.utils.JwtTokenUtils;
 import com.opencloud.common.exception.OpenAlertException;
 import com.opencloud.common.utils.RedisUtils;
 import io.jsonwebtoken.Claims;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -23,6 +24,7 @@ import java.util.Map;
  * 2019年6月29日
  */
 @Component
+@Slf4j
 public class LoginTokenHandlerInterceptor implements HandlerInterceptor {
     @Autowired
     private RedisUtils<Object> redisUtils;
@@ -50,9 +52,9 @@ public class LoginTokenHandlerInterceptor implements HandlerInterceptor {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object arg2) {
-        System.out.println(request.getRequestURI() + "被拦截了");
         String jwtToken = request.getHeader(UserConstants.TOKEN_NAME);
         String sessionId = request.getHeader(UserConstants.SESSIONID);
+        log.info("{}被拦截了", request.getRequestURI());
         String realToken = redisUtils.get(sessionId);
         if (realToken == null || !realToken.equals(jwtToken)) {
             throw new OpenAlertException("token错误");
@@ -65,6 +67,8 @@ public class LoginTokenHandlerInterceptor implements HandlerInterceptor {
         loginInfoMap.put(UserConstants.SESSIONID, jwtClaims.get(JwtTokenUtils.JWT_ATTRIBUTE_SESSIONID).toString());
         loginInfoMap.put(UserConstants.TOKEN_NAME, realToken);
         request.setAttribute(UserConstants.LOGIN_INFO, loginInfoMap);
+        log.info("{}被拦截了,入参sessionId：{}，入参token：{}，token解析结果：loginMobile：{}，loginInfo：{}",
+                request.getRequestURI(), sessionId, realToken, request.getAttribute(UserConstants.LOGIN_MOBILE), loginInfoMap.toString());
         return true;
     }
 }
