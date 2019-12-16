@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
 import org.springframework.http.HttpHeaders;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 
@@ -74,6 +75,7 @@ public class AccessLogService {
         return false;
     }
 
+    @Async
     public void sendLog(HttpServletRequest request, HttpServletResponse response, Exception ex) {
         int httpStatus = response.getStatus();
         String requestPath = request.getRequestURI();

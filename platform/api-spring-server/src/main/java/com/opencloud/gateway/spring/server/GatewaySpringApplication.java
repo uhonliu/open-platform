@@ -33,6 +33,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.bus.jackson.RemoteApplicationEventScan;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
  * 网关服务
@@ -43,6 +44,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  */
 @EnableFeignClients
 @EnableDiscoveryClient
+@EnableAsync
 @SpringBootApplication
 @RemoteApplicationEventScan(basePackages = "com.opencloud")
 public class GatewaySpringApplication implements CommandLineRunner {

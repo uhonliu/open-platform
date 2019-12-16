@@ -168,7 +168,9 @@ open-platform
 #### 参考项目及文档
 + https://gitee.com/liuyadu/open-cloud
 + https://github.com/jmdhappy/xxpay-master
++ https://gitee.com/52itstyle/sentinel-dashboard
++ https://github.com/deviantony/docker-elk
++ https://github.com/alibaba/sentinel/wiki
 + https://github.com/alibaba/spring-cloud-alibaba
 + https://nacos.io/zh-cn
-+ https://github.com/alibaba/sentinel/wiki
 + https://mybatis.plus

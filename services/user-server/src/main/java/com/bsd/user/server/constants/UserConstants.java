@@ -124,10 +124,6 @@ public class UserConstants {
      * 绑定第三方账号短信模板code
      */
     public static final String BINDINGS_TEMPLATECODE = "SMS_172205023";
-    /**
-     * 旧系统登录认证接口url
-     */
-    public static final String ORD_LOGIN_URL = "/kjapi/v1/user/pwd";
 
     /**
      * 登录拦截器中客户端传入的token名称

@@ -284,7 +284,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
         if (userInfo == null) {
             throw new OpenAlertException("用户不存在或密码错误");
         }
-        if (UserConstants.UPDATEFLAG0.equals(userInfo.getUpdateFlag())) {
+        if (false && UserConstants.UPDATEFLAG0.equals(userInfo.getUpdateFlag())) {
             //调用旧系统登录认证
             boolean rs = loginByOrderSystem(user.getMobile(), user.getPassword());
             if (!rs) {
@@ -599,7 +599,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
         }
 
         //推送任务处理
-        boolean isSuc = pushUserToCustomerSystem(users, authorization);
+        boolean isSuc = true; // pushUserToCustomerSystem(users, authorization);
         if (!isSuc) {
             throw new OpenAlertException("推送用户信息失败");
         }

@@ -37,8 +37,9 @@
         <apache.commons.beanutils>1.9.4</apache.commons.beanutils>
 
         <mybatis-plus.version>3.3.0</mybatis-plus.version>
-        <hutool.version>4.6.8</hutool.version>
         <com.google.zxing.version>3.4.0</com.google.zxing.version>
+        <hutool.version>4.6.8</hutool.version>
+        <logstash.version>6.3</logstash.version>
         <swagger2.version>2.9.2</swagger2.version>
         <swagger-bootstrap-ui.version>1.9.6</swagger-bootstrap-ui.version>
 
