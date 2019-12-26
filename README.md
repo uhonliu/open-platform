@@ -29,6 +29,10 @@ open-platform
     ├── config                         -- 公共配置,用于导入到nacos配置中心
     ├── sql                            -- sql文件
       ├── data                         -- 增量数据
+├── docker                             -- Docker部署脚本
+    ├── elk                            -- ELK部署脚本
+    ├── influxdb                       -- InfluxDB部署脚本
+    ├── monitor                        -- Grafana部署脚本
 ├── components                         -- 公共组件
     ├── common-core         -- 提供微服务相关依赖包、工具类、全局异常解析等
     ├── common-starter      -- SpringBoot自动配置扫描
@@ -72,6 +76,8 @@ open-platform
     + Redis (v3.2.00+)
     + RabbitMq (v3.7+)（需安装rabbitmq_delayed_message_exchange插件 <a href="https://www.rabbitmq.com/community-plugins.html" target="_blank">下载地址</a>）
     + Mysql (v5.5.28+)
+    + InfluxDB (v1.7.9+)
+    + ELK (v7.4.1+)
     + Maven (v3+)
     + Nodejs (v10.14.2+)
 
@@ -106,7 +112,7 @@ open-platform
 
 4. 修改主pom.xml
     初始化maven项目
-    ``` bush
+    ``` bash
     maven clean install
     ```
     本地启动,默认不用修改
@@ -134,7 +140,7 @@ open-platform
     ```
 
 6. 前端启动
-    ``` bush
+    ``` bash
     npm install
     npm run dev
     ```
@@ -142,11 +148,11 @@ open-platform
 
 7. 项目打包部署
     + maven多环境打包,替换变量
-    ``` bush
+    ``` bash
     mvn clean install package -P {dev|test|uat|online}
     ```
     + 项目启动
-    ``` bush
+    ``` bash
     ./docs/bin/startup.sh {start|stop|restart|status} base-server.jar
     ./docs/bin/startup.sh {start|stop|restart|status} uaa-admin-server.jar
     ./docs/bin/startup.sh {start|stop|restart|status} api-spring-server.jar
@@ -155,11 +161,11 @@ open-platform
 8. docker部署
     + 配置DOCKER私服仓库
     + maven多环境打包,替换变量.并构建docker镜像
-    ``` bush
+    ``` bash
     clean install package -P {dev|test|uat|online} dockerfile:build
     ```
     + 启动docker镜像
-    ```bush
+    ```bash
     docker run -d -e JAVA_OPTS="-Xms128m -Xmx768m" -p 8233:8233 --name base-server platform/base-server:3.0.0
     docker run -d -e JAVA_OPTS="-Xms128m -Xmx768m" -p 8211:8211 --name uaa-admin-server platform/uaa-admin-server:3.0.0
     docker run -d -e JAVA_OPTS="-Xms128m -Xmx768m" -p 8888:8888 --name api-spring-server platform/api-spring-server:3.0.0

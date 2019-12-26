@@ -38,4 +38,8 @@ Servers
 upload
 generator
 temp
-logs
+
+# docker ignore
+docker/influxdb/data
+docker/influxdb/var
+docker/monitor/data

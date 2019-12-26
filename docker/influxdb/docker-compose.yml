@@ -1,0 +1,69 @@
+version: '3'
+
+services:
+    influxdb:
+        image: "influxdb:latest"
+        hostname: influxdb
+        ports:
+            - "8086:8086"
+        networks:
+            - tik_net
+        environment:
+            - TZ=Asia/Shanghai
+            - GOGC=10
+            - INFLUXDB_DATA_INDEX_VERSION=tsi1
+        volumes:
+            - ./etc/influxdb:/etc/influxdb
+            - ./data/influxdb:/var/lib/influxdb
+
+    telegraf:
+        image: "telegraf:latest"
+        hostname: telegraf
+        networks:
+            - tik_net
+        volumes:
+            - ./etc/telegraf:/etc/telegraf
+            - ./var/log/telegraf:/var/log/telegraf
+        links:
+            - influxdb
+        depends_on:
+            - influxdb
+
+    kapacitor:
+        image: "kapacitor:latest"
+        hostname: kapacitor
+        ports:
+            - "9092:9092"
+        networks:
+            - tik_net
+        volumes:
+            - ./etc/kapacitor:/etc/kapacitor
+            - ./data/kapacitor:/var/lib/kapacitor
+            - ./var/log/kapacitor:/var/log/kapacitor
+            - ./home/kapacitor:/home/kapacitor
+        environment:
+            - KAPACITOR_INFLUXDB_0_URLS_0=http://influxdb:8086
+        links:
+            - influxdb
+
+    chronograf:
+        image: "chronograf:latest"
+        hostname: chronograf
+        ports:
+            - "8888:8888"
+        networks:
+            - tik_net
+        command: --influxdb-url=http://influxdb:8086
+        volumes:
+            - ./data/chronograf:/var/lib/chronograf
+        links:
+            - influxdb
+            - kapacitor
+        depends_on:
+            - influxdb
+            - kapacitor
+            - telegraf
+
+networks:
+    tik_net:
+        driver: bridge

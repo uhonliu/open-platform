@@ -1,0 +1,8 @@
+{{ define "cdn_live_wechat.html" }}
+  {{ range $i, $alert := .Alerts.Firing }}
+    [报警项]:{{ index $alert.Labels "alertname" }}
+    [实例]:{{ index $alert.Labels "instance" }}
+    [报警阀值]:{{ index $alert.Annotations "value" }}
+    [开始时间]:{{ $alert.StartsAt }}
+  {{ end }}
+{{ end }}

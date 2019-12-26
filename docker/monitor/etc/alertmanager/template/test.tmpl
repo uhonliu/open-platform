@@ -1,0 +1,18 @@
+{{ define "test.html" }}
+<table border="1">
+        <tr>
+                <td>报警项</td>
+                <td>实例</td>
+                <td>报警阀值</td>
+                <td>开始时间</td>
+        </tr>
+        {{ range $i, $alert := .Alerts }}
+                <tr>
+                        <td>{{ index $alert.Labels "alertname" }}</td>
+                        <td>{{ index $alert.Labels "instance" }}</td>
+                        <td>{{ index $alert.Annotations "value" }}</td>
+                        <td>{{ $alert.StartsAt }}</td>
+                </tr>
+        {{ end }}
+</table>
+{{ end }}

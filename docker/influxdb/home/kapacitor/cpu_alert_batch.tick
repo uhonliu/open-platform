@@ -1,0 +1,10 @@
+batch
+    |query('''
+        SELECT usage_idle
+        FROM "telegraf"."autogen"."cpu"
+    ''')
+        .period(5m)
+        .every(5m)
+    |alert()
+        .crit(lambda: "usage_idle" < 70)
+        .log('/var/log/kapacitor/alerts-batch.log')

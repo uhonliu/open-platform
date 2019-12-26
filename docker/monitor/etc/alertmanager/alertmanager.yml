@@ -1,0 +1,46 @@
+# 全局配置项
+global:
+    resolve_timeout: 5m #处理超时时间，默认为5min
+    smtp_smarthost: 'smtp.sina.com:25' # 邮箱smtp服务器代理
+    smtp_from: '******@sina.com' # 发送邮箱名称
+    smtp_auth_username: '******@sina.com' # 邮箱名称
+    smtp_auth_password: '******' # 邮箱密码或授权码
+    wechat_api_url: 'https://qyapi.weixin.qq.com/cgi-bin/' # 企业微信地址
+
+
+# 定义模板信息
+templates:
+    - 'template/*.tmpl'
+
+# 定义路由树信息
+route:
+    group_by: ['alertname'] # 报警分组依据
+    group_wait: 10s # 最初即第一次等待多久时间发送一组警报的通知
+    group_interval: 10s # 在发送新警报前的等待时间
+    repeat_interval: 10m # 发送重复警报的周期 对于email配置中，此项不可以设置过低，否则将会由于邮件发送太多频繁，被smtp服务器拒绝
+    receiver: 'live-monitoring' # 发送警报的接收者的名称，以下receivers name的名称
+
+# 定义警报接收者信息
+receivers:
+    -   name: 'live-monitoring' # 警报
+        email_configs: # 邮箱配置
+            -   to: 'futustar@qq.com'  # 接收警报的email配置
+                html: '{{ template "test.html" . }}' # 设定邮箱的内容模板
+                headers: { Subject: "[WARN] 报警邮件"} # 接收邮件的标题
+        webhook_configs: # webhook配置
+            -   url: 'http://127.0.0.1:5001'
+                send_resolved: true
+        wechat_configs: # 企业微信报警配置
+            -   send_resolved: true
+                to_party: '1' # 接收组的id
+                agent_id: '1000002' # (企业微信-->自定应用-->AgentId)
+                corp_id: '******' # 企业信息(我的企业-->CorpId[在底部])
+                api_secret: '******' # 企业微信(企业微信-->自定应用-->Secret)
+                message: '{{ template "test_wechat.html" . }}' # 发送消息模板的设定
+# 一个inhibition规则是在与另一组匹配器匹配的警报存在的条件下，使匹配一组匹配器的警报失效的规则。两个警报必须具有一组相同的标签。 
+inhibit_rules:
+    -   source_match:
+            severity: 'critical'
+        target_match:
+            severity: 'warning'
+        equal: ['alertname', 'dev', 'instance']
