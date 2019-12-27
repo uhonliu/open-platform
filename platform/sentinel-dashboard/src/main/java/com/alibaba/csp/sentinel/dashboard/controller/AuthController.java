@@ -48,14 +48,6 @@ public class AuthController {
     @Autowired
     private AuthService<HttpServletRequest> authService;
 
-    /**
-     * 登录验证、账号密码从配置文件中获取
-     *
-     * @param request
-     * @param username
-     * @param password
-     * @return
-     */
     @PostMapping("/login")
     public Result<AuthService.AuthUser> login(HttpServletRequest request, String username, String password) {
         if (StringUtils.isNotBlank(DashboardConfig.getAuthUsername())) {
@@ -82,24 +74,12 @@ public class AuthController {
         return Result.ofSuccess(authUser);
     }
 
-    /**
-     * 退出
-     *
-     * @param request
-     * @return
-     */
     @PostMapping(value = "/logout")
     public Result<?> logout(HttpServletRequest request) {
         request.getSession().invalidate();
         return Result.ofSuccess(null);
     }
 
-    /**
-     * 校验用户
-     *
-     * @param request
-     * @return
-     */
     @PostMapping(value = "/check")
     public Result<?> check(HttpServletRequest request) {
         AuthService.AuthUser authUser = authService.getAuthUser(request);

@@ -123,8 +123,10 @@ management:
 opencloud:
     swagger2:
         enabled: true
-        description: 平台基础服务器
-        title: 平台基础服务器
+        description: API开放网关
+        title: API开放网关
+    logstash:
+        destination: ${logstash.destination}
     #网关配置
     api:
         #动态权限控制

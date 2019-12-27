@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alibaba.csp.sentinel.dashboard.filter;
+package com.alibaba.csp.sentinel.dashboard.auth;
 
-import com.alibaba.csp.sentinel.dashboard.auth.AuthService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,50 +28,51 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Servlet Filter that authenticate requests.
+ * <p>The Servlet filter for authentication.</p>
+ *
+ * <p>Note: some urls are excluded as they needn't auth, such as:</p>
+ * <ul>
+ * <li>index url: {@code /}</li>
+ * <li>authentication request url: {@code /login}, {@code /logout}</li>
+ * <li>machine registry: {@code /registry/machine}</li>
+ * <li>static resources</li>
+ * </ul>
  * <p>
- * Note:
- * Some urls are excluded as they needn't auth, such as:
- * <p>
- * Index url: /
- * Authentication request url: /login,logout
- * Used for client: /registry/machine
- * Static resources: htm,html,js and so on.
- * <p>
- * The excluded urls and urlSuffixes are configured in application.properties
+ * The excluded urls and urlSuffixes could be configured in {@code application.properties} file.
  *
  * @author cdfive
  * @since 1.6.0
  */
 @Component
-public class AuthFilter implements Filter {
+public class LoginAuthenticationFilter implements Filter {
     private static final String URL_SUFFIX_DOT = ".";
 
     /**
-     * Some urls which needn't auth, such as /auth/login,/registry/machine and so on
+     * Some urls which needn't auth, such as /auth/login, /registry/machine and so on.
      */
     @Value("#{'${auth.filter.exclude-urls}'.split(',')}")
     private List<String> authFilterExcludeUrls;
 
     /**
-     * Some urls with suffixes which needn't auth, such as htm,html,js and so on
+     * Some urls with suffixes which needn't auth, such as htm, html, js and so on.
      */
     @Value("#{'${auth.filter.exclude-url-suffixes}'.split(',')}")
     private List<String> authFilterExcludeUrlSuffixes;
 
     /**
-     * Authentication using AuthService interface
+     * Authentication using AuthService interface.
      */
     @Autowired
     private AuthService<HttpServletRequest> authService;
 
     @Override
-    public void init(FilterConfig filterConfig) {
+    public void init(FilterConfig filterConfig) throws ServletException {
 
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
 
         String servletPath = httpRequest.getServletPath();

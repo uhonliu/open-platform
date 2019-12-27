@@ -39,3 +39,11 @@ security:
             user-authorization-uri: ${opencloud.common.api-server-addr}/admin/oauth/authorize
         resource:
             token-info-uri: ${opencloud.common.api-server-addr}/admin/oauth/check_token
+
+opencloud:
+    swagger2:
+        enabled: true
+        description: SSO单点登录演示
+        title: SSO单点登录演示
+    logstash:
+        destination: ${logstash.destination}

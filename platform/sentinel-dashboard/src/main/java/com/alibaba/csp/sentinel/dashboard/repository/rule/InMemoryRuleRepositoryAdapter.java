@@ -28,7 +28,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author leyou
  */
 public abstract class InMemoryRuleRepositoryAdapter<T extends RuleEntity> implements RuleRepository<T, Long> {
-
     /**
      * {@code <machine, <id, rule>>}
      */

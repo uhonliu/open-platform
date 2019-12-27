@@ -38,6 +38,12 @@ management:
                 include: refresh,health
 
 opencloud:
+    swagger2:
+        enabled: true
+        description: 用户中心
+        title: 用户中心
+    logstash:
+        destination: ${logstash.destination}
     client:
         oauth2:
             gitee:
@@ -76,11 +82,6 @@ opencloud:
                 user-info-uri: https://api.weixin.qq.com/sns/userinfo
             wechat_gzh_xcx:
                 auth-code2session-uri: https://api.weixin.qq.com/sns/jscode2session
-
-    swagger2:
-        enabled: true
-        description: 用户中心
-        title: 用户中心
 
 #mybatis plus 设置
 mybatis-plus:

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="false" scan="false">
-    <springProperty scop="context" name="spring.application.name" source="spring.application.name" defaultValue="logs"/>
-    <springProperty scop="context" name="logstash.destination" source="open.cloud.logstash.destination"
-                    defaultValue="127.0.0.1:5000"/>
+    <springProperty scope="context" name="spring.application.name" source="spring.application.name"
+                    defaultValue="logs"/>
     <property name="log.path" value="logs/${spring.application.name}"/>
+
     <!-- Console log output -->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
@@ -47,34 +47,6 @@
         </filter>
     </appender>
 
-    <!-- Appender to log to file in a JSON format -->
-    <appender name="logstash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
-        <destination>${logstash.destination}</destination>
-        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
-            <providers>
-                <timestamp>
-                    <timeZone>UTC</timeZone>
-                </timestamp>
-                <pattern>
-                    <pattern>
-                        {
-                        "severity": "%level",
-                        "service": "${spring.application.name:-}",
-                        "trace": "%X{X-B3-TraceId:-}",
-                        "span": "%X{X-B3-SpanId:-}",
-                        "parent": "%X{X-B3-ParentSpanId:-}",
-                        "exportable": "%X{X-Span-Export:-}",
-                        "pid": "${PID:-}",
-                        "thread": "%thread",
-                        "class": "%logger{40}",
-                        "rest": "%message"
-                        }
-                    </pattern>
-                </pattern>
-            </providers>
-        </encoder>
-    </appender>
-
     <!--开发环境:打印控制台-->
     <springProfile name="dev">
         <logger name="com.opencloud" level="debug"/>
@@ -98,6 +70,5 @@
         <appender-ref ref="console"/>
         <appender-ref ref="debug"/>
         <appender-ref ref="error"/>
-        <appender-ref ref="logstash"/>
     </root>
 </configuration>

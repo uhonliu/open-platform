@@ -27,7 +27,6 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 @Component
 public class InMemParamFlowRuleStore extends InMemoryRuleRepositoryAdapter<ParamFlowRuleEntity> {
-
     private static AtomicLong ids = new AtomicLong(0);
 
     @Override

@@ -244,4 +244,5 @@ public class FlowRuleEntity implements RuleEntity {
         flowRule.setClusterConfig(clusterConfig);
         return flowRule;
     }
+
 }

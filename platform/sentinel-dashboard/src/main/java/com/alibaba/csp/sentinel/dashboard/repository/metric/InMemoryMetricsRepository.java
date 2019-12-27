@@ -99,17 +99,15 @@ public class InMemoryMetricsRepository implements MetricsRepository<MetricEntity
         if (resourceMap == null) {
             return results;
         }
-        //最近一分钟的指标(实时数据)
         final long minTimeMs = System.currentTimeMillis() - 1000 * 60;
         Map<String, MetricEntity> resourceCount = new ConcurrentHashMap<>(32);
-        //遍历当前App的资源信息
+
         for (Entry<String, ConcurrentLinkedHashMap<Long, MetricEntity>> resourceMetrics : resourceMap.entrySet()) {
             for (Entry<Long, MetricEntity> metrics : resourceMetrics.getValue().entrySet()) {
                 if (metrics.getKey() < minTimeMs) {
                     continue;
                 }
                 MetricEntity newEntity = metrics.getValue();
-                //如果集合中存在相同的资源则相加
                 if (resourceCount.containsKey(resourceMetrics.getKey())) {
                     MetricEntity oldEntity = resourceCount.get(resourceMetrics.getKey());
                     oldEntity.addPassQps(newEntity.getPassQps());

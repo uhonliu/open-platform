@@ -24,7 +24,6 @@ import java.util.List;
  * @author leyou
  */
 public class MachineInfoVo {
-
     private String app;
     private String hostname;
     private String ip;

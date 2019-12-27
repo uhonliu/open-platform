@@ -104,6 +104,12 @@ management:
                 include: health,info,open
 
 opencloud:
+    swagger2:
+        enabled: true
+        description: API开放网关
+        title: API开放网关
+    logstash:
+        destination: ${logstash.destination}
     # 开放api
     api:
         # 参数签名验证

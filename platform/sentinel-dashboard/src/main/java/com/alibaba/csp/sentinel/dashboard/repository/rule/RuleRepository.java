@@ -25,7 +25,6 @@ import java.util.List;
  * @author leyou
  */
 public interface RuleRepository<T, ID> {
-
     /**
      * Save one.
      *

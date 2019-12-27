@@ -13,25 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alibaba.csp.sentinel.dashboard.repository.rule;
+package com.alibaba.csp.sentinel.dashboard.auth;
 
-import com.alibaba.csp.sentinel.dashboard.datasource.entity.rule.AuthorityRuleEntity;
-import org.springframework.stereotype.Component;
-
-import java.util.concurrent.atomic.AtomicLong;
+import java.lang.annotation.*;
 
 /**
- * In-memory storage for authority rules.
- *
- * @author Eric Zhao
- * @since 0.2.1
+ * @author lkxiaolou
+ * @since 1.7.1
  */
-@Component
-public class InMemAuthorityRuleStore extends InMemoryRuleRepositoryAdapter<AuthorityRuleEntity> {
-    private static AtomicLong ids = new AtomicLong(0);
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Target({ElementType.METHOD})
+public @interface AuthAction {
+    /**
+     * @return the privilege type
+     */
+    AuthService.PrivilegeType value();
 
-    @Override
-    protected long nextId() {
-        return ids.incrementAndGet();
-    }
+    /**
+     * @return the target name to control
+     */
+    String targetName() default "app";
+
+    /**
+     * @return the message when permission is denied
+     */
+    String message() default "Permission denied";
 }

@@ -83,6 +83,8 @@
                 <discovery.server-addr>127.0.0.1:8848</discovery.server-addr>
                 <!--Nacos服务发现命名空间,用于支持多环境.这里必须使用ID，不能使用名称,默认为空-->
                 <discovery.namespace></discovery.namespace>
+                <!--Logstash日志收集地址-->
+                <logstash.destination>127.0.0.1:5000</logstash.destination>
             </properties>
         </profile>
         <!-- 开发 -->
@@ -103,6 +105,8 @@
                 <discovery.server-addr>192.168.7.31:8848</discovery.server-addr>
                 <!--Nacos服务发现命名空间,用于支持多环境.这里必须使用ID，不能使用名称,默认为空-->
                 <discovery.namespace></discovery.namespace>
+                <!--Logstash日志收集地址-->
+                <logstash.destination>192.168.7.31:5000</logstash.destination>
             </properties>
         </profile>
         <!-- 测试 -->
@@ -119,6 +123,8 @@
                 <discovery.server-addr>192.168.7.83:8848</discovery.server-addr>
                 <!--Nacos服务发现命名空间,用于支持多环境.这里必须使用ID，不能使用名称,默认为空-->
                 <discovery.namespace></discovery.namespace>
+                <!--Logstash日志收集地址-->
+                <logstash.destination>192.168.7.83:5000</logstash.destination>
             </properties>
         </profile>
         <!-- 预发布 -->
@@ -135,6 +141,8 @@
                 <discovery.server-addr>172.18.55.14:8848</discovery.server-addr>
                 <!--Nacos服务发现命名空间,用于支持多环境.这里必须使用ID，不能使用名称,默认为空-->
                 <discovery.namespace></discovery.namespace>
+                <!--Logstash日志收集地址-->
+                <logstash.destination>172.18.55.14:5000</logstash.destination>
             </properties>
         </profile>
         <!-- 生产 -->
@@ -151,6 +159,8 @@
                 <discovery.server-addr>172.18.108.117:8848</discovery.server-addr>
                 <!--Nacos服务发现命名空间,用于支持多环境.这里必须使用ID，不能使用名称,默认为空-->
                 <discovery.namespace></discovery.namespace>
+                <!--Logstash日志收集地址-->
+                <logstash.destination>172.18.108.117:5000</logstash.destination>
             </properties>
         </profile>
     </profiles>

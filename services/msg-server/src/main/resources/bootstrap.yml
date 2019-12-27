@@ -47,6 +47,8 @@ opencloud:
         enabled: true
         description: 消息服务器
         title: 消息服务器
+    logstash:
+        destination: ${logstash.destination}
 
 #mybatis plus 设置
 mybatis-plus:

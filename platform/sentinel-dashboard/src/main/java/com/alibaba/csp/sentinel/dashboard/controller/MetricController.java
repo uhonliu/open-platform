@@ -71,7 +71,6 @@ public class MetricController {
         if (endTime == null) {
             endTime = System.currentTimeMillis();
         }
-        //最近五分钟的数据
         if (startTime == null) {
             startTime = endTime - 1000 * 60 * 5;
         }

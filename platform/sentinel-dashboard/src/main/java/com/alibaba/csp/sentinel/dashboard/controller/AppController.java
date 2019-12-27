@@ -43,12 +43,6 @@ public class AppController {
         return Result.ofSuccess(appManagement.getAppNames());
     }
 
-    /**
-     * 首页左侧菜单
-     *
-     * @param request
-     * @return
-     */
     @GetMapping("/briefinfos.json")
     public Result<List<AppInfo>> queryAppInfos(HttpServletRequest request) {
         List<AppInfo> list = new ArrayList<>(appManagement.getBriefApps());
@@ -56,12 +50,6 @@ public class AppController {
         return Result.ofSuccess(list);
     }
 
-    /**
-     * 机器列表
-     *
-     * @param app
-     * @return
-     */
     @GetMapping(value = "/{app}/machines.json")
     public Result<List<MachineInfoVo>> getMachinesByApp(@PathVariable("app") String app) {
         AppInfo appInfo = appManagement.getDetailApp(app);
@@ -73,14 +61,6 @@ public class AppController {
         return Result.ofSuccess(MachineInfoVo.fromMachineInfoList(list));
     }
 
-    /**
-     * 移除机器
-     *
-     * @param app
-     * @param ip
-     * @param port
-     * @return
-     */
     @RequestMapping(value = "/{app}/machine/remove.json")
     public Result<String> removeMachineById(
             @PathVariable("app") String app,

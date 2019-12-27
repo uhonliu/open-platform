@@ -62,7 +62,7 @@ open-platform
     ├── sso-ui-demo         -- SSO单点登录演示demo[port = 2222]
     ├── task-client         -- 任务调度接口
     ├── task-server         -- 调度服务器[port = 8501]
-    ├── tenant-demo         -- SSO单点登录演示demo[port = 6878]
+    ├── tenant-demo         -- 多租户演示demo[port = 6878]
     ├── user-server         -- 用户服务[port = 8277]
 ```
 

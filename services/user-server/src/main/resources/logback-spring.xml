@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="false" scan="false">
-    <springProperty scop="context" name="spring.application.name" source="spring.application.name" defaultValue="logs"/>
-    <springProperty scop="context" name="logstash.destination" source="open.cloud.logstash.destination"
+    <springProperty scope="context" name="spring.application.name" source="spring.application.name"
+                    defaultValue="logs"/>
+    <springProperty scope="context" name="logstash.destination" source="opencloud.logstash.destination"
                     defaultValue="127.0.0.1:5000"/>
     <property name="log.path" value="logs/${spring.application.name}"/>
+
     <!-- Console log output -->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">

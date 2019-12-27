@@ -32,8 +32,11 @@ management:
         web:
             exposure:
                 include: '*'
+
 opencloud:
     swagger2:
         enabled: true
         description: 代码生成服务器
         title: 代码生成服务器
+    logstash:
+        destination: ${logstash.destination}
