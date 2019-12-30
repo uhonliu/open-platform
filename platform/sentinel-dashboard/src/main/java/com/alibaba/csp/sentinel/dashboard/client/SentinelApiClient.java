@@ -41,7 +41,6 @@ import com.alibaba.csp.sentinel.slots.system.SystemRule;
 import com.alibaba.csp.sentinel.util.AssertUtil;
 import com.alibaba.csp.sentinel.util.StringUtil;
 import com.alibaba.fastjson.JSON;
-import org.apache.http.Consts;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -164,7 +163,13 @@ public class SentinelApiClient {
             for (Entry<String, String> entry : params.entrySet()) {
                 list.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
             }
-            httpPost.setEntity(new UrlEncodedFormEntity(list, Consts.UTF_8));
+
+            try {
+                httpPost.setEntity(new UrlEncodedFormEntity(list));
+            } catch (UnsupportedEncodingException e) {
+                logger.warn("httpPostContent encode entity error: {}", params, e);
+                return null;
+            }
         }
         return httpPost;
     }
@@ -751,8 +756,7 @@ public class SentinelApiClient {
             AssertUtil.notEmpty(app, "Bad app name");
             AssertUtil.notEmpty(ip, "Bad machine IP");
             AssertUtil.isTrue(port > 0, "Bad machine port");
-            String data = JSON.toJSONString(
-                    apis.stream().map(r -> r.toApiDefinition()).collect(Collectors.toList()));
+            String data = JSON.toJSONString(apis.stream().map(r -> r.toApiDefinition()).collect(Collectors.toList()));
             Map<String, String> params = new HashMap<>(2);
             params.put("data", data);
             String result = executeCommand(app, ip, port, MODIFY_GATEWAY_API_PATH, params, true).get();

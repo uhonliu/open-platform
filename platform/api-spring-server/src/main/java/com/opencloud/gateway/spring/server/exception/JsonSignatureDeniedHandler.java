@@ -32,9 +32,7 @@ public class JsonSignatureDeniedHandler implements ServerSignatureDeniedHandler 
     @Override
     public Mono<Void> handle(ServerWebExchange exchange, OpenSignatureException e) {
         ResultBody resultBody = OpenGlobalExceptionHandler.resolveException(e, exchange.getRequest().getURI().getPath());
-        return Mono.defer(() -> {
-            return Mono.just(exchange.getResponse());
-        }).flatMap((response) -> {
+        return Mono.defer(() -> Mono.just(exchange.getResponse())).flatMap((response) -> {
             response.setStatusCode(HttpStatus.valueOf(resultBody.getHttpStatus()));
             response.getHeaders().setContentType(MediaType.APPLICATION_JSON_UTF8);
             DataBufferFactory dataBufferFactory = response.bufferFactory();
