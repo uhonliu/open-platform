@@ -22,7 +22,7 @@ public class Department extends AbstractEntity {
     /**
      * 部门ID
      */
-    @TableId(value = "department_id", type = IdType.ID_WORKER)
+    @TableId(value = "department_id", type = IdType.ASSIGN_ID)
     private Long departmentId;
 
     /**

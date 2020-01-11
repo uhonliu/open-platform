@@ -18,7 +18,7 @@ public class Position extends AbstractEntity {
     /**
      * 岗位ID
      */
-    @TableId(value = "position_id", type = IdType.ID_WORKER)
+    @TableId(value = "position_id", type = IdType.ASSIGN_ID)
     private Integer positionId;
 
     /**

@@ -127,7 +127,7 @@ public class ResourceServerConfiguration {
                 // oauth2认证过滤器
                 .addFilterAt(oauth2, SecurityWebFiltersOrder.AUTHENTICATION)
                 // 日志过滤器
-                .addFilterAt(new AccessLogFilter(accessLogService), SecurityWebFiltersOrder.SECURITY_CONTEXT_SERVER_WEB_EXCHANGE);
+                .addFilterAt(new PreResponseFilter(accessLogService, apiProperties), SecurityWebFiltersOrder.SECURITY_CONTEXT_SERVER_WEB_EXCHANGE);
         return http.build();
     }
 }

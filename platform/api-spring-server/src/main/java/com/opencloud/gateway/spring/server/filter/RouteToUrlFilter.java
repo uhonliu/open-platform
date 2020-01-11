@@ -3,6 +3,7 @@ package com.opencloud.gateway.spring.server.filter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
+import org.springframework.cloud.gateway.filter.RouteToRequestUrlFilter;
 import org.springframework.cloud.gateway.route.Route;
 import org.springframework.cloud.gateway.support.ServerWebExchangeUtils;
 import org.springframework.core.Ordered;
@@ -20,7 +21,6 @@ import java.util.regex.Pattern;
  */
 @Slf4j
 public class RouteToUrlFilter implements GlobalFilter, Ordered {
-    public static final int ROUTE_TO_URL_FILTER_ORDER = 10001;
     static final Pattern schemePattern = Pattern.compile("[a-zA-Z]([a-zA-Z]|\\d|\\+|\\.|-)*:.*");
 
     static boolean hasAnotherScheme(URI uri) {
@@ -29,7 +29,7 @@ public class RouteToUrlFilter implements GlobalFilter, Ordered {
 
     @Override
     public int getOrder() {
-        return ROUTE_TO_URL_FILTER_ORDER;
+        return RouteToRequestUrlFilter.ROUTE_TO_URL_FILTER_ORDER + 1;
     }
 
     @Override

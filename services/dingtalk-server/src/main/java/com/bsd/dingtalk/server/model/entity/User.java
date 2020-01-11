@@ -35,7 +35,7 @@ public class User extends AbstractEntity {
     /**
      * 员工在当前企业内的唯一标识
      */
-    @TableId(value = "dd_userid", type = IdType.ID_WORKER)
+    @TableId(value = "dd_userid", type = IdType.ASSIGN_ID)
     private String ddUserid;
 
     /**

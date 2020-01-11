@@ -14,7 +14,7 @@ import com.opencloud.common.mybatis.base.entity.AbstractEntity;
 public class BaseAuthority extends AbstractEntity {
     private static final long serialVersionUID = 1L;
 
-    @TableId(type = IdType.ID_WORKER)
+    @TableId(type = IdType.ASSIGN_ID)
     private Long authorityId;
 
     /**

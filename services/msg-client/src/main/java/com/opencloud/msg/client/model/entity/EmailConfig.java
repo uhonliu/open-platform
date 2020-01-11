@@ -24,7 +24,7 @@ import lombok.experimental.Accessors;
 public class EmailConfig extends AbstractEntity {
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "config_id", type = IdType.ID_WORKER)
+    @TableId(value = "config_id", type = IdType.ASSIGN_ID)
     private Long configId;
 
     @ApiModelProperty(value = "配置名称")

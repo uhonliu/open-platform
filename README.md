@@ -88,6 +88,7 @@ open-platform
     + docs/sql/msg.sql
     + docs/sql/quartz.sql && scheduler.sql
     + docs/sql/org.sql
+    + docs/sql/data/update.sql
 
    执行创建数据库open_platform_user并执行sql脚本
     + docs/sql/user.sql

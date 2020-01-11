@@ -114,6 +114,10 @@ opencloud:
     api:
         # 参数签名验证
         check-sign: false
+        # 加解密
+        check-encrypt: false
+        # 加密参数名称
+        encrypt-key: data
         # 访问权限控制
         access-control: true
         # swagger调试,生产环境设为false
@@ -134,6 +138,9 @@ opencloud:
         # 签名忽略
         sign-ignores:
             - /**/login/**
+            - /**/logout/**
+        # 加解密忽略
+        encrypt-ignores:
             - /**/logout/**
 
 #mybatis plus 设置

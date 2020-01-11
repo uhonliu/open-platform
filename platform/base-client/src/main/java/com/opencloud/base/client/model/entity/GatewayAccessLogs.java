@@ -19,7 +19,7 @@ public class GatewayAccessLogs implements Serializable {
     /**
      * 访问ID
      */
-    @TableId(type = IdType.ID_WORKER)
+    @TableId(type = IdType.ASSIGN_ID)
     private Long accessId;
 
     /**

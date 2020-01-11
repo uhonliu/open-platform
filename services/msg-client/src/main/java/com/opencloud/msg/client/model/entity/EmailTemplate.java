@@ -24,7 +24,7 @@ import lombok.experimental.Accessors;
 public class EmailTemplate extends AbstractEntity {
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "tpl_id", type = IdType.ID_WORKER)
+    @TableId(value = "tpl_id", type = IdType.ASSIGN_ID)
     private Long tplId;
 
     @ApiModelProperty(value = "模板名称")

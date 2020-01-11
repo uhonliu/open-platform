@@ -21,7 +21,7 @@ public class BaseDeveloper extends AbstractEntity {
     /**
      * 系统用户ID
      */
-    @TableId(type = IdType.ID_WORKER)
+    @TableId(type = IdType.ASSIGN_ID)
     private Long userId;
 
     /**

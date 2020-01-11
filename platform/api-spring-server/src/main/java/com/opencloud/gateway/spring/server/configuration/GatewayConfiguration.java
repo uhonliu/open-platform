@@ -9,12 +9,14 @@ import com.opencloud.common.configuration.OpenCommonProperties;
 import com.opencloud.common.utils.SpringContextHolder;
 import com.opencloud.gateway.spring.server.actuator.ApiEndpoint;
 import com.opencloud.gateway.spring.server.exception.JsonExceptionHandler;
+import com.opencloud.gateway.spring.server.exception.RequestDecryptionExceptionHandler;
 import com.opencloud.gateway.spring.server.filter.GatewayContextFilter;
 import com.opencloud.gateway.spring.server.filter.RemoveGatewayContextFilter;
 import com.opencloud.gateway.spring.server.filter.RouteToUrlFilter;
 import com.opencloud.gateway.spring.server.locator.JdbcRouteDefinitionLocator;
 import com.opencloud.gateway.spring.server.locator.ResourceLocator;
 import com.opencloud.gateway.spring.server.service.AccessLogService;
+import com.opencloud.gateway.spring.server.service.feign.BaseAppServiceClient;
 import com.opencloud.gateway.spring.server.service.feign.BaseAuthorityServiceClient;
 import com.opencloud.gateway.spring.server.service.feign.GatewayServiceClient;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +41,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.codec.ServerCodecConfigurer;
-import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.reactive.result.view.ViewResolver;
@@ -71,13 +72,14 @@ public class GatewayConfiguration {
      * 自定义异常处理[@@]注册Bean时依赖的Bean，会从容器中直接获取，所以直接注入即可
      *
      * @param viewResolversProvider
-     * @param serverCodecConfigurer
+     * @param accessLogService
      * @return
      */
     @Primary
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
-    public ErrorWebExceptionHandler errorWebExceptionHandler(ObjectProvider<List<ViewResolver>> viewResolversProvider, ServerCodecConfigurer serverCodecConfigurer, AccessLogService accessLogService) {
+    public ErrorWebExceptionHandler errorWebExceptionHandler(ObjectProvider<List<ViewResolver>> viewResolversProvider, AccessLogService accessLogService) {
+        ServerCodecConfigurer serverCodecConfigurer = ServerCodecConfigurer.create();
         JsonExceptionHandler jsonExceptionHandler = new JsonExceptionHandler(accessLogService);
         jsonExceptionHandler.setViewResolvers(viewResolversProvider.getIfAvailable(Collections::emptyList));
         jsonExceptionHandler.setMessageWriters(serverCodecConfigurer.getWriters());
@@ -106,11 +108,10 @@ public class GatewayConfiguration {
     /**
      * 转换器全局配置
      *
-     * @param converters
      * @return
      */
     @Bean
-    public HttpMessageConverters httpMessageConverters(List<HttpMessageConverter<?>> converters) {
+    public HttpMessageConverters httpMessageConverters() {
         MappingJackson2HttpMessageConverter jackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
         ObjectMapper objectMapper = new ObjectMapper();
         // 忽略为空的字段
@@ -179,9 +180,9 @@ public class GatewayConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(GatewayContextFilter.class)
-    public GatewayContextFilter gatewayContextFilter() {
+    public GatewayContextFilter gatewayContextFilter(BaseAppServiceClient baseAppServiceClient, ApiProperties apiProperties, AccessLogService accessLogService) {
         log.debug("Load GatewayContextFilter Config Bean");
-        return new GatewayContextFilter();
+        return new GatewayContextFilter(baseAppServiceClient, apiProperties, new RequestDecryptionExceptionHandler(accessLogService));
     }
 
     @Bean
@@ -191,11 +192,6 @@ public class GatewayConfiguration {
         log.debug("Load RemoveGatewayContextFilter Config Bean");
         return gatewayContextFilter;
     }
-
-    /*@Bean
-    public KeyResolver ipKeyResolver() {
-        return exchange -> Mono.just(exchange.getRequest().getRemoteAddress().getHostName());
-    }*/
 
     @Bean
     public KeyResolver pathKeyResolver() {

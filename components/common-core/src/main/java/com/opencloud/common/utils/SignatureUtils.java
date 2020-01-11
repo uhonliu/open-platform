@@ -24,16 +24,16 @@ public class SignatureUtils {
     public static void main(String[] args) {
         String clientSecret = "0osTIhce7uPvDKHz6aa67bhCukaKoYl4";
         //参数签名算法测试例子
-        HashMap<String, String> signMap = new HashMap<String, String>();
+        HashMap<String, String> signMap = new HashMap<>(0);
         signMap.put("AppId", "1552274783265");
         signMap.put("SignType", SignType.SHA256.name());
         signMap.put("Timestamp", DateUtils.getCurrentTimestampStr());
         signMap.put("Nonce", RandomValueUtils.randomAlphanumeric(16));
-        String sign = SignatureUtils.getSign(signMap, clientSecret);
+        String sign = getSign(signMap, clientSecret);
         System.out.println("签名结果:" + sign);
         signMap.put("Sign", sign);
         System.out.println("签名参数:" + JSONObject.toJSONString(signMap));
-        System.out.println(SignatureUtils.validateSign(signMap, clientSecret));
+        System.out.println(validateSign(signMap, clientSecret));
     }
 
     /**
@@ -42,24 +42,24 @@ public class SignatureUtils {
      * @param paramsMap
      */
     public static void validateParams(Map<String, String> paramsMap) {
-        Assert.notNull(paramsMap.get(CommonConstants.SIGN_APP_ID_KEY), String.format("签名验证失败:%s不能为空", CommonConstants.SIGN_APP_ID_KEY));
-        Assert.notNull(paramsMap.get(CommonConstants.SIGN_NONCE_KEY), String.format("签名验证失败:%s不能为空", CommonConstants.SIGN_NONCE_KEY));
-        Assert.notNull(paramsMap.get(CommonConstants.SIGN_TIMESTAMP_KEY), String.format("签名验证失败:%s不能为空", CommonConstants.SIGN_TIMESTAMP_KEY));
-        Assert.notNull(paramsMap.get(CommonConstants.SIGN_SIGN_TYPE_KEY), String.format("签名验证失败:%s不能为空", CommonConstants.SIGN_SIGN_TYPE_KEY));
-        Assert.notNull(paramsMap.get(CommonConstants.SIGN_SIGN_KEY), String.format("签名验证失败:%s不能为空", CommonConstants.SIGN_SIGN_KEY));
-        if (!SignatureUtils.SignType.contains(paramsMap.get(CommonConstants.SIGN_SIGN_TYPE_KEY))) {
-            throw new IllegalArgumentException(String.format("签名验证失败:%s必须为:%s,%s", CommonConstants.SIGN_SIGN_TYPE_KEY, SignatureUtils.SignType.MD5, SignatureUtils.SignType.SHA256));
+        Assert.notNull(paramsMap.get(CommonConstants.APP_ID_KEY), String.format("签名验证失败:%s不能为空", CommonConstants.APP_ID_KEY));
+        Assert.notNull(paramsMap.get(CommonConstants.NONCE_KEY), String.format("签名验证失败:%s不能为空", CommonConstants.NONCE_KEY));
+        Assert.notNull(paramsMap.get(CommonConstants.TIMESTAMP_KEY), String.format("签名验证失败:%s不能为空", CommonConstants.TIMESTAMP_KEY));
+        Assert.notNull(paramsMap.get(CommonConstants.SIGN_TYPE_KEY), String.format("签名验证失败:%s不能为空", CommonConstants.SIGN_TYPE_KEY));
+        Assert.notNull(paramsMap.get(CommonConstants.SIGN_KEY), String.format("签名验证失败:%s不能为空", CommonConstants.SIGN_KEY));
+        if (!SignType.contains(paramsMap.get(CommonConstants.SIGN_TYPE_KEY))) {
+            throw new IllegalArgumentException(String.format("签名验证失败:%s必须为:%s,%s", CommonConstants.SIGN_TYPE_KEY, SignType.MD5, SignType.SHA256));
         }
         try {
-            DateUtils.parseDate(paramsMap.get(CommonConstants.SIGN_TIMESTAMP_KEY), "yyyyMMddHHmmss");
+            DateUtils.parseDate(paramsMap.get(CommonConstants.TIMESTAMP_KEY), "yyyyMMddHHmmss");
         } catch (ParseException e) {
-            throw new IllegalArgumentException(String.format("签名验证失败:%s格式必须为:%s", CommonConstants.SIGN_TIMESTAMP_KEY, "yyyyMMddHHmmss"));
+            throw new IllegalArgumentException(String.format("签名验证失败:%s格式必须为:%s", CommonConstants.TIMESTAMP_KEY, "yyyyMMddHHmmss"));
         }
-        String timestamp = paramsMap.get(CommonConstants.SIGN_TIMESTAMP_KEY);
+        String timestamp = paramsMap.get(CommonConstants.TIMESTAMP_KEY);
         Long clientTimestamp = Long.parseLong(timestamp);
         //判断时间戳 timestamp=201808091113
         if ((DateUtils.getCurrentTimestamp() - clientTimestamp) > MAX_EXPIRE) {
-            throw new IllegalArgumentException(String.format("签名验证失败:%s已过期", CommonConstants.SIGN_TIMESTAMP_KEY));
+            throw new IllegalArgumentException(String.format("签名验证失败:%s已过期", CommonConstants.TIMESTAMP_KEY));
         }
     }
 
@@ -71,7 +71,7 @@ public class SignatureUtils {
     public static boolean validateSign(Map<String, String> paramsMap, String clientSecret) {
         try {
             validateParams(paramsMap);
-            String sign = paramsMap.get(CommonConstants.SIGN_SIGN_KEY);
+            String sign = paramsMap.get(CommonConstants.SIGN_KEY);
             //重新生成签名
             String signNew = getSign(paramsMap, clientSecret);
             //判断当前签名是否正确
@@ -106,7 +106,7 @@ public class SignatureUtils {
         String[] keyArray = keySet.toArray(new String[keySet.size()]);
         Arrays.sort(keyArray);
         StringBuilder sb = new StringBuilder();
-        String signType = paramMap.get(CommonConstants.SIGN_SIGN_TYPE_KEY);
+        String signType = paramMap.get(CommonConstants.SIGN_TYPE_KEY);
         SignType type = null;
         if (StringUtils.isNotBlank(signType)) {
             type = SignType.valueOf(signType);
@@ -115,7 +115,7 @@ public class SignatureUtils {
             type = SignType.MD5;
         }
         for (String k : keyArray) {
-            if (k.equals(CommonConstants.SIGN_SIGN_KEY) || k.equals(CommonConstants.SIGN_SECRET_KEY)) {
+            if (k.equals(CommonConstants.SIGN_KEY) || k.equals(CommonConstants.SECRET_KEY)) {
                 continue;
             }
             if (paramMap.get(k).trim().length() > 0) {
@@ -124,7 +124,7 @@ public class SignatureUtils {
             }
         }
         //暂时不需要个人认证
-        sb.append(CommonConstants.SIGN_SECRET_KEY + "=").append(clientSecret);
+        sb.append(CommonConstants.SECRET_KEY + "=").append(clientSecret);
         String signStr = "";
         //加密
         switch (type) {

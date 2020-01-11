@@ -24,7 +24,7 @@ import lombok.experimental.Accessors;
 public class EmailLogs extends AbstractEntity {
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "log_id", type = IdType.ID_WORKER)
+    @TableId(value = "log_id", type = IdType.ASSIGN_ID)
     private Long logId;
 
     private String subject;

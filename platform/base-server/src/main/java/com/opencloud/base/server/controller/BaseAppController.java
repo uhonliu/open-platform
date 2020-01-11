@@ -103,10 +103,14 @@ public class BaseAppController implements IBaseAppServiceClient {
             @ApiImplicitParam(name = "appType", value = "应用类型(server-应用服务 app-手机应用 pc-PC网页应用 wap-手机网页应用)", allowableValues = "server,app,pc,wap", required = true, paramType = "form"),
             @ApiImplicitParam(name = "appIcon", value = "应用图标", paramType = "form"),
             @ApiImplicitParam(name = "appOs", value = "手机应用操作系统", allowableValues = "android,ios", required = false, paramType = "form"),
-            @ApiImplicitParam(name = "appDesc", value = "应用说明", required = false, paramType = "form"),
+            @ApiImplicitParam(name = "appDesc", value = "应用说明", paramType = "form"),
             @ApiImplicitParam(name = "status", required = true, defaultValue = "1", allowableValues = "0,1", value = "是否启用", paramType = "form"),
-            @ApiImplicitParam(name = "website", value = "官网地址", required = false, paramType = "form"),
-            @ApiImplicitParam(name = "developerId", value = "开发者", required = false, paramType = "form")
+            @ApiImplicitParam(name = "website", value = "官网地址", paramType = "form"),
+            @ApiImplicitParam(name = "developerId", value = "开发者", paramType = "form"),
+            @ApiImplicitParam(name = "isSign", value = "是否开启验签", paramType = "form"),
+            @ApiImplicitParam(name = "isEncrypt", value = "是否开启加密", paramType = "form"),
+            @ApiImplicitParam(name = "encryptType", value = "加密类型", paramType = "form"),
+            @ApiImplicitParam(name = "publicKey", value = "RSA公钥", paramType = "form")
     })
     @PostMapping("/app/add")
     public ResultBody<String> addApp(
@@ -118,7 +122,11 @@ public class BaseAppController implements IBaseAppServiceClient {
             @RequestParam(value = "appDesc", required = false) String appDesc,
             @RequestParam(value = "status", defaultValue = "1") Integer status,
             @RequestParam(value = "website", required = false) String website,
-            @RequestParam(value = "developerId", required = false) Long developerId
+            @RequestParam(value = "developerId", required = false) Long developerId,
+            @RequestParam(value = "isSign", required = false, defaultValue = "0") Integer isSign,
+            @RequestParam(value = "isEncrypt", required = false, defaultValue = "0") Integer isEncrypt,
+            @RequestParam(value = "encryptType", required = false, defaultValue = "") String encryptType,
+            @RequestParam(value = "publicKey", required = false, defaultValue = "") String publicKey
     ) {
         BaseApp app = new BaseApp();
         app.setAppName(appName);
@@ -130,6 +138,10 @@ public class BaseAppController implements IBaseAppServiceClient {
         app.setStatus(status);
         app.setWebsite(website);
         app.setDeveloperId(developerId);
+        app.setIsSign(isSign);
+        app.setIsEncrypt(isEncrypt);
+        app.setEncryptType(encryptType);
+        app.setPublicKey(publicKey);
         BaseApp result = baseAppService.addAppInfo(app);
         String appId = null;
         if (result != null) {
@@ -162,10 +174,14 @@ public class BaseAppController implements IBaseAppServiceClient {
             @ApiImplicitParam(name = "appType", value = "应用类型(server-应用服务 app-手机应用 pc-PC网页应用 wap-手机网页应用)", allowableValues = "server,app,pc,wap", required = true, paramType = "form"),
             @ApiImplicitParam(name = "appIcon", value = "应用图标", required = false, paramType = "form"),
             @ApiImplicitParam(name = "appOs", value = "手机应用操作系统", allowableValues = "android,ios", required = false, paramType = "form"),
-            @ApiImplicitParam(name = "appDesc", value = "应用说明", required = false, paramType = "form"),
+            @ApiImplicitParam(name = "appDesc", value = "应用说明", paramType = "form"),
             @ApiImplicitParam(name = "status", required = true, defaultValue = "1", allowableValues = "0,1", value = "是否启用", paramType = "form"),
-            @ApiImplicitParam(name = "website", value = "官网地址", required = false, paramType = "form"),
-            @ApiImplicitParam(name = "developerId", value = "开发者", required = false, paramType = "form")
+            @ApiImplicitParam(name = "website", value = "官网地址", paramType = "form"),
+            @ApiImplicitParam(name = "developerId", value = "开发者", paramType = "form"),
+            @ApiImplicitParam(name = "isSign", value = "是否开启验签", paramType = "form"),
+            @ApiImplicitParam(name = "isEncrypt", value = "是否开启加密", paramType = "form"),
+            @ApiImplicitParam(name = "encryptType", value = "加密类型", paramType = "form"),
+            @ApiImplicitParam(name = "publicKey", value = "RSA公钥", paramType = "form")
     })
     @PostMapping("/app/update")
     public ResultBody updateApp(
@@ -178,7 +194,11 @@ public class BaseAppController implements IBaseAppServiceClient {
             @RequestParam(value = "appDesc", required = false) String appDesc,
             @RequestParam(value = "status", defaultValue = "1") Integer status,
             @RequestParam(value = "website", required = false) String website,
-            @RequestParam(value = "developerId", required = false) Long developerId
+            @RequestParam(value = "developerId", required = false) Long developerId,
+            @RequestParam(value = "isSign", required = false, defaultValue = "0") Integer isSign,
+            @RequestParam(value = "isEncrypt", required = false, defaultValue = "0") Integer isEncrypt,
+            @RequestParam(value = "encryptType", required = false, defaultValue = "") String encryptType,
+            @RequestParam(value = "publicKey", required = false, defaultValue = "") String publicKey
     ) {
         BaseApp app = new BaseApp();
         app.setAppId(appId);
@@ -191,6 +211,10 @@ public class BaseAppController implements IBaseAppServiceClient {
         app.setStatus(status);
         app.setWebsite(website);
         app.setDeveloperId(developerId);
+        app.setIsSign(isSign);
+        app.setIsEncrypt(isEncrypt);
+        app.setEncryptType(encryptType);
+        app.setPublicKey(publicKey);
         baseAppService.updateInfo(app);
         openRestTemplate.refreshGateway();
         return ResultBody.ok();
@@ -225,8 +249,8 @@ public class BaseAppController implements IBaseAppServiceClient {
             @RequestParam(value = "grantTypes") String grantTypes,
             @RequestParam(value = "redirectUrls") String redirectUrls,
             @RequestParam(value = "scopes") String scopes,
-            @RequestParam(value = "accessTokenValidity", required = true) Integer accessTokenValidity,
-            @RequestParam(value = "refreshTokenValidity", required = true) Integer refreshTokenValidity,
+            @RequestParam(value = "accessTokenValidity") Integer accessTokenValidity,
+            @RequestParam(value = "refreshTokenValidity") Integer refreshTokenValidity,
             @RequestParam(value = "autoApproveScopes", required = false) String autoApproveScopes
     ) {
         BaseApp app = baseAppService.getAppInfo(appId);

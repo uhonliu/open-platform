@@ -45,27 +45,29 @@ public class CommonConstants {
     /**
      * 客户端ID KEY
      */
-    public static final String SIGN_APP_ID_KEY = "AppId";
+    public static final String APP_ID_KEY = "AppId";
 
     /**
      * 客户端秘钥 KEY
      */
-    public static final String SIGN_SECRET_KEY = "SecretKey";
+    public static final String SECRET_KEY = "SecretKey";
 
     /**
      * 随机字符串 KEY
      */
-    public static final String SIGN_NONCE_KEY = "Nonce";
+    public static final String NONCE_KEY = "Nonce";
+
     /**
      * 时间戳 KEY
      */
-    public static final String SIGN_TIMESTAMP_KEY = "Timestamp";
+    public static final String TIMESTAMP_KEY = "Timestamp";
+
     /**
      * 签名类型 KEY
      */
-    public static final String SIGN_SIGN_TYPE_KEY = "SignType";
+    public static final String SIGN_TYPE_KEY = "SignType";
     /**
      * 签名结果 KEY
      */
-    public static final String SIGN_SIGN_KEY = "Sign";
+    public static final String SIGN_KEY = "Sign";
 }

@@ -15,7 +15,7 @@ public class GatewayIpLimit extends AbstractEntity {
     /**
      * 策略ID
      */
-    @TableId(type = IdType.ID_WORKER)
+    @TableId(type = IdType.ASSIGN_ID)
     private Long policyId;
 
     /**

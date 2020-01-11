@@ -22,7 +22,7 @@ public enum ChannelEnum {
     private String code;
     private String value;
 
-    private ChannelEnum(String code, String value) {
+    ChannelEnum(String code, String value) {
         this.code = code;
         this.value = value;
     }

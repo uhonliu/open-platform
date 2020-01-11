@@ -14,12 +14,16 @@
         <result column="app_name_en" property="appNameEn" jdbcType="VARCHAR"/>
         <result column="app_os" property="appOs" jdbcType="VARCHAR"/>
         <result column="status" property="status" jdbcType="TINYINT"/>
-        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
-        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
-        <result column="is_persist" property="isPersist" jdbcType="INTEGER"/>
         <result column="app_desc" property="appDesc" jdbcType="VARCHAR"/>
         <result column="website" property="website" jdbcType="VARCHAR"/>
         <result column="developer_id" property="developerId" jdbcType="BIGINT"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="is_persist" property="isPersist" jdbcType="INTEGER"/>
+        <result column="is_sign" property="isSign" jdbcType="INTEGER"/>
+        <result column="is_encrypt" property="isEncrypt" jdbcType="INTEGER"/>
+        <result column="encrypt_type" property="encryptType" jdbcType="VARCHAR"/>
+        <result column="public_key" property="publicKey" jdbcType="VARCHAR"/>
         <result column="user_name" property="userName" jdbcType="VARCHAR"/>
     </resultMap>
     <!-- 自定义分页 -->

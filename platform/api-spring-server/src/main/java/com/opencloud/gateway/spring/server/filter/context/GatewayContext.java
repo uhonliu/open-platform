@@ -16,6 +16,10 @@ import org.springframework.util.MultiValueMap;
 public class GatewayContext {
     public static final String CACHE_GATEWAY_CONTEXT = "cacheGatewayContext";
     /**
+     * cache request path
+     */
+    private String requestPath;
+    /**
      * cache json body
      */
     private String requestBody;
@@ -35,4 +39,12 @@ public class GatewayContext {
      * cache all request data include:form data and query param
      */
     private MultiValueMap<String, String> allRequestData = new LinkedMultiValueMap<>(0);
+    /**
+     * cache encrypt type
+     */
+    private String encryptType;
+    /**
+     * cache encrypt secret
+     */
+    private String encryptSecret;
 }

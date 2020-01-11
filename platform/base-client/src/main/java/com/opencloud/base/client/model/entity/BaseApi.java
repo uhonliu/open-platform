@@ -19,7 +19,7 @@ public class BaseApi extends AbstractEntity {
     /**
      * 资源ID
      */
-    @TableId(type = IdType.ID_WORKER)
+    @TableId(type = IdType.ASSIGN_ID)
     private Long apiId;
 
     /**

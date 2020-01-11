@@ -19,7 +19,7 @@ public class BaseAction extends AbstractEntity {
     /**
      * 资源ID
      */
-    @TableId(type = IdType.ID_WORKER)
+    @TableId(type = IdType.ASSIGN_ID)
     private Long actionId;
 
     /**

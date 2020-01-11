@@ -64,7 +64,7 @@ public class PreSignatureFilter implements WebFilter {
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
         String requestPath = request.getURI().getPath();
-        if (apiProperties.getCheckSign() && !notSign(requestPath)) {
+        if (apiProperties.getCheckSign() && !notSign(requestPath) && !apiProperties.getCheckEncrypt()) {
             try {
                 Map<String, String> params = Maps.newHashMap();
                 GatewayContext gatewayContext = exchange.getAttribute(GatewayContext.CACHE_GATEWAY_CONTEXT);
@@ -75,17 +75,17 @@ public class PreSignatureFilter implements WebFilter {
                 }
 
                 HttpHeaders headers = request.getHeaders();
-                params.put(CommonConstants.SIGN_APP_ID_KEY, headers.getFirst(CommonConstants.SIGN_APP_ID_KEY));
-                params.put(CommonConstants.SIGN_NONCE_KEY, headers.getFirst(CommonConstants.SIGN_NONCE_KEY));
-                params.put(CommonConstants.SIGN_TIMESTAMP_KEY, headers.getFirst(CommonConstants.SIGN_TIMESTAMP_KEY));
-                params.put(CommonConstants.SIGN_SIGN_TYPE_KEY, headers.getFirst(CommonConstants.SIGN_SIGN_TYPE_KEY));
-                params.put(CommonConstants.SIGN_SIGN_KEY, headers.getFirst(CommonConstants.SIGN_SIGN_KEY));
+                params.put(CommonConstants.APP_ID_KEY, headers.getFirst(CommonConstants.APP_ID_KEY));
+                params.put(CommonConstants.NONCE_KEY, headers.getFirst(CommonConstants.NONCE_KEY));
+                params.put(CommonConstants.TIMESTAMP_KEY, headers.getFirst(CommonConstants.TIMESTAMP_KEY));
+                params.put(CommonConstants.SIGN_TYPE_KEY, headers.getFirst(CommonConstants.SIGN_TYPE_KEY));
+                params.put(CommonConstants.SIGN_KEY, headers.getFirst(CommonConstants.SIGN_KEY));
 
                 // 验证请求参数
                 SignatureUtils.validateParams(params);
                 //开始验证签名
                 if (baseAppServiceClient != null) {
-                    String appId = params.get(CommonConstants.SIGN_APP_ID_KEY).toString();
+                    String appId = params.get(CommonConstants.APP_ID_KEY);
                     // 获取客户端信息
                     ResultBody<BaseApp> result = baseAppServiceClient.getApp(appId);
                     BaseApp app = result.getData();
@@ -93,7 +93,7 @@ public class PreSignatureFilter implements WebFilter {
                         return signatureDeniedHandler.handle(exchange, new OpenSignatureException("appId无效"));
                     }
                     // 服务器验证签名结果
-                    if (!SignatureUtils.validateSign(params, app.getSecretKey())) {
+                    if (app.getIsSign() == 1 && !SignatureUtils.validateSign(params, app.getSecretKey())) {
                         return signatureDeniedHandler.handle(exchange, new OpenSignatureException("签名验证失败!"));
                     }
                 }

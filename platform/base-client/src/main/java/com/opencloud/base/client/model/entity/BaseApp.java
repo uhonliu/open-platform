@@ -79,6 +79,26 @@ public class BaseApp extends AbstractEntity {
     private Integer isPersist;
 
     /**
+     * 是否验签:0-否 1-是
+     */
+    private Integer isSign;
+
+    /**
+     * 是否加密:0-否 1-是
+     */
+    private Integer isEncrypt;
+
+    /**
+     * 加密类型:DES TripleDES AES RSA
+     */
+    private String encryptType;
+
+    /**
+     * RSA加解密公钥
+     */
+    private String publicKey;
+
+    /**
      * @return app_id
      */
     public String getAppId() {
@@ -215,5 +235,37 @@ public class BaseApp extends AbstractEntity {
 
     public void setSecretKey(String secretKey) {
         this.secretKey = secretKey;
+    }
+
+    public Integer getIsSign() {
+        return isSign;
+    }
+
+    public void setIsSign(Integer isSign) {
+        this.isSign = isSign;
+    }
+
+    public Integer getIsEncrypt() {
+        return isEncrypt;
+    }
+
+    public void setIsEncrypt(Integer isEncrypt) {
+        this.isEncrypt = isEncrypt;
+    }
+
+    public String getEncryptType() {
+        return encryptType;
+    }
+
+    public void setEncryptType(String encryptType) {
+        this.encryptType = encryptType;
+    }
+
+    public String getPublicKey() {
+        return publicKey;
+    }
+
+    public void setPublicKey(String publicKey) {
+        this.publicKey = publicKey;
     }
 }

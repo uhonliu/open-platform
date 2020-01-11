@@ -15,7 +15,7 @@ import com.opencloud.common.mybatis.base.entity.AbstractEntity;
 public class UserAccount extends AbstractEntity {
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "account_id", type = IdType.ID_WORKER)
+    @TableId(value = "account_id", type = IdType.ASSIGN_ID)
     private Long accountId;
 
     /**

@@ -25,7 +25,7 @@ public class CommentReply extends AbstractEntity {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "评论回复ID")
-    @TableId(value = "reply_id", type = IdType.ID_WORKER)
+    @TableId(value = "reply_id", type = IdType.ASSIGN_ID)
     private Long replyId;
 
     @ApiModelProperty(value = "评论ID")

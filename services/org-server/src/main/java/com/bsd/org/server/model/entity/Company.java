@@ -26,7 +26,7 @@ public class Company extends AbstractEntity {
     /**
      * 企业ID
      */
-    @TableId(value = "company_id", type = IdType.ID_WORKER)
+    @TableId(value = "company_id", type = IdType.ASSIGN_ID)
     private Long companyId;
 
     /**

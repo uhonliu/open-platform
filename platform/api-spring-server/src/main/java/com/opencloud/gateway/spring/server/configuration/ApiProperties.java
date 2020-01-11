@@ -42,6 +42,21 @@ public class ApiProperties {
      */
     private Set<String> signIgnores;
 
+    /**
+     * 是否开启加密
+     */
+    private Boolean checkEncrypt = true;
+
+    /**
+     * 加密忽略请求
+     */
+    private Set<String> encryptIgnores;
+
+    /**
+     * 加密参数 KEY
+     */
+    private String encryptKey = "data";
+
     public Boolean getCheckSign() {
         return checkSign;
     }
@@ -88,5 +103,29 @@ public class ApiProperties {
 
     public void setSignIgnores(Set<String> signIgnores) {
         this.signIgnores = signIgnores;
+    }
+
+    public Boolean getCheckEncrypt() {
+        return checkEncrypt;
+    }
+
+    public void setCheckEncrypt(Boolean checkEncrypt) {
+        this.checkEncrypt = checkEncrypt;
+    }
+
+    public Set<String> getEncryptIgnores() {
+        return encryptIgnores;
+    }
+
+    public void setEncryptIgnores(Set<String> encryptIgnores) {
+        this.encryptIgnores = encryptIgnores;
+    }
+
+    public String getEncryptKey() {
+        return encryptKey;
+    }
+
+    public void setEncryptKey(String encryptKey) {
+        this.encryptKey = encryptKey;
     }
 }

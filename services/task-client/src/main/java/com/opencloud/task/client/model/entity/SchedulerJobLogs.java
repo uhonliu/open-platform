@@ -16,7 +16,7 @@ import java.util.Date;
 @Accessors(chain = true)
 @TableName("scheduler_job_logs")
 public class SchedulerJobLogs implements Serializable {
-    @TableId(type = IdType.ID_WORKER)
+    @TableId(type = IdType.ASSIGN_ID)
     private Long logId;
 
     /**

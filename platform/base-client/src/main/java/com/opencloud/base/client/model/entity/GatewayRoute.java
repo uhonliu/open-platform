@@ -19,7 +19,7 @@ public class GatewayRoute extends AbstractEntity {
     /**
      * 路由ID
      */
-    @TableId(type = IdType.ID_WORKER)
+    @TableId(type = IdType.ASSIGN_ID)
     private Long routeId;
 
     /**

@@ -51,8 +51,7 @@ public class SwaggerController {
 
     @GetMapping("/configuration/security")
     public Mono<ResponseEntity<SecurityConfiguration>> securityConfiguration() {
-        return Mono.just(new ResponseEntity<>(
-                Optional.ofNullable(securityConfiguration).orElse(null), HttpStatus.OK));
+        return Mono.just(new ResponseEntity<>(Optional.ofNullable(securityConfiguration).orElse(null), HttpStatus.OK));
     }
 
     @GetMapping("/configuration/ui")
