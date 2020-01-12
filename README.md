@@ -18,6 +18,10 @@
 #### 使用手册
 <a target="_blank" href="https://gitee.com/uhon/open-platform/wikis/pages">使用手册</a>
 
+#### 技术支持
+![技术支持](/docs/技术支持.jpg)
+学习交流(千人群):760809808 <a target="_blank" href="//shang.qq.com/wpa/qunwpa?idkey=3c1017efeda485820c9eddee13a125d99261f7504746aa4824bc5c7c2b9a4234"><img border="0" src="//pub.idqqimg.com/wpa/images/group.png" alt="open-cloud交流群" title="open-cloud交流群"></a>
+
 #### 功能介绍
 ![功能介绍](/docs/功能介绍.png)
 
@@ -101,12 +105,11 @@ open-platform
 
 3. 启动nacos服务发现&配置中心,新建公共配置文件
     + 访问 http://localhost:8848/nacos/index.html 
-    + 导入配置 /docs/config/DEFAULT_GROUP.zip（nacos1.0.3以上版本支持一键导入）
-    + 新建配置文件  （nacos1.0.3以下版本）
-        + 项目目录/docs/config/db.properties >  db.properties
-        + 项目目录/docs/config/rabbitmq.properties > rabbitmq.properties
-        + 项目目录/docs/config/redis.properties > redis.properties
-        + 项目目录/docs/config/common.properties  > common.properties
+    + 新建配置文件及导入（根据需要导入docs/config下配置文件）
+        + docs/config/db.properties >  db.properties
+        + docs/config/rabbitmq.properties > rabbitmq.properties
+        + docs/config/redis.properties > redis.properties
+        + docs/config/common.properties  > common.properties
 
     如图:
     ![nacos](https://gitee.com/uploads/images/2019/0425/231436_fce24434_791541.png "nacos.png")
@@ -126,6 +129,8 @@ open-platform
     <discovery.server-addr>127.0.0.1:8848</discovery.server-addr>
     <!--Nacos服务发现命名空间,用于支持多环境.这里必须使用ID，不能使用名称,默认为空-->
     <discovery.namespace></discovery.namespace>
+    <!--Logstash日志收集地址-->
+    <logstash.destination>127.0.0.1:5000</logstash.destination>
     ```
 
 5. 本地启动(按顺序启动)
