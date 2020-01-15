@@ -130,7 +130,7 @@ public class GatewayContextFilter implements WebFilter, Ordered {
                 gatewayContext.setEncryptType(encryptType);
 
                 // 加密Key
-                String encryptSecret = "RSA".equals(apiProperties.getEncryptKey()) ? app.getPublicKey() : app.getSecretKey();
+                String encryptSecret = "RSA".equalsIgnoreCase(encryptType) ? app.getPublicKey() : app.getSecretKey();
                 gatewayContext.setEncryptSecret(encryptSecret);
 
                 // 参数解密

@@ -41,7 +41,7 @@ public class RSAUtils {
     private static final int MAX_ENCRYPT_BLOCK = 117;
 
     // RSA最大解密密文大小
-    private static final int MAX_DECRYPT_BLOCK = 128;
+    private static final int MAX_DECRYPT_BLOCK = 256;
 
     // 不仅可以使用DSA算法，同样也可以使用RSA算法做数字签名
     private static final String KEY_ALGORITHM = "RSA";
@@ -170,14 +170,13 @@ public class RSAUtils {
      * @throws InvalidKeySpecException
      * @throws NoSuchPaddingException
      * @throws InvalidKeyException
-     * @throws UnsupportedEncodingException
      * @throws BadPaddingException
      * @throws IllegalBlockSizeException
-     * @throws Exception                    加密过程中的异常信息
+     * @throws Exception                 加密过程中的异常信息
      */
     public static String encryptByPublicKey(String str, String publicKey)
             throws InvalidKeySpecException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException,
-            IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException {
+            IllegalBlockSizeException, BadPaddingException {
         // base64编码的公钥
         byte[] keyBytes = decryptBASE64(publicKey);
         RSAPublicKey pubKey = (RSAPublicKey) KeyFactory.getInstance(KEY_ALGORITHM)
@@ -292,7 +291,7 @@ public class RSAUtils {
     /**
      * RSA私钥解密
      *
-     * @param encryStr   加密字符串
+     * @param encryptStr 加密字符串
      * @param privateKey 私钥
      * @return 铭文
      * @throws NoSuchAlgorithmException
@@ -303,7 +302,7 @@ public class RSAUtils {
      * @throws InvalidKeyException
      * @throws Exception                 解密过程中的异常信息
      */
-    public static String decryptByPrivateKey(String encryStr, String privateKey)
+    public static String decryptByPrivateKey(String encryptStr, String privateKey)
             throws InvalidKeySpecException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException,
             BadPaddingException, InvalidKeyException {
         // base64编码的私钥
@@ -315,7 +314,7 @@ public class RSAUtils {
         cipher.init(Cipher.DECRYPT_MODE, priKey);
 
         // 64位解码加密后的字符串
-        byte[] data = decryptBASE64(encryStr);
+        byte[] data = decryptBASE64(encryptStr);
         // 解密时超过128字节报错。为此采用分段解密的办法来解密
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < data.length; i += MAX_DECRYPT_BLOCK) {
@@ -329,8 +328,8 @@ public class RSAUtils {
     /**
      * RSA公钥解密
      *
-     * @param encryStr  加密字符串
-     * @param publicKey 公钥
+     * @param encryptStr 加密字符串
+     * @param publicKey  公钥
      * @return 铭文
      * @throws NoSuchAlgorithmException
      * @throws InvalidKeySpecException
@@ -340,7 +339,7 @@ public class RSAUtils {
      * @throws InvalidKeyException
      * @throws Exception                 解密过程中的异常信息
      */
-    public static String decryptByPublicKey(String encryStr, String publicKey)
+    public static String decryptByPublicKey(String encryptStr, String publicKey)
             throws InvalidKeySpecException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException,
             BadPaddingException, InvalidKeyException {
         // base64编码的私钥
@@ -352,7 +351,7 @@ public class RSAUtils {
         cipher.init(Cipher.DECRYPT_MODE, priKey);
 
         // 64位解码加密后的字符串
-        byte[] data = decryptBASE64(encryStr);
+        byte[] data = decryptBASE64(encryptStr);
         // 解密时超过128字节报错。为此采用分段解密的办法来解密
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < data.length; i += MAX_DECRYPT_BLOCK) {
@@ -390,15 +389,15 @@ public class RSAUtils {
         log.error("经验证数据和签名匹配：{} ", verify);
 
         String s = "测试，e8986ae53e76e7514ebc7e8a42e81e6cea5b6280fb5d3259d5f0a46f9f6e090c";
-        String encrytStr = encryptByPublicKey(s, getPublicKey(keyMap));
-        log.info("字符串 {} 的公钥加密结果为：{}", s, encrytStr);
-        String decryStr = decryptByPrivateKey(encrytStr, getPrivateKey(keyMap));
+        String encryptStr = encryptByPublicKey(s, getPublicKey(keyMap));
+        log.info("字符串 {} 的公钥加密结果为：{}", s, encryptStr);
+        String decryStr = decryptByPrivateKey(encryptStr, getPrivateKey(keyMap));
         log.info("私钥解密结果为：{}", decryStr);
         log.info("========================================================================================");
         String s2 = "测试2，e8986ae53e76e7514ebc7e8a42e81e6cea5b6280fb5d3259d5f0a46f9f6e090c";
-        String encrytStr2 = encryptByPrivateKey(s, getPrivateKey(keyMap));
-        log.info("字符串 {} 的私钥加密结果为：{}", s2, encrytStr2);
-        String decryStr2 = decryptByPublicKey(encrytStr2, getPublicKey(keyMap));
+        String encryptStr2 = encryptByPrivateKey(s, getPrivateKey(keyMap));
+        log.info("字符串 {} 的私钥加密结果为：{}", s2, encryptStr2);
+        String decryStr2 = decryptByPublicKey(encryptStr2, getPublicKey(keyMap));
         log.info("公钥解密结果为：{}", decryStr2);
     }
 }

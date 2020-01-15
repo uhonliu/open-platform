@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -19,29 +18,8 @@ import java.util.Map;
  */
 @Slf4j
 public class CryptoUtils {
-    public static void main(String[] args) {
-        String clientSecret = "0osTIhce7uPvDKHz6aa67bhCukaKoYl4";
-        //参数签名算法测试例子
-        HashMap<String, Object> cryptoMap = new HashMap<>(0);
-        cryptoMap.put("username", "admin");
-        cryptoMap.put("password", "123456");
-        String data = CryptoUtils.encrypt(cryptoMap, clientSecret, CryptoType.AES);
-        System.out.println("加密结果:" + data);
-        System.out.println("解密结果:" + CryptoUtils.decrypt(data, clientSecret, CryptoType.AES));
-        HashMap<String, Object> cryptoMap2 = new HashMap<>(0);
-        cryptoMap2.put("phoneNum", "18718518094");
-        cryptoMap2.put("signName", "跨境知道");
-        cryptoMap2.put("tplCode", "SMS_142475098");
-        JSONObject obj = new JSONObject();
-        obj.put("code", "123456");
-        cryptoMap2.put("tplParams", obj.toJSONString());
-        String data2 = CryptoUtils.encrypt(cryptoMap2, clientSecret, CryptoType.AES);
-        System.out.println("加密结果:" + data2);
-        System.out.println("解密结果:" + CryptoUtils.decrypt(data2, clientSecret, CryptoType.AES));
-    }
-
     /**
-     * 加密
+     * 公钥加密
      *
      * @param paramMap     参数集合不含clientSecret
      * @param clientSecret 验证接口的clientSecret
@@ -56,6 +34,14 @@ public class CryptoUtils {
         return encrypt(paramString, clientSecret, type);
     }
 
+    /**
+     * 公钥加密
+     *
+     * @param paramString  参数集合不含clientSecret
+     * @param clientSecret 验证接口的clientSecret
+     * @param type         加密类型
+     * @return
+     */
     public static String encrypt(String paramString, String clientSecret, CryptoType type) {
         String encryptStr = "";
         if (StringUtils.isNotEmpty(paramString)) {
@@ -74,7 +60,7 @@ public class CryptoUtils {
                 case RSA:
                     try {
                         encryptStr = RSAUtils.encryptByPublicKey(paramString, clientSecret);
-                    } catch (InvalidKeySpecException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | UnsupportedEncodingException e) {
+                    } catch (InvalidKeySpecException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
                         log.error(e.getMessage());
                         return null;
                     }
@@ -88,7 +74,7 @@ public class CryptoUtils {
     }
 
     /**
-     * 解密
+     * 公钥解密
      *
      * @param paramString  必须包含
      * @param clientSecret 验证接口的clientSecret
@@ -105,6 +91,14 @@ public class CryptoUtils {
         return paramMap;
     }
 
+    /**
+     * 公钥解密
+     *
+     * @param paramString  必须包含
+     * @param clientSecret 验证接口的clientSecret
+     * @param type         加密类型
+     * @return
+     */
     public static String decrypt(String paramString, String clientSecret, CryptoType type) {
         String decryptStr = "";
         if (StringUtils.isNotEmpty(paramString)) {
