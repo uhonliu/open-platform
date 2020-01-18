@@ -2,12 +2,16 @@ package com.opencloud.common.utils;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 /**
  * 字符串工具类, 继承org.apache.commons.lang3.StringUtils类
@@ -176,6 +180,72 @@ public class StringHelper extends StringUtils {
     public static String trimToDefault(final String str, String defaultValue) {
         final String ts = trim(str);
         return isEmpty(ts) ? defaultValue : ts;
+    }
+
+    /**
+     * GZIP压缩
+     *
+     * @author liujianhong
+     */
+    public static byte[] compress(String str, String encoding) {
+        if (str == null || str.length() == 0) {
+            return null;
+        }
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        GZIPOutputStream gzip;
+        try {
+            gzip = new GZIPOutputStream(out);
+            gzip.write(str.getBytes(encoding));
+            gzip.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return out.toByteArray();
+    }
+
+    /**
+     * GZIP压缩
+     *
+     * @author liujianhong
+     */
+    public static byte[] compress(String str, Charset charset) {
+        if (str == null || str.length() == 0) {
+            return null;
+        }
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        GZIPOutputStream gzip;
+        try {
+            gzip = new GZIPOutputStream(out);
+            gzip.write(str.getBytes(charset));
+            gzip.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return out.toByteArray();
+    }
+
+    /**
+     * GZIP解压缩
+     *
+     * @author liujianhong
+     */
+    public static byte[] uncompress(byte[] bytes) {
+        if (bytes == null || bytes.length == 0) {
+            return null;
+        }
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ByteArrayInputStream in = new ByteArrayInputStream(bytes);
+        try {
+            GZIPInputStream ungzip = new GZIPInputStream(in);
+            byte[] buffer = new byte[256];
+            int n;
+            while ((n = ungzip.read(buffer)) >= 0) {
+                out.write(buffer, 0, n);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return out.toByteArray();
     }
 
     /**

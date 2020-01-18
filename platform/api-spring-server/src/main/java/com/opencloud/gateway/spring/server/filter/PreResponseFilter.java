@@ -3,6 +3,7 @@ package com.opencloud.gateway.spring.server.filter;
 import cn.hutool.core.collection.ConcurrentHashSet;
 import com.alibaba.fastjson.JSONObject;
 import com.opencloud.common.utils.CryptoUtils;
+import com.opencloud.common.utils.StringHelper;
 import com.opencloud.common.utils.StringUtils;
 import com.opencloud.gateway.spring.server.configuration.ApiProperties;
 import com.opencloud.gateway.spring.server.filter.context.GatewayContext;
@@ -34,14 +35,12 @@ import java.util.Set;
 @Slf4j
 public class PreResponseFilter implements WebFilter {
     private AccessLogService accessLogService;
-    private ApiProperties apiProperties;
 
     private static final AntPathMatcher pathMatch = new AntPathMatcher();
     private Set<String> accessLogIgnores = new ConcurrentHashSet<>();
 
     public PreResponseFilter(AccessLogService accessLogService, ApiProperties apiProperties) {
         this.accessLogService = accessLogService;
-        this.apiProperties = apiProperties;
 
         // 默认忽略写访问日志
         accessLogIgnores.add("/");
@@ -78,12 +77,24 @@ public class PreResponseFilter implements WebFilter {
                         // 释放掉内存
                         DataBufferUtils.release(join);
 
+                        // 如果对内容进行了压缩，则解压
+                        String contentEncoding = response.getHeaders().getFirst("Content-Encoding");
+                        boolean isGzip = null != contentEncoding && contentEncoding.contains("gzip");
+                        if (isGzip) {
+                            content = StringHelper.uncompress(content);
+                        }
+
                         String bodyStr = new String(content, StandardCharsets.UTF_8);
                         if (gatewayContext != null && MediaType.APPLICATION_JSON.isCompatibleWith(response.getHeaders().getContentType())) {
                             bodyStr = repackageBody(bodyStr, gatewayContext);
                         }
 
-                        content = bodyStr.getBytes();
+                        if (isGzip) {
+                            content = StringHelper.compress(bodyStr, StandardCharsets.UTF_8);
+                        } else {
+                            content = bodyStr.getBytes();
+                        }
+
                         response.getHeaders().setContentLength(content.length);
                         return bufferFactory.wrap(content);
                     }));
@@ -104,21 +115,26 @@ public class PreResponseFilter implements WebFilter {
      * @author liujianhong
      */
     private String repackageBody(String bodyStr, GatewayContext gatewayContext) {
-        JSONObject bodyObject = JSONObject.parseObject(bodyStr);
-        String pathKey = "path";
-        if (StringUtils.isEmpty(bodyObject.getString(pathKey)) && StringUtils.isNotEmpty(gatewayContext.getRequestPath())) {
-            bodyObject.replace(pathKey, gatewayContext.getRequestPath());
-        }
+        try {
+            JSONObject bodyObject = JSONObject.parseObject(bodyStr);
+            String pathKey = "path";
+            if (StringUtils.isEmpty(bodyObject.getString(pathKey)) && StringUtils.isNotEmpty(gatewayContext.getRequestPath())) {
+                bodyObject.replace(pathKey, gatewayContext.getRequestPath());
+            }
 
-        // 响应加密
-        if (gatewayContext.getEncryptType() != null && gatewayContext.getEncryptSecret() != null) {
-            String dataKey = "data";
-            String dataValue = bodyObject.getString(dataKey);
-            String encryptData = CryptoUtils.encrypt(dataValue, gatewayContext.getEncryptSecret(), CryptoUtils.CryptoType.valueOf(gatewayContext.getEncryptType()));
-            bodyObject.replace(dataKey, encryptData);
-            log.info("请求{} 加密响应参数{},加密前:{},加密后:{}", bodyObject.getString(pathKey), dataKey, dataValue, encryptData);
+            // 响应加密
+            if (gatewayContext.getEncryptType() != null && gatewayContext.getEncryptSecret() != null) {
+                String dataKey = "data";
+                String dataValue = bodyObject.getString(dataKey);
+                String encryptData = CryptoUtils.encrypt(dataValue, gatewayContext.getEncryptSecret(), CryptoUtils.CryptoType.valueOf(gatewayContext.getEncryptType()));
+                bodyObject.replace(dataKey, encryptData);
+                log.info("请求{} 加密响应参数{},加密前:{},加密后:{}", bodyObject.getString(pathKey), dataKey, dataValue, encryptData);
+            }
+            return bodyObject.toJSONString();
+        } catch (Exception e) {
+            log.error("请求{} 加密响应参数异常:{}", gatewayContext.getRequestPath(), e.getMessage());
+            return bodyStr;
         }
-        return bodyObject.toJSONString();
     }
 
     /**
