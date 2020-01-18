@@ -14,6 +14,7 @@ import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferFactory;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.core.io.buffer.DefaultDataBufferFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.http.server.reactive.ServerHttpResponseDecorator;
@@ -77,22 +78,9 @@ public class PreResponseFilter implements WebFilter {
                         // 释放掉内存
                         DataBufferUtils.release(join);
 
-                        // 如果对内容进行了压缩，则解压
-                        String contentEncoding = response.getHeaders().getFirst("Content-Encoding");
-                        boolean isGzip = null != contentEncoding && contentEncoding.contains("gzip");
-                        if (isGzip) {
-                            content = StringHelper.uncompress(content);
-                        }
-
-                        String bodyStr = new String(content, StandardCharsets.UTF_8);
-                        if (gatewayContext != null && MediaType.APPLICATION_JSON.isCompatibleWith(response.getHeaders().getContentType())) {
-                            bodyStr = repackageBody(bodyStr, gatewayContext);
-                        }
-
-                        if (isGzip) {
-                            content = StringHelper.compress(bodyStr, StandardCharsets.UTF_8);
-                        } else {
-                            content = bodyStr.getBytes();
+                        HttpHeaders headers = response.getHeaders();
+                        if (gatewayContext != null && MediaType.APPLICATION_JSON.isCompatibleWith(headers.getContentType())) {
+                            content = repackageBody(content, gatewayContext, headers);
                         }
 
                         response.getHeaders().setContentLength(content.length);
@@ -114,8 +102,15 @@ public class PreResponseFilter implements WebFilter {
      *
      * @author liujianhong
      */
-    private String repackageBody(String bodyStr, GatewayContext gatewayContext) {
+    private byte[] repackageBody(byte[] content, GatewayContext gatewayContext, HttpHeaders headers) {
         try {
+            String contentEncoding = headers.getFirst("Content-Encoding");
+            boolean isGzip = null != contentEncoding && contentEncoding.contains("gzip");
+            if (isGzip) {
+                content = StringHelper.uncompress(content);
+            }
+
+            String bodyStr = new String(content, StandardCharsets.UTF_8);
             JSONObject bodyObject = JSONObject.parseObject(bodyStr);
             String pathKey = "path";
             if (StringUtils.isEmpty(bodyObject.getString(pathKey)) && StringUtils.isNotEmpty(gatewayContext.getRequestPath())) {
@@ -130,11 +125,18 @@ public class PreResponseFilter implements WebFilter {
                 bodyObject.replace(dataKey, encryptData);
                 log.info("请求{} 加密响应参数{},加密前:{},加密后:{}", bodyObject.getString(pathKey), dataKey, dataValue, encryptData);
             }
-            return bodyObject.toJSONString();
+
+            bodyStr = bodyObject.toJSONString();
+            if (isGzip) {
+                content = StringHelper.compress(bodyStr, StandardCharsets.UTF_8);
+            } else {
+                content = bodyStr.getBytes();
+            }
         } catch (Exception e) {
             log.error("请求{} 加密响应参数异常:{}", gatewayContext.getRequestPath(), e.getMessage());
-            return bodyStr;
         }
+
+        return content;
     }
 
     /**
