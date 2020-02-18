@@ -241,7 +241,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
         Set<String> userSet = new HashSet<String>();
         if (users != null && users.size() > 0) {
             for (UserDetailVO user : users) {
-                if (user.getUserId().equals(0l)) {
+                if (user.getUserId() == 0) {
                     continue;
                 }
                 userSet.add(String.valueOf(user.getUserId()));

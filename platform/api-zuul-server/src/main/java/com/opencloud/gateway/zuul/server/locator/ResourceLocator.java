@@ -16,6 +16,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
 
+import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -239,12 +240,12 @@ public class ResourceLocator implements ApplicationListener<RemoteRefreshRouteEv
                         policyList = Lists.newArrayList();
                     }
                     RateLimitProperties.Policy policy = new RateLimitProperties.Policy();
-                    long[] arry = getIntervalAndQuota(item.getIntervalUnit());
-                    Long refreshInterval = arry[0];
-                    Long quota = arry[1];
+                    long[] array = getIntervalAndQuota(item.getIntervalUnit());
+                    Long refreshInterval = array[0];
+                    Long quota = array[1];
                     policy.setLimit(item.getLimitQuota());
-                    policy.setRefreshInterval(refreshInterval);
-                    policy.setQuota(quota);
+                    policy.setRefreshInterval(Duration.ofSeconds(refreshInterval));
+                    policy.setQuota(Duration.ofSeconds(quota));
                     String type = "url=".concat(item.getPath());
                     RateLimitProperties.Policy.MatchType matchType = converter.convert(type);
                     policy.getType().add(matchType);
