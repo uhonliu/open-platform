@@ -93,10 +93,10 @@ public class CaptchaController {
             @ApiImplicitParam(name = "seccode", required = true, value = "极验验证二次验证表单数据 seccode", paramType = "form"),
     })
     @PostMapping("/validate")
-    public ResultBody validate(@RequestParam(value = "userId", required = true) String userId,
-                               @RequestParam(value = "chllenge", required = true) String chllenge,
-                               @RequestParam(value = "validate", required = true) String validate,
-                               @RequestParam(value = "seccode", required = true) String seccode,
+    public ResultBody validate(@RequestParam(value = "userId") String userId,
+                               @RequestParam(value = "chllenge") String chllenge,
+                               @RequestParam(value = "validate") String validate,
+                               @RequestParam(value = "seccode") String seccode,
                                HttpServletRequest request) {
         //获取session中的数据
         String initStr = (String) redisUtils.get(CAPTCHA_INIT_USER_PREFIX + Md5Utils.getMD5(userId, "UTF-8"));

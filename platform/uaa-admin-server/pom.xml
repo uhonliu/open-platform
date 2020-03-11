@@ -5,11 +5,11 @@
     <parent>
         <groupId>com.opencloud</groupId>
         <artifactId>platform</artifactId>
-        <version>3.0.0</version>
+        <version>3.1.0</version>
     </parent>
     <packaging>jar</packaging>
     <modelVersion>4.0.0</modelVersion>
-    <version>3.0.0</version>
+    <version>3.1.0</version>
     <artifactId>uaa-admin-server</artifactId>
     <description>平台用户认证服务器</description>
     <dependencies>

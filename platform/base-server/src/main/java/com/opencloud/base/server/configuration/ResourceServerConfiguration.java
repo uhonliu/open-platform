@@ -51,7 +51,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
 
 
     @Override
-    public void configure(ResourceServerSecurityConfigurer resources) {
+    public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
         // 构建redis获取token服务类
         resources.tokenServices(OpenHelper.buildRedisTokenServices(redisConnectionFactory));
     }
@@ -63,7 +63,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .authorizeRequests()
                 // 监控端点内部放行
                 .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
-                // feign访问或无需身份认证
+                // fegin访问或无需身份认证
                 .antMatchers(
                         "/authority/access",
                         "/authority/app",
@@ -75,7 +75,8 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                         "/user/login",
                         "/developer/add/thirdParty",
                         "/developer/info",
-                        "/developer/login"
+                        "/developer/login",
+                        "/captcha/**"
                 ).permitAll()
                 .anyRequest().authenticated()
                 .and()

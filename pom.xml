@@ -6,7 +6,7 @@
     <groupId>com.opencloud</groupId>
     <artifactId>parent</artifactId>
     <packaging>pom</packaging>
-    <version>3.0.0</version>
+    <version>3.1.0</version>
     <modules>
         <module>components</module>
         <module>platform</module>
@@ -20,12 +20,11 @@
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
-        <maven-source-plugin.version>3.1.0</maven-source-plugin.version>
+        <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
         <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
-        <maven-assembly-plugin.version>3.1.1</maven-assembly-plugin.version>
         <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
-        <maven-dockerfile-plugin.version>1.4.12</maven-dockerfile-plugin.version>
-        <spring-boot.version>2.1.12.RELEASE</spring-boot.version>
+        <maven-dockerfile-plugin.version>1.4.13</maven-dockerfile-plugin.version>
+        <spring-boot.version>2.1.13.RELEASE</spring-boot.version>
         <spring-boot-admin.version>2.1.6</spring-boot-admin.version>
         <spring-cloud.version>Greenwich.SR5</spring-cloud.version>
         <alibaba.cloud.version>2.1.1.RELEASE</alibaba.cloud.version>
@@ -36,19 +35,19 @@
         <apache.commons-io.version>2.6</apache.commons-io.version>
         <apache.commons.beanutils>1.9.4</apache.commons.beanutils>
 
-        <mybatis-plus.version>3.3.0</mybatis-plus.version>
+        <mybatis-plus.version>3.3.1</mybatis-plus.version>
         <com.google.zxing.version>3.4.0</com.google.zxing.version>
-        <hutool.version>4.6.8</hutool.version>
+        <hutool.version>5.1.3</hutool.version>
         <logstash-logback-encoder.version>6.3</logstash-logback-encoder.version>
         <swagger2.version>2.9.2</swagger2.version>
         <swagger-bootstrap-ui.version>1.9.6</swagger-bootstrap-ui.version>
 
         <!--自定义版本-->
-        <opencloud.common.version>3.0.0-SNAPSHOT</opencloud.common.version>
-        <opencloud.base-client.version>3.0.0-SNAPSHOT</opencloud.base-client.version>
-        <opencloud.msg-client.version>3.0.0-SNAPSHOT</opencloud.msg-client.version>
-        <opencloud.bpm-client.version>3.0.0-SNAPSHOT</opencloud.bpm-client.version>
-        <opencloud.task-client.version>3.0.0-SNAPSHOT</opencloud.task-client.version>
+        <opencloud.common.version>3.1.0-SNAPSHOT</opencloud.common.version>
+        <opencloud.base-client.version>3.1.0-SNAPSHOT</opencloud.base-client.version>
+        <opencloud.msg-client.version>3.1.0-SNAPSHOT</opencloud.msg-client.version>
+        <opencloud.bpm-client.version>3.1.0-SNAPSHOT</opencloud.bpm-client.version>
+        <opencloud.task-client.version>3.1.0-SNAPSHOT</opencloud.task-client.version>
 
         <!--镜像前缀-->
         <docker.image.prefix>platform</docker.image.prefix>

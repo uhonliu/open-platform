@@ -52,10 +52,10 @@ public class GeetestCaptchaServiceImpl implements CaptchaService {
         //获取SDK工具类
         GeetestLib gtSdk = new GeetestLib(geetestProperties.getCaptchaId(), geetestProperties.getPrivateKey(), true);
         int result = 0;
-        if (captchaValidateDTO.getGtServerStatus().intValue() == 1) {
+        if (captchaValidateDTO.getGtServerStatus() == 1) {
             //gt-server正常，向gt-server进行二次验证
             try {
-                result = gtSdk.enhencedValidateRequest(captchaValidateDTO);
+                result = gtSdk.enhancedValidateRequest(captchaValidateDTO);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

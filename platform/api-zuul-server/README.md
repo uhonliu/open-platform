@@ -20,8 +20,7 @@ opencloud:
             - /*/login/**
             - /*/logout/**
             - /*/oauth/**
-            - /actuator/health
-            - /actuator/info
+            - /actuator/**
         # 忽略权限鉴定
         authority-ignores:
             - /*/authority/granted/me

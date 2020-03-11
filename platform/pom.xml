@@ -5,11 +5,11 @@
     <parent>
         <groupId>com.opencloud</groupId>
         <artifactId>parent</artifactId>
-        <version>3.0.0</version>
+        <version>3.1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>platform</artifactId>
-    <version>3.0.0</version>
+    <version>3.1.0</version>
     <packaging>pom</packaging>
     <description>平台服务</description>
     <modules>

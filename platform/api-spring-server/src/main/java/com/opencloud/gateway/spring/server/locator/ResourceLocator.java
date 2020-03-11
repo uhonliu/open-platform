@@ -123,14 +123,12 @@ public class ResourceLocator implements ApplicationListener<RemoteRefreshRouteEv
         routeDefinitionLocator.getRouteDefinitions()
                 .filter(routeDefinition -> routeDefinition.getId().equals(serviceId))
                 .filter(routeDefinition -> routeDefinition.getUri() != null)
-                .subscribe(routeDefinition -> {
-                    routeDefinition.getPredicates().stream()
-                            .filter(predicateDefinition -> ("Path").equalsIgnoreCase(predicateDefinition.getName()))
-                            .filter(predicateDefinition -> !predicateDefinition.getArgs().containsKey("_rateLimit"))
-                            .forEach(predicateDefinition -> {
-                                fullPath[0] = predicateDefinition.getArgs().get("pattern").replace("/**", s);
-                            });
-                });
+                .subscribe(routeDefinition -> routeDefinition.getPredicates().stream()
+                        .filter(predicateDefinition -> ("Path").equalsIgnoreCase(predicateDefinition.getName()))
+                        //.filter(predicateDefinition -> !predicateDefinition.getArgs().containsKey("_rateLimit"))
+                        .forEach(predicateDefinition -> {
+                            fullPath[0] = predicateDefinition.getArgs().get("pattern").replace("/**", s);
+                        }));
         return fullPath[0];
     }
 
@@ -216,7 +214,7 @@ public class ResourceLocator implements ApplicationListener<RemoteRefreshRouteEv
      */
     public static long[] getIntervalAndQuota(String timeUnit) {
         if (timeUnit.equalsIgnoreCase(TimeUnit.SECONDS.name())) {
-            return new long[]{SECONDS_IN_MINUTE, PERIOD_SECOND_TTL};
+            return new long[]{1, PERIOD_SECOND_TTL};
         } else if (timeUnit.equalsIgnoreCase(TimeUnit.MINUTES.name())) {
             return new long[]{SECONDS_IN_MINUTE, PERIOD_MINUTE_TTL};
         } else if (timeUnit.equalsIgnoreCase(TimeUnit.HOURS.name())) {

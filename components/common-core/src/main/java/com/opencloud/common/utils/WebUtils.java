@@ -368,7 +368,7 @@ public class WebUtils {
             MultipartResolver multipartResolver = SpringContextHolder.getBean(MultipartResolver.class);
             MultipartHttpServletRequest multiReq = multipartResolver.resolveMultipart(request);
             returnMap = conventMap(multiReq.getParameterMap());
-        } else if (MediaType.APPLICATION_JSON_VALUE.equals(contentType) || MediaType.APPLICATION_JSON_UTF8_VALUE.equals(contentType)) {
+        } else if (contentType != null && contentType.contains(MediaType.APPLICATION_JSON_VALUE)) {
             // json表单
             String body = getBodyString(request);
             if (StringUtils.isNotBlank(body)) {

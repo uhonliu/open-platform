@@ -52,6 +52,10 @@ management:
         web:
             exposure:
                 include: '*'
+                exclude: env,beans
+    endpoint:
+        health:
+            show-details: ALWAYS
 
 opencloud:
     swagger2:

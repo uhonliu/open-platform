@@ -17,7 +17,12 @@ spring:
                 register-enabled: false
     profiles:
         active: ${profile.name}
-    security:
-        user:
-            name: sba
-            password: 123456
+
+management:
+    endpoints:
+        web:
+            exposure:
+                include: "*"
+    endpoint:
+        health:
+            show-details: ALWAYS

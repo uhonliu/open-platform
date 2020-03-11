@@ -24,15 +24,11 @@ public class SwaggerProvider implements SwaggerResourcesProvider {
         //结合配置的route-路径(Path)，和route过滤，只获取有效的route节点
         routeDefinitionLocator.getRouteDefinitions()
                 .filter(routeDefinition -> routeDefinition.getUri().toString().contains("lb://"))
-                .subscribe(routeDefinition -> {
-                            routeDefinition.getPredicates().stream()
-                                    .filter(predicateDefinition -> ("Path").equalsIgnoreCase(predicateDefinition.getName()))
-                                    .filter(predicateDefinition -> !predicateDefinition.getArgs().containsKey("_rateLimit"))
-                                    .forEach(predicateDefinition -> resources.add(swaggerResource(predicateDefinition.getArgs().get("name"),
-                                            predicateDefinition.getArgs().get("pattern")
-                                                    .replace("/**", API_URI))));
-                        }
-                );
+                .subscribe(routeDefinition -> routeDefinition.getPredicates().stream()
+                        .filter(predicateDefinition -> ("Path").equalsIgnoreCase(predicateDefinition.getName()))
+                        //.filter(predicateDefinition -> !predicateDefinition.getArgs().containsKey("_rateLimit"))
+                        .forEach(predicateDefinition -> resources.add(swaggerResource(predicateDefinition.getArgs().get("name"),
+                                predicateDefinition.getArgs().get("pattern").replace("/**", API_URI)))));
         return resources;
     }
 

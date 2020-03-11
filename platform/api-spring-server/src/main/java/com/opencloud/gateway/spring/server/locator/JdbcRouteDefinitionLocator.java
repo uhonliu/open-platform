@@ -16,13 +16,10 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,13 +49,11 @@ public class JdbcRouteDefinitionLocator implements ApplicationListener<RemoteRef
             "        a.service_id,\n" +
             "        a.path,\n" +
             "        r.url\n" +
-            "    FROM\n" +
-            "        gateway_rate_limit_api AS i\n" +
+            "    FROM gateway_rate_limit_api AS i\n" +
             "    INNER JOIN gateway_rate_limit AS p ON i.policy_id = p.policy_id\n" +
             "    INNER JOIN base_api AS a ON i.api_id = a.api_id\n" +
             "    INNER JOIN gateway_route AS r ON a.service_id = r.route_name\n" +
-            "    WHERE\n" +
-            "        p.policy_type = 'url'";
+            "    WHERE p.policy_type = 'url'";
 
 
     public JdbcRouteDefinitionLocator(JdbcTemplate jdbcTemplate, InMemoryRouteDefinitionRepository repository) {
@@ -118,47 +113,41 @@ public class JdbcRouteDefinitionLocator implements ApplicationListener<RemoteRef
     private Mono<Void> loadRoutes() {
         //从数据库拿到路由配置
         try {
-            List<GatewayRoute> routeList = jdbcTemplate.query(SELECT_ROUTES, new RowMapper<GatewayRoute>() {
-                @Override
-                public GatewayRoute mapRow(ResultSet rs, int i) throws SQLException {
-                    GatewayRoute result = new GatewayRoute();
-                    result.setRouteId(rs.getLong("route_id"));
-                    result.setPath(rs.getString("path"));
-                    result.setServiceId(rs.getString("service_id"));
-                    result.setUrl(rs.getString("url"));
-                    result.setStatus(rs.getInt("status"));
-                    result.setRetryable(rs.getInt("retryable"));
-                    result.setStripPrefix(rs.getInt("strip_prefix"));
-                    result.setIsPersist(rs.getInt("is_persist"));
-                    result.setRouteName(rs.getString("route_name"));
-                    result.setRouteType(rs.getString("route_type"));
-                    return result;
-                }
+            List<GatewayRoute> routeList = jdbcTemplate.query(SELECT_ROUTES, (rs, i) -> {
+                GatewayRoute result = new GatewayRoute();
+                result.setRouteId(rs.getLong("route_id"));
+                result.setPath(rs.getString("path"));
+                result.setServiceId(rs.getString("service_id"));
+                result.setUrl(rs.getString("url"));
+                result.setStatus(rs.getInt("status"));
+                result.setRetryable(rs.getInt("retryable"));
+                result.setStripPrefix(rs.getInt("strip_prefix"));
+                result.setIsPersist(rs.getInt("is_persist"));
+                result.setRouteName(rs.getString("route_name"));
+                result.setRouteType(rs.getString("route_type"));
+                return result;
             });
-            List<RateLimitApi> limitApiList = jdbcTemplate.query(SELECT_LIMIT_PATH, new RowMapper<RateLimitApi>() {
-                @Override
-                public RateLimitApi mapRow(ResultSet rs, int i) throws SQLException {
-                    RateLimitApi result = new RateLimitApi();
-                    result.setPolicyId(rs.getLong("policy_id"));
-                    result.setPolicyName(rs.getString("policy_name"));
-                    result.setServiceId(rs.getString("service_id"));
-                    result.setPath(rs.getString("path"));
-                    result.setApiId(rs.getLong("api_id"));
-                    result.setApiCode(rs.getString("api_code"));
-                    result.setApiName(rs.getString("api_name"));
-                    result.setApiCategory(rs.getString("api_category"));
-                    result.setLimitQuota(rs.getLong("limit_quota"));
-                    result.setIntervalUnit(rs.getString("interval_unit"));
-                    result.setUrl(rs.getString("url"));
-                    return result;
-                }
+            List<RateLimitApi> limitApiList = jdbcTemplate.query(SELECT_LIMIT_PATH, (rs, i) -> {
+                RateLimitApi result = new RateLimitApi();
+                result.setPolicyId(rs.getLong("policy_id"));
+                result.setPolicyName(rs.getString("policy_name"));
+                result.setServiceId(rs.getString("service_id"));
+                result.setPath(rs.getString("path"));
+                result.setApiId(rs.getLong("api_id"));
+                result.setApiCode(rs.getString("api_code"));
+                result.setApiName(rs.getString("api_name"));
+                result.setApiCategory(rs.getString("api_category"));
+                result.setLimitQuota(rs.getLong("limit_quota"));
+                result.setIntervalUnit(rs.getString("interval_unit"));
+                result.setUrl(rs.getString("url"));
+                return result;
             });
-            if (limitApiList != null) {
+            if (limitApiList.size() > 0) {
                 // 加载限流
                 limitApiList.forEach(item -> {
-                    long[] arry = ResourceLocator.getIntervalAndQuota(item.getIntervalUnit());
-                    Long refreshInterval = arry[0];
-                    Long quota = arry[1];
+                    long[] array = ResourceLocator.getIntervalAndQuota(item.getIntervalUnit());
+                    Long refreshInterval = array[0];
+                    Long quota = array[1];
                     // 允许用户每秒处理多少个请求
                     long replenishRate = item.getLimitQuota() / refreshInterval;
                     replenishRate = replenishRate < 1 ? 1 : refreshInterval;
@@ -207,7 +196,7 @@ public class JdbcRouteDefinitionLocator implements ApplicationListener<RemoteRef
                     this.repository.save(Mono.just(definition)).subscribe();
                 });
             }
-            if (routeList != null) {
+            if (routeList.size() > 0) {
                 // 最后加载路由
                 routeList.forEach(gatewayRoute -> {
                     RouteDefinition definition = new RouteDefinition();

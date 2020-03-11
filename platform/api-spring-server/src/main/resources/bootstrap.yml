@@ -101,7 +101,11 @@ management:
         web:
             exposure:
                 # 开放部分端点和自定义端点
-                include: health,info,open
+                include: '*'
+                exclude: env,beans
+    endpoint:
+        health:
+            show-details: ALWAYS
 
 opencloud:
     swagger2:
@@ -124,12 +128,12 @@ opencloud:
         api-debug: true
         # 始终放行
         permit-all:
-            - /*/login/**
-            - /*/logout/**
-            - /*/oauth/**
             - /actuator
             - /actuator/health
             - /actuator/info
+            - /*/login/**
+            - /*/logout/**
+            - /*/oauth/**
         # 忽略权限鉴定
         authority-ignores:
             - /*/authority/granted/me
