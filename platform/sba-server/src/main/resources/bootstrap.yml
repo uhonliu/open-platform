@@ -10,7 +10,7 @@ spring:
                 namespace: ${config.namespace}
                 refreshable-dataids: common.properties
                 server-addr: ${config.server-addr}
-                shared-dataids: common.properties
+                shared-dataids: common.properties,mail.properties
             discovery:
                 namespace: ${discovery.namespace}
                 server-addr: ${discovery.server-addr}

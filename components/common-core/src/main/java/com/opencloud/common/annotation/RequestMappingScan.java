@@ -178,15 +178,12 @@ public class RequestMappingScan implements ApplicationListener<ApplicationReadyE
         resource.put("application", serviceId);
         resource.put("mapping", list);
         log.info("ApplicationReadyEvent:[{}]", serviceId);
-        executorService.submit(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    // 发送mq扫描消息
-                    amqpTemplate.convertAndSend(QueueConstants.QUEUE_SCAN_API_RESOURCE, resource);
-                } catch (Exception e) {
-                    log.error("发送失败:{}", e.getMessage());
-                }
+        executorService.submit(() -> {
+            try {
+                // 发送mq扫描消息
+                amqpTemplate.convertAndSend(QueueConstants.QUEUE_SCAN_API_RESOURCE, resource);
+            } catch (Exception e) {
+                log.error("发送失败:{}", e.getMessage());
             }
         });
     }
