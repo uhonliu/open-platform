@@ -1,4 +1,6 @@
-FROM openjdk:8-jdk-alpine
+FROM openjdk:8-jre
+MAINTAINER uhonliu <futustar@qq.com>
+
 VOLUME /tmp
 ARG JAR_FILE
 COPY ${JAR_FILE} app.jar

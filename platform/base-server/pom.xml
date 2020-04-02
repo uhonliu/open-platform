@@ -66,11 +66,13 @@
                 <artifactId>dockerfile-maven-plugin</artifactId>
                 <version>${maven-dockerfile-plugin.version}</version>
                 <configuration>
-                    <repository>${docker.image.prefix}/${project.artifactId}</repository>
+                    <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
+                    <repository>${docker.repostory}/${docker.image.prefix}/${project.artifactId}</repository>
                     <tag>${project.version}</tag>
                     <buildArgs>
                         <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
                     </buildArgs>
+                    <skip>false</skip>
                 </configuration>
             </plugin>
             <!--maven deploy 忽略发布插件-->

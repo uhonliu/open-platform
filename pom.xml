@@ -50,19 +50,21 @@
         <opencloud.bpm-client.version>3.1.0-SNAPSHOT</opencloud.bpm-client.version>
         <opencloud.task-client.version>3.1.0-SNAPSHOT</opencloud.task-client.version>
 
+        <!--镜像仓库-->
+        <docker.repostory>registry.cn-shenzhen.aliyuncs.com</docker.repostory>
         <!--镜像前缀-->
-        <docker.image.prefix>platform</docker.image.prefix>
+        <docker.image.prefix>uhonliu</docker.image.prefix>
     </properties>
 
     <!--nexus 私有仓库发布地址 -->
     <distributionManagement>
         <!--maven的settings.xml文件中设置<server>标签-->
         <repository>
-            <id>open-platform-releases</id>
+            <id>maven-releases</id>
             <url>http://192.168.7.245:8081/repository/maven-releases/</url>
         </repository>
         <snapshotRepository>
-            <id>open-platform-snapshots</id>
+            <id>maven-snapshots</id>
             <url>http://192.168.7.245:8081/repository/maven-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
