@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 
 INPUT=$2
+SW_SERVER=$3
 FILE_PATH=$(readlink -f ${INPUT})
 SERVICE=${INPUT##*/}
 SERVICE_NAME=${SERVICE%.*}
 DEPLOY_DIR=$(pwd)
-JVM_OPTS="-server -Xms128m -Xmx768m -XX:+UseG1GC -XX:SurvivorRatio=6 -XX:MaxGCPauseMillis=400 -XX:G1ReservePercent=15 -XX:ParallelGCThreads=4 -XX:ConcGCThreads=1 -XX:InitiatingHeapOccupancyPercent=40 -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -Xloggc:../logs/gc.log"
+JVM_OPTS="-server -Xms128m -Xmx768m -XX:+UseG1GC -XX:SurvivorRatio=6 -XX:MaxGCPauseMillis=400 -XX:G1ReservePercent=15 -XX:ParallelGCThreads=4 -XX:ConcGCThreads=1 -XX:InitiatingHeapOccupancyPercent=40 -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -Xloggc:../logs/gc.log -javaagent:skywalking-agent.jar -Dskywalking.agent.service_name=$SERVICE_NAME -Dskywalking.collector.backend_service=$SW_SERVER"
 
 if [[ "$1" == "" ]]; then
   echo -e "\033[0;31m 未输入操作名 \033[0m  \033[0;34m {start|stop|restart|status} \033[0m"

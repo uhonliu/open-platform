@@ -46,8 +46,6 @@ opencloud:
         enabled: true
         description: 用户中心
         title: 用户中心
-    logstash:
-        destination: ${logstash.destination}
     client:
         oauth2:
             gitee:

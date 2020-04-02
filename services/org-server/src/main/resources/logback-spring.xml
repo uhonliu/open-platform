@@ -2,8 +2,6 @@
 <configuration debug="false" scan="false">
     <springProperty scope="context" name="spring.application.name" source="spring.application.name"
                     defaultValue="logs"/>
-    <springProperty scope="context" name="logstash.destination" source="opencloud.logstash.destination"
-                    defaultValue="127.0.0.1:5000"/>
     <property name="log.path" value="logs/${spring.application.name}"/>
 
     <!-- Console log output -->
@@ -50,8 +48,13 @@
     </appender>
 
     <!-- Appender to log to file in a JSON format -->
-    <appender name="logstash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
-        <destination>${logstash.destination}</destination>
+    <appender name="logstash" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}/logstash.json</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${log.path}/%d{yyyy-MM}/logstash.%d{yyyy-MM-dd}.%i.json.gz</fileNamePattern>
+            <maxFileSize>50MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
         <encoder charset="UTF-8" class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
             <providers>
                 <timestamp>

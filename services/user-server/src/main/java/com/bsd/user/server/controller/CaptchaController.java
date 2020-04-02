@@ -58,8 +58,8 @@ public class CaptchaController {
             @ApiImplicitParam(name = "clientType", required = true, value = "客户端类型web(pc浏览器),h5(手机浏览器,包括webview),native(原生app),unknown(未知)", paramType = "form"),
     })
     @PostMapping("/init")
-    public ResultBody init(@RequestParam(value = "userId", required = true) String userId,
-                           @RequestParam(value = "clientType", required = true) String clientType,
+    public ResultBody init(@RequestParam(value = "userId") String userId,
+                           @RequestParam(value = "clientType") String clientType,
                            HttpServletRequest request) {
         //业务参数
         CaptchaInitDTO captchaInitDTO = new CaptchaInitDTO();

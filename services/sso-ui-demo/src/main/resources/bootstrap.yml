@@ -45,5 +45,3 @@ opencloud:
         enabled: true
         description: SSO单点登录演示
         title: SSO单点登录演示
-    logstash:
-        destination: ${logstash.destination}

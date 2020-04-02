@@ -42,8 +42,6 @@ opencloud:
         description: 钉钉服务
         enabled: true
         title: 钉钉服务
-    logstash:
-        destination: ${logstash.destination}
 
 #mybatis plus 设置
 mybatis-plus:

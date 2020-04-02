@@ -52,8 +52,6 @@ opencloud:
         enabled: true
         description: 门户开发者认证服务器
         title: 门户开发者认证服务器
-    logstash:
-        destination: ${logstash.destination}
     client:
         oauth2:
             #portal:

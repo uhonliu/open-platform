@@ -42,5 +42,3 @@ opencloud:
         enabled: true
         description: 文件服务
         title: 文件服务
-    logstash:
-        destination: ${logstash.destination}

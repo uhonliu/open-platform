@@ -14,8 +14,6 @@ opencloud:
         enabled: true
         description: 多租户演示
         title: 多租户演示
-    logstash:
-        destination: ${logstash.destination}
     tenant:
         datasource:
             driver-class-name: com.mysql.cj.jdbc.Driver

@@ -129,8 +129,6 @@ open-platform
     <discovery.server-addr>127.0.0.1:8848</discovery.server-addr>
     <!--Nacos服务发现命名空间,用于支持多环境.这里必须使用ID，不能使用名称,默认为空-->
     <discovery.namespace></discovery.namespace>
-    <!--Logstash日志收集地址-->
-    <logstash.destination>127.0.0.1:5000</logstash.destination>
     ```
 
 5. 本地启动(按顺序启动)
@@ -155,7 +153,7 @@ open-platform
 7. 项目打包部署
     + maven多环境打包,替换变量
     ``` bash
-    mvn clean install package -P {dev|test|uat|online}
+    mvn clean package -P {dev|test|uat|online} -DskipTests
     ```
     + 项目启动
     ``` bash
@@ -168,13 +166,13 @@ open-platform
     + 配置DOCKER私服仓库
     + maven多环境打包,替换变量.并构建docker镜像
     ``` bash
-    clean install package -P {dev|test|uat|online} dockerfile:build
+    mvn clean package -P {dev|test|uat|online} -DskipTests dockerfile:build dockerfile:push
     ```
     + 启动docker镜像
     ```bash
-    docker run -d -e JAVA_OPTS="-Xms128m -Xmx768m" -p 8233:8233 --name base-server platform/base-server:3.0.0
-    docker run -d -e JAVA_OPTS="-Xms128m -Xmx768m" -p 8211:8211 --name uaa-admin-server platform/uaa-admin-server:3.0.0
-    docker run -d -e JAVA_OPTS="-Xms128m -Xmx768m" -p 8888:8888 --name api-spring-server platform/api-spring-server:3.0.0
+    docker run -d -e JAVA_OPTS="-Xms128m -Xmx768m" -p 8233:8233 --name base-server platform/base-server:3.1.0
+    docker run -d -e JAVA_OPTS="-Xms128m -Xmx768m" -p 8211:8211 --name uaa-admin-server platform/uaa-admin-server:3.1.0
+    docker run -d -e JAVA_OPTS="-Xms128m -Xmx768m" -p 8888:8888 --name api-spring-server platform/api-spring-server:3.1.0
     ```
 
 #### 参考项目及文档

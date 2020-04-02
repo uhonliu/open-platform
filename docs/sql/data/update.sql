@@ -5,4 +5,5 @@ ALTER TABLE `base_app` ADD COLUMN `encrypt_type` VARCHAR(10) NOT NULL DEFAULT 'A
 ALTER TABLE `base_app` ADD COLUMN `public_key` VARCHAR(2048) NOT NULL DEFAULT '' COMMENT 'RSA加解密公钥' AFTER `encrypt_type`;
 
 # gateway.sql
-ALTER TABLE `gateway_access_logs` MODIFY error VARCHAR(2000) DEFAULT NULL COMMENT '错误信息';
+ALTER TABLE `gateway_access_logs` MODIFY `error` VARCHAR(2000) DEFAULT NULL COMMENT '错误信息';
+ALTER TABLE `gateway_access_logs` MODIFY `authentication` MEDIUMTEXT DEFAULT NULL COMMENT '认证信息';

@@ -1,23 +1,17 @@
-package com.opencloud.base.server.configuration;
+package com.opencloud.generator.server.configuration;
 
 import com.opencloud.common.exception.OpenAccessDeniedHandler;
 import com.opencloud.common.exception.OpenAuthenticationEntryPoint;
 import com.opencloud.common.security.OpenHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
-import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
-
-import javax.sql.DataSource;
 
 /**
  * oauth2资源服务器配置
@@ -31,27 +25,9 @@ import javax.sql.DataSource;
 public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
     @Autowired
     private RedisConnectionFactory redisConnectionFactory;
-    @Autowired
-    private DataSource dataSource;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Bean
-    public RedisTokenStore redisTokenStore() {
-        return new RedisTokenStore(redisConnectionFactory);
-    }
-
-
-    @Bean
-    public JdbcClientDetailsService clientDetailsService() {
-        JdbcClientDetailsService jdbcClientDetailsService = new JdbcClientDetailsService(dataSource);
-        jdbcClientDetailsService.setPasswordEncoder(passwordEncoder);
-        return jdbcClientDetailsService;
-    }
-
 
     @Override
-    public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
+    public void configure(ResourceServerSecurityConfigurer resources) {
         // 构建redis获取token服务类
         resources.tokenServices(OpenHelper.buildRedisTokenServices(redisConnectionFactory));
     }
@@ -65,18 +41,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
                 // feign访问或无需身份认证
                 .antMatchers(
-                        "/authority/access",
-                        "/authority/app",
-                        "/app/*/info",
-                        "/app/client/*/info",
-                        "/gateway/api/**",
-                        "/user/add/thirdParty",
-                        "/user/info",
-                        "/user/login",
-                        "/developer/add/thirdParty",
-                        "/developer/info",
-                        "/developer/login",
-                        "/captcha/**"
+                        "/generate/**"
                 ).permitAll()
                 .anyRequest().authenticated()
                 .and()

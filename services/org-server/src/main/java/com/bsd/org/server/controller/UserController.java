@@ -8,7 +8,7 @@ import com.bsd.org.server.model.entity.User;
 import com.bsd.org.server.model.vo.UserDetailVO;
 import com.bsd.org.server.service.CompanyService;
 import com.bsd.org.server.service.UserService;
-import com.bsd.org.server.service.fegin.BaseUserServiceClient;
+import com.bsd.org.server.service.feign.BaseUserServiceClient;
 import com.opencloud.common.exception.OpenAlertException;
 import com.opencloud.common.model.ResultBody;
 import com.opencloud.common.security.OpenHelper;
@@ -324,7 +324,7 @@ public class UserController {
         userService.updateUser(user);
         return ResultBody.ok();
     }
-    
+
     /**
      * 修改激活状态(钉钉)
      *

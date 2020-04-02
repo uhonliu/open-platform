@@ -42,8 +42,6 @@ opencloud:
         enabled: true
         description: 平台基础服务器
         title: 平台基础服务器
-    logstash:
-        destination: ${logstash.destination}
 
 #mybatis plus 设置
 mybatis-plus:

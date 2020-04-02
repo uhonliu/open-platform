@@ -42,8 +42,6 @@ opencloud:
         enabled: true
         description: 支付中心
         title: 支付中心
-    logstash:
-        destination: ${logstash.destination}
 
 #mybatis plus 设置
 mybatis-plus:

@@ -29,6 +29,7 @@
         <spring-cloud.version>Greenwich.SR5</spring-cloud.version>
         <alibaba.cloud.version>2.1.1.RELEASE</alibaba.cloud.version>
         <alibaba.fastjson.version>1.2.66</alibaba.fastjson.version>
+        <jaeger.version>3.1.1</jaeger.version>
 
         <apache.commons-lang3.version>3.9</apache.commons-lang3.version>
         <apache.commons-text.version>1.8</apache.commons-text.version>
@@ -58,11 +59,11 @@
         <!--maven的settings.xml文件中设置<server>标签-->
         <repository>
             <id>open-platform-releases</id>
-            <url>http://192.168.7.31:8081/repository/maven-releases/</url>
+            <url>http://192.168.7.245:8081/repository/maven-releases/</url>
         </repository>
         <snapshotRepository>
             <id>open-platform-snapshots</id>
-            <url>http://192.168.7.31:8081/repository/maven-snapshots/</url>
+            <url>http://192.168.7.245:8081/repository/maven-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 
@@ -82,8 +83,6 @@
                 <discovery.server-addr>127.0.0.1:8848</discovery.server-addr>
                 <!--Nacos服务发现命名空间,用于支持多环境.这里必须使用ID，不能使用名称,默认为空-->
                 <discovery.namespace></discovery.namespace>
-                <!--Logstash日志收集地址-->
-                <logstash.destination>127.0.0.1:5000</logstash.destination>
             </properties>
         </profile>
         <!-- 开发 -->
@@ -104,8 +103,6 @@
                 <discovery.server-addr>192.168.7.31:8848</discovery.server-addr>
                 <!--Nacos服务发现命名空间,用于支持多环境.这里必须使用ID，不能使用名称,默认为空-->
                 <discovery.namespace></discovery.namespace>
-                <!--Logstash日志收集地址-->
-                <logstash.destination>192.168.7.31:5000</logstash.destination>
             </properties>
         </profile>
         <!-- 测试 -->
@@ -122,8 +119,6 @@
                 <discovery.server-addr>192.168.7.83:8848</discovery.server-addr>
                 <!--Nacos服务发现命名空间,用于支持多环境.这里必须使用ID，不能使用名称,默认为空-->
                 <discovery.namespace></discovery.namespace>
-                <!--Logstash日志收集地址-->
-                <logstash.destination>192.168.7.83:5000</logstash.destination>
             </properties>
         </profile>
         <!-- 预发布 -->
@@ -140,8 +135,6 @@
                 <discovery.server-addr>172.18.55.14:8848</discovery.server-addr>
                 <!--Nacos服务发现命名空间,用于支持多环境.这里必须使用ID，不能使用名称,默认为空-->
                 <discovery.namespace></discovery.namespace>
-                <!--Logstash日志收集地址-->
-                <logstash.destination>172.18.55.14:5000</logstash.destination>
             </properties>
         </profile>
         <!-- 生产 -->
@@ -158,8 +151,6 @@
                 <discovery.server-addr>172.18.108.117:8848</discovery.server-addr>
                 <!--Nacos服务发现命名空间,用于支持多环境.这里必须使用ID，不能使用名称,默认为空-->
                 <discovery.namespace></discovery.namespace>
-                <!--Logstash日志收集地址-->
-                <logstash.destination>172.18.108.117:5000</logstash.destination>
             </properties>
         </profile>
     </profiles>
@@ -223,6 +214,15 @@
                 <version>${maven-surefire-plugin.version}</version>
                 <configuration>
                     <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
+            <!-- docker打包跳过 -->
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>${maven-dockerfile-plugin.version}</version>
+                <configuration>
+                    <skip>true</skip>
                 </configuration>
             </plugin>
         </plugins>
