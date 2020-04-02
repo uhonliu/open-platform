@@ -170,9 +170,9 @@ open-platform
     ```
     + 启动docker镜像
     ```bash
-    docker run -d -e JAVA_OPTS="-Xms128m -Xmx768m" -p 8233:8233 --name base-server platform/base-server:3.1.0
-    docker run -d -e JAVA_OPTS="-Xms128m -Xmx768m" -p 8211:8211 --name uaa-admin-server platform/uaa-admin-server:3.1.0
-    docker run -d -e JAVA_OPTS="-Xms128m -Xmx768m" -p 8888:8888 --name api-spring-server platform/api-spring-server:3.1.0
+    docker run -d -e JAVA_OPTS="-Xms128m -Xmx768m" -p 8233:8233 --name base-server uhonliu/base-server:3.1.0
+    docker run -d -e JAVA_OPTS="-Xms128m -Xmx768m" -p 8211:8211 --name uaa-admin-server uhonliu/uaa-admin-server:3.1.0
+    docker run -d -e JAVA_OPTS="-Xms128m -Xmx768m" -p 8888:8888 --name api-spring-server uhonliu/api-spring-server:3.1.0
     ```
 
 #### 参考项目及文档
