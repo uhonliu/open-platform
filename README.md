@@ -153,7 +153,7 @@ open-platform
 7. 项目打包部署
     + maven多环境打包,替换变量
     ``` bash
-    mvn clean package -P {dev|test|uat|online} -DskipTests
+    mvn clean package -P {dev|test|uat|online}
     ```
     + 项目启动
     ``` bash
@@ -166,13 +166,13 @@ open-platform
     + 配置DOCKER私服仓库
     + maven多环境打包,替换变量.并构建docker镜像
     ``` bash
-    mvn clean package -P {dev|test|uat|online} -DskipTests dockerfile:build dockerfile:push
+    mvn clean package -P {dev|test|uat|online} dockerfile:build dockerfile:push
     ```
     + 启动docker镜像
     ```bash
-    docker run -d -e JAVA_OPTS="-Xms128m -Xmx768m" -p 8233:8233 --name base-server uhonliu/base-server:3.1.0
-    docker run -d -e JAVA_OPTS="-Xms128m -Xmx768m" -p 8211:8211 --name uaa-admin-server uhonliu/uaa-admin-server:3.1.0
-    docker run -d -e JAVA_OPTS="-Xms128m -Xmx768m" -p 8888:8888 --name api-spring-server uhonliu/api-spring-server:3.1.0
+    docker run -d -e JAVA_OPTS="-Xms128m -Xmx768m" -p 8233:8233 --name base-server uhonliu/base-server:3.1.0-{dev|test|uat|online}
+    docker run -d -e JAVA_OPTS="-Xms128m -Xmx768m" -p 8211:8211 --name uaa-admin-server uhonliu/uaa-admin-server:3.1.0-{dev|test|uat|online}
+    docker run -d -e JAVA_OPTS="-Xms128m -Xmx768m" -p 8888:8888 --name api-spring-server uhonliu/api-spring-server:3.1.0-{dev|test|uat|online}
     ```
 
 #### 参考项目及文档

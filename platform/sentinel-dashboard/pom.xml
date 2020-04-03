@@ -148,7 +148,7 @@
                 <configuration>
                     <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
                     <repository>${docker.repostory}/${docker.image.prefix}/${project.artifactId}</repository>
-                    <tag>${project.version}</tag>
+                    <tag>${project.version}-${profile.name}</tag>
                     <buildArgs>
                         <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
                     </buildArgs>

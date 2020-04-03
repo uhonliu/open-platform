@@ -56,9 +56,21 @@
         <docker.image.prefix>uhonliu</docker.image.prefix>
     </properties>
 
-    <!--nexus 私有仓库发布地址 -->
+    <!--云效私有仓库发布地址-->
     <distributionManagement>
         <!--maven的settings.xml文件中设置<server>标签-->
+        <repository>
+            <id>rdc-releases</id>
+            <url>https://repo.rdc.aliyun.com/repository/126334-release-hl3JHL/</url>
+        </repository>
+        <snapshotRepository>
+            <id>rdc-snapshots</id>
+            <url>https://repo.rdc.aliyun.com/repository/126334-snapshot-k0fTE8/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <!--nexus 私有仓库发布地址-->
+    <!--<distributionManagement>
         <repository>
             <id>maven-releases</id>
             <url>http://192.168.7.245:8081/repository/maven-releases/</url>
@@ -67,7 +79,7 @@
             <id>maven-snapshots</id>
             <url>http://192.168.7.245:8081/repository/maven-snapshots/</url>
         </snapshotRepository>
-    </distributionManagement>
+    </distributionManagement>-->
 
     <!-- 环境 -->
     <profiles>
@@ -155,6 +167,34 @@
                 <discovery.namespace></discovery.namespace>
             </properties>
         </profile>
+        <!-- 云效私有仓库 -->
+        <profile>
+            <id>rdc-private-repo</id>
+            <repositories>
+                <repository>
+                    <id>rdc-releases</id>
+                    <url>https://repo.rdc.aliyun.com/repository/126334-release-hl3JHL/</url>
+                </repository>
+                <repository>
+                    <id>rdc-snapshots</id>
+                    <url>https://repo.rdc.aliyun.com/repository/126334-snapshot-k0fTE8/</url>
+                </repository>
+            </repositories>
+        </profile>
+        <!-- nexus 私有仓库 -->
+        <!--<profile>
+            <id>nexus-private-repo</id>
+            <repositories>
+                <repository>
+                    <id>maven-releases</id>
+                    <url>http://192.168.7.245:8081/repository/maven-releases/</url>
+                </repository>
+                <repository>
+                    <id>maven-snapshots</id>
+                    <url>http://192.168.7.245:8081/repository/maven-snapshots/</url>
+                </repository>
+            </repositories>
+        </profile>-->
     </profiles>
     <dependencyManagement>
         <dependencies>
